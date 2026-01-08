@@ -1,7 +1,7 @@
 ManifestFileVersion: 0
-CRC: 1126021792
+CRC: 420566862
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: test_obj
+      Name: chars/hero
       Dependencies: {}

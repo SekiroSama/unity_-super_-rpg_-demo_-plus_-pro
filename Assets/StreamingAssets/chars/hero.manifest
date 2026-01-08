@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 331251952
+CRC: 3737263431
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ee14fbbb3678d3cba857ee96d50f4471
+    Hash: 424057ee5c7d8219068a2602576e2b4b
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 16c8aa2ea7eeb9c3aebb6cebe2273284
+    Hash: b202ec60f4ab6c2051313412611822f6
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: ee14fbbb3678d3cba857ee96d50f4471
+    Hash: 424057ee5c7d8219068a2602576e2b4b
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -18,17 +18,21 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 21
   Script: {instanceID: 0}
-- Class: 23
-  Script: {instanceID: 0}
-- Class: 33
-  Script: {instanceID: 0}
 - Class: 43
   Script: {instanceID: 0}
 - Class: 48
   Script: {instanceID: 0}
-- Class: 65
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 90
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 137
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/_Game/Art/Cube.prefab
+- Assets/_Game/Resources_Build/Characters/Hero.prefab
 Dependencies: []

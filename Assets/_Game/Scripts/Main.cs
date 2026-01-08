@@ -12,8 +12,8 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameObject cube = ResourceManage.Instance.LoadRes<GameObject>("test_obj", "cube");
-        Instantiate(cube);
+        //GameObject cube = ResourceManage.Instance.LoadRes<GameObject>("test_obj", "cube");
+        //Instantiate(cube);
     }
 
     // Update is called once per frame
