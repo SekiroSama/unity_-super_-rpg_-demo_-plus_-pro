@@ -1,18 +1,27 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StateBase : MonoBehaviour
+public abstract class StateBase
 {
-    // Start is called before the first frame update
-    void Start()
+    protected PlayerController playerController;
+    protected StateMachine stateMachine;
+    public StateBase(PlayerController playerController, StateMachine stateMachine)
     {
-        
+        this.playerController = playerController;
+        this.stateMachine = stateMachine;
     }
 
-    // Update is called once per frame
-    void Update()
+    public virtual void OnEnter()
     {
-        
+
+    }
+    public virtual void OnUpdate()
+    {
+
+    }
+    public virtual void OnExit()
+    {
+
     }
 }
