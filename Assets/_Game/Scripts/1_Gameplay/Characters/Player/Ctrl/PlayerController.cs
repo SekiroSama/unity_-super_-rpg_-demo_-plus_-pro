@@ -15,6 +15,9 @@ public class PlayerController : MonoBehaviour
     float rotatSpeed = 10f;
 
     Transform _camTransform;
+
+    [HideInInspector]
+    public bool UseRootMotion = false;
     private void Start()
     {
         CC = this.GetComponent<CharacterController>();
@@ -49,6 +52,15 @@ public class PlayerController : MonoBehaviour
         this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(moveDir), rotatSpeed * Time.deltaTime);
     }
 
+    private void OnAnimatorMove()
+    {
+        if (UseRootMotion)
+        {
+            CC.Move(animator.deltaPosition);
+            this.transform.rotation *= animator.deltaRotation;
+        }
+    }
+
     /// <summary>
     /// 让角色混合树动画更新
     /// </summary>
@@ -72,10 +84,10 @@ public class PlayerController : MonoBehaviour
     /// 角色攻击动画是否播放完毕
     /// </summary>
     /// <returns></returns>
-    public bool IsAttckFinished()
+    public bool IsAnimationFinished(int animHash)
     {
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        if(stateInfo.IsName("Attack01") && stateInfo.normalizedTime >= 1f)
+        if(stateInfo.shortNameHash == animHash && stateInfo.normalizedTime >= 0.95f)
         {
             return true;
         }
