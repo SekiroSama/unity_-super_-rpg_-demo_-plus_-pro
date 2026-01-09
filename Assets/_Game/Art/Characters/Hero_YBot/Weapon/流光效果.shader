@@ -3,7 +3,7 @@
     Properties
     {
         _MainTex ("BloomTex", 2D) = "white" {}
-        _Color ("Color", Color) = (1, 1, 1, 1)
+        [HDR]_Color ("Color", Color) = (1, 1, 1, 1)
         _Speed ("Speed", Float) = 1.0
     }
     SubShader
