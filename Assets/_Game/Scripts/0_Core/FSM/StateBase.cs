@@ -13,6 +13,7 @@ public abstract class StateBase
         this.stateMachine = machine;
     }
 
+    #region 状态生命周期
     public virtual void OnEnter()
     {
 
@@ -25,4 +26,5 @@ public abstract class StateBase
     {
 
     }
+    #endregion
 }

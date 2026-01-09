@@ -18,11 +18,15 @@ public class StateMachine
         ChangeState<T>();
     }
 
-    public void Update()
+    public void OnUpdate()
     {
         CurrentState.OnUpdate();
     }
 
+    /// <summary>
+    /// 状态切换
+    /// </summary>
+    /// <typeparam name="T">状态类</typeparam>
     public void ChangeState<T>() where T: StateBase, new()
     {
         if(typeof(T) == CurrentState?.GetType())

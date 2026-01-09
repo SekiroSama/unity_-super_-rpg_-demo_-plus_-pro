@@ -12,6 +12,7 @@ public class GameInputManager : MonoBehaviour
             return _instance;
         }
     }
+
     private void Awake()
     {
         _instance = this;
@@ -21,22 +22,26 @@ public class GameInputManager : MonoBehaviour
     public struct PlayerInputData
     {
         public Vector2 MoveVector;
-        public bool IsRunning;
+        public bool IsAttack;
     }
 
-    PlayerInputData playerInputData;
-    public PlayerInputData CurrentInput => playerInputData;
+    PlayerInputData _playerInputData;
+    public PlayerInputData CurrentInput => _playerInputData;
 
+    //接收ui按钮输入
+    private bool _virtualAttackPressed = false;
     private void Update()
     {
-        playerInputData = new PlayerInputData();
-        playerInputData.MoveVector.x = Input.GetAxis("Horizontal");
-        playerInputData.MoveVector.y = Input.GetAxis("Vertical");
-        if(playerInputData.MoveVector.magnitude > 1f)
+        _playerInputData = new PlayerInputData();
+        _playerInputData.MoveVector.x = Input.GetAxis("Horizontal");
+        _playerInputData.MoveVector.y = Input.GetAxis("Vertical");
+        if(_playerInputData.MoveVector.magnitude > 1f)
         {
-            playerInputData.MoveVector.Normalize();
+            _playerInputData.MoveVector.Normalize();
         }
 
+        _playerInputData.IsAttack = Input.GetMouseButtonDown(0) || _virtualAttackPressed;
+        _virtualAttackPressed = false;
         //Debug.Log("MoveVector: " + playerInputData.MoveVector);
     }
 }
