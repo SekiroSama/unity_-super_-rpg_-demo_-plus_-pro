@@ -1,18 +1,20 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAttackState : MonoBehaviour
+public class PlayerAttackState : StateBase
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void OnEnter()
     {
-        
+        owner.UpdateAnimation(0f);
+        owner.PlayAnimation(AnimHash.Attack01);
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void OnUpdate()
     {
-        
+        if(owner.IsAttckFinished())
+        {
+            stateMachine.ChangeState<PlayerIdleState>();
+        }
     }
 }

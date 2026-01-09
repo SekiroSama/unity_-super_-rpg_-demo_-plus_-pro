@@ -4,9 +4,21 @@ using UnityEngine;
 
 public class PlayerIdleState : StateBase
 {
+    public override void OnEnter()
+    {
+        owner.UpdateAnimation(0f);
+        owner.PlayAnimation(AnimHash.Locomotion);
+    }
+
     public override void OnUpdate()
     {
-        if(GameInputManager.Instance.CurrentInput.MoveVector.sqrMagnitude > 0.01)
+        if (GameInputManager.Instance.CurrentInput.IsAttack)
+        {
+            stateMachine.ChangeState<PlayerAttackState>();
+            return;
+        }
+
+        if (GameInputManager.Instance.CurrentInput.MoveVector.sqrMagnitude > 0.01)
         {
             stateMachine.ChangeState<PlayerRunState>();
             return;

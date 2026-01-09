@@ -8,7 +8,6 @@ public class PlayerController : MonoBehaviour
 {
     CharacterController CC;
     private Animator animator;
-    private static readonly int _animIDMoveSpeed = Animator.StringToHash("MoveSpeed");
 
     private StateMachine stateMachine;
 
@@ -32,7 +31,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// 角色位移旋转
+    /// 让角色位移旋转
     /// </summary>
     /// <param name="input"></param>
     public void Move(Vector2 input)
@@ -51,20 +50,22 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// 角色混合树动画更新
+    /// 让角色混合树动画更新
     /// </summary>
     /// <param name="speed"></param>
     public void UpdateAnimation(float speed)
     {
-        animator.SetFloat(id: _animIDMoveSpeed, value: speed, dampTime: 0.1f, deltaTime: Time.deltaTime);
+        animator.SetFloat(id: AnimHash.MoveSpeed, value: speed, dampTime: 0.1f, deltaTime: Time.deltaTime);
     }
 
     /// <summary>
-    /// 角色攻击动画播放
+    /// 让角色更新动画
     /// </summary>
-    public void PlayAttack()
+    /// <param name="animHash"></param>
+    /// <param name="fadeTime"></param>
+    public void PlayAnimation(int animHash, float fadeTime = 0.1f)
     {
-        animator.CrossFadeInFixedTime("Attack01", 0.1f);// 参数2：过渡时间，0.1秒通常是 ARPG 的黄金标准
+        animator.CrossFadeInFixedTime(animHash, fadeTime);// 参数2：过渡时间，0.1秒通常是 ARPG 的黄金标准
     }
 
     /// <summary>
@@ -80,4 +81,5 @@ public class PlayerController : MonoBehaviour
         }
         return false;
     }
+
 }
