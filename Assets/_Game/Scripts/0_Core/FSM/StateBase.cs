@@ -4,12 +4,13 @@ using UnityEngine;
 
 public abstract class StateBase
 {
-    protected PlayerController playerController;
+    protected PlayerController owner;
     protected StateMachine stateMachine;
-    public StateBase(PlayerController playerController, StateMachine stateMachine)
+
+    public void Initialize(PlayerController owner, StateMachine machine)
     {
-        this.playerController = playerController;
-        this.stateMachine = stateMachine;
+        this.owner = owner;
+        this.stateMachine = machine;
     }
 
     public virtual void OnEnter()

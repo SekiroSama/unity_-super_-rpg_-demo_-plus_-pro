@@ -5,27 +5,40 @@ using UnityEngine;
 public class StateMachine
 {
     public StateBase CurrentState;
+    public PlayerController owner;
+    Dictionary<System.Type, StateBase> States = new Dictionary<System.Type, StateBase>();
 
-    void Initialize(StateBase startState)
+    public StateMachine(PlayerController owner)
     {
-        startState.OnEnter();
-        CurrentState = startState;
+        this.owner = owner;
     }
 
-    void Update()
+    public void Initialize<T>() where T : StateBase, new()
+    {
+        ChangeState<T>();
+    }
+
+    public void Update()
     {
         CurrentState.OnUpdate();
     }
 
-    void ChangeState(StateBase newState, bool changeToSelf = false)
+    public void ChangeState<T>() where T: StateBase, new()
     {
-        if(newState == null || (!changeToSelf && newState == CurrentState))
+        if(typeof(T) == CurrentState?.GetType())
         {
             return;
         }
 
-        CurrentState.OnExit();
-        CurrentState = newState;
+        if (!States.ContainsKey(typeof(T)))
+        {
+            StateBase newstate = new T();
+            newstate.Initialize(owner, this);
+            States.Add(typeof(T), newstate);
+        }
+
+        CurrentState?.OnExit();
+        CurrentState = States[typeof(T)];
         CurrentState.OnEnter();
     }
 }
