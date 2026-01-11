@@ -235,12 +235,9 @@
             }
             fixed4 frag (v2f i) : SV_Target
             {
-                float3 viewDir = UnityWorldSpaceViewDir(i.wPos).xyz;
-                //角度计算不对
-                float rim = 1 - saturate(dot(viewDir, normalize(i.wNormal)));
                 fixed3 noise = tex2D(_AuraFlowMap, float2(i.uv.x + _Time.y * _FlowSpeed, i.uv.y + _Time.y * _FlowSpeed)) ;
 
-                return float4(_AuraColor * rim * noise,1);
+                return float4(_AuraColor * noise, 1);
             }
 
             ENDCG
