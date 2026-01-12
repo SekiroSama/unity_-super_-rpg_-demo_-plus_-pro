@@ -1,4 +1,4 @@
-﻿Shader "Unlit/FlowingLight"
+﻿Shader "Custom/Weapon/Knife_magic_sword_FlowingLight"
 {
     Properties
     {

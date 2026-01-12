@@ -1,4 +1,4 @@
-﻿Shader "Custom/Weapon/RuneBlade"
+﻿Shader "Custom/Weapon/Knife_magic_sword_RuneBlade"
 {
    Properties
     {

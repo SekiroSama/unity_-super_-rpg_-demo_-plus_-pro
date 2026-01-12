@@ -1,18 +1,24 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public int HP = 100;
+    MeshRenderer meshRenderer;
+    Material material;
+
+    private void Start()
     {
-        
+        meshRenderer = GetComponent<MeshRenderer>();
+        material = meshRenderer.material;
     }
 
-    // Update is called once per frame
-    void Update()
+
+    public void TakeDamage(int damage, Vector3 hitPoint)
     {
-        
+        HP -= damage;
+        material.SetVector("_HitPoint", hitPoint);
+        StartCoroutine("");
     }
 }
