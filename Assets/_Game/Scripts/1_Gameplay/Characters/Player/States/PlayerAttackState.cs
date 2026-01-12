@@ -7,6 +7,7 @@ public class PlayerAttackState : StateBase
     int[] comboHashIDs = new int[3] { AnimHash.Attack01, AnimHash.Attack02, AnimHash.Attack03 };
     int comboIndex = 0;
     bool _hasAtkInput;
+    float _waitTimer;
 
     public override void OnEnter()
     {
@@ -17,6 +18,7 @@ public class PlayerAttackState : StateBase
         _hasAtkInput = false;
 
         owner.UseRootMotion = true;
+        _waitTimer = 0f;
     }
 
     public override void OnUpdate()
@@ -26,20 +28,35 @@ public class PlayerAttackState : StateBase
             _hasAtkInput = true;
         }
 
-        if (owner.IsAnimationFinished(comboHashIDs[comboIndex]))
+        if (owner.IsAnimationFinished(comboHashIDs[comboIndex], comboIndex == 2 ? 0.5f : 0.95f))
         {
             if (_hasAtkInput && comboIndex < 2)
             {
                 comboIndex++;
                 owner.PlayAnimation(comboHashIDs[comboIndex]);
                 _hasAtkInput = false;
+                _waitTimer = 0f;
             }
             else
             {
-                stateMachine.ChangeState<PlayerIdleState>();
-                return;
+                if (_hasAtkInput && comboIndex == 2)
+                {
+                    comboIndex = 0;
+                    owner.PlayAnimation(comboHashIDs[comboIndex]);
+                    _hasAtkInput = false;
+                    _waitTimer = 0f;
+                }
+
+                _waitTimer += Time.deltaTime;
+                if(_waitTimer > 0.3f)
+                {
+                    stateMachine.ChangeState<PlayerIdleState>();
+                    _waitTimer = 0f;
+                    return;
+                }
             }
         }
+        owner.FaceInput(GameInputManager.Instance.CurrentInput.MoveVector);
     }
 
     public override void OnExit()

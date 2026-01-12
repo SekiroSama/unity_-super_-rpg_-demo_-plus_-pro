@@ -1,4 +1,4 @@
-﻿Shader "Unlit/流光效果"
+﻿Shader "Unlit/FlowingLight"
 {
     Properties
     {

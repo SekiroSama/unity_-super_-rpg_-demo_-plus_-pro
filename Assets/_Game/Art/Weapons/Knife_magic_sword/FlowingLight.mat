@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: "\u6D41\u5149\u6548\u679C"
+  m_Name: FlowingLight
   m_Shader: {fileID: 4800000, guid: cf04a0e50978cad49871c1394f036274, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0

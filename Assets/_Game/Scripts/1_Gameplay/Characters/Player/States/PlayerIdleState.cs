@@ -7,7 +7,7 @@ public class PlayerIdleState : StateBase
     public override void OnEnter()
     {
         owner.UpdateAnimation(0f);
-        owner.PlayAnimation(AnimHash.Locomotion, 0.3f);
+        owner.PlayAnimation(AnimHash.Locomotion, 0.1f);
     }
 
     public override void OnUpdate()

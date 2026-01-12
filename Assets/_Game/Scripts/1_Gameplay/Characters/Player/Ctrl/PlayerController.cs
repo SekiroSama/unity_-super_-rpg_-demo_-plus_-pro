@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
 
     [HideInInspector]
     public bool UseRootMotion = false;
+
+    public WeaponController weaponController;
     private void Start()
     {
         CC = this.GetComponent<CharacterController>();
@@ -31,6 +33,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         stateMachine.OnUpdate();
+        //Debug.Log(stateMachine.CurrentState);
     }
 
     /// <summary>
@@ -39,7 +42,32 @@ public class PlayerController : MonoBehaviour
     /// <param name="input"></param>
     public void Move(Vector2 input)
     {
-        if (input.sqrMagnitude <= 0.01) return;
+        Vector3 moveDir = GetCameraRelativeDir(input);
+
+        CC.Move(moveDir * moveSpeed * Time.deltaTime);
+        FaceDirection(moveDir);
+    }
+
+    /// <summary>
+    /// 根据输入方向让角色面向该方向
+    /// </summary>
+    /// <param name="input">输入方向</param>
+    public void FaceInput(Vector2 input)
+    {
+        Vector3 moveDir = GetCameraRelativeDir(input);
+        FaceDirection(moveDir);
+    }
+
+    private void FaceDirection(Vector3 moveDir)
+    {
+        if(moveDir.sqrMagnitude <= 0.01f) return;
+        this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(moveDir), rotatSpeed * Time.deltaTime);
+    }
+
+
+    private Vector3 GetCameraRelativeDir(Vector2 input)
+    {
+        if (input.sqrMagnitude <= 0.01) return Vector3.zero;
 
         Vector3 camForward = _camTransform.forward;
         Vector3 camRight = _camTransform.right;
@@ -47,9 +75,7 @@ public class PlayerController : MonoBehaviour
         camForward.Normalize(); camRight.Normalize();
 
         Vector3 moveDir = camRight * input.x + camForward * input.y;
-
-        CC.Move(moveDir * moveSpeed * Time.deltaTime);
-        this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(moveDir), rotatSpeed * Time.deltaTime);
+        return moveDir;
     }
 
     private void OnAnimatorMove()
@@ -84,14 +110,30 @@ public class PlayerController : MonoBehaviour
     /// 角色攻击动画是否播放完毕
     /// </summary>
     /// <returns></returns>
-    public bool IsAnimationFinished(int animHash)
+    public bool IsAnimationFinished(int animHash, float exitTime = 0.95f)
     {
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        if(stateInfo.shortNameHash == animHash && stateInfo.normalizedTime >= 0.95f)
+        if(stateInfo.shortNameHash == animHash && stateInfo.normalizedTime >= exitTime)
         {
             return true;
         }
         return false;
     }
 
+
+    /// <summary>
+    /// 动画事件：武器碰撞开启
+    /// </summary>
+    public void AE_WeaponOn()
+    {
+        weaponController.OpenCollider();
+    }
+
+    /// <summary>
+    /// 动画事件：武器碰撞关闭
+    /// </summary>
+    public void AE_WeaponOff()
+    {
+        weaponController.CloseCollider();
+    }
 }
