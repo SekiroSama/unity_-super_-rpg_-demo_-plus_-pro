@@ -272,6 +272,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HP: 100
   duration: 0.5
+  JitterScale: 0.1
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

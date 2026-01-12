@@ -10,7 +10,7 @@ public class EnemyController : MonoBehaviour
 
     private void Start()
     {
-        meshRenderer = GetComponent<MeshRenderer>();
+        meshRenderer = this.GetComponentInChildren<MeshRenderer>();
         material = meshRenderer.material;
     }
 
@@ -34,19 +34,20 @@ public class EnemyController : MonoBehaviour
     }
 
     public float duration;//抖动时间
+    public float JitterScale = 0.1f;
     /// <summary>
     /// 往受击抖动shader传参开始抖动
     /// </summary>
     /// <returns></returns>
     private IEnumerator HitJitter()
     {
-        material.SetFloat("_HitStrength", 0.2f);
+        material.SetFloat("_HitStrength", JitterScale);
         float timer = 0;
         while(timer < duration)
         {
             timer += Time.deltaTime;
             float progress = timer / duration;
-            float val = Mathf.Lerp(1, 0, progress);
+            float val = Mathf.Lerp(JitterScale, 0, progress);
             material.SetFloat("_HitStrength", val);
             yield return null;
         }
