@@ -3,11 +3,9 @@
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _HitPos ("HitPos", vector) = (0, 0, 0, 0)
-        _HitStrength ("HitStrength", float) = 0
-        _HitRadius ("HitRadius", float) = 0.5
-        _WaveSpeed ("WaveSpeed", float) = 50
-        _WaveFrequency ("WaveFrequency", float) = 10
+        _HitRadius ("受击振动范围", float) = 0.5
+        _WaveSpeed ("振动速度", float) = 50
+        _WaveFrequency ("波纹密度", float) = 10
     }
     SubShader
     {

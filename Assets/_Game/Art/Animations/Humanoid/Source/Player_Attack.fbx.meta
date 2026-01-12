@@ -104,7 +104,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.6273408
+      - time: 0.57268244
         functionName: AE_WeaponOn
         data: 
         objectReferenceParameter: {instanceID: 0}

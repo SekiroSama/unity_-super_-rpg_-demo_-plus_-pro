@@ -30,7 +30,8 @@ public class WeaponController : MonoBehaviour
             int id = other.gameObject.GetInstanceID();
             if (!whiteList.Contains(id))
             {
-                Debug.Log("Hit an enemy!");
+                EnemyController enemyController = other.GetComponent<EnemyController>();
+                enemyController.TakeDamage(10, other.ClosestPoint(transform.position));
                 whiteList.Add(id);
             }
         }
