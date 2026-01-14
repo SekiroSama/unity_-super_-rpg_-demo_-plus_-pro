@@ -5,12 +5,12 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     public int HP = 100;
-    MeshRenderer meshRenderer;
+    SkinnedMeshRenderer meshRenderer;
     Material material;
 
     private void Start()
     {
-        meshRenderer = this.GetComponentInChildren<MeshRenderer>();
+        meshRenderer = this.GetComponentInChildren<SkinnedMeshRenderer>();
         material = meshRenderer.material;
     }
 
