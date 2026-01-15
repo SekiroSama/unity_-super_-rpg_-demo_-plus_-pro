@@ -19,7 +19,7 @@ public class EnemyController : MonoBehaviour
     /// 受到伤害
     /// </summary>
     /// <param name="damage">伤害值</param>
-    /// <param name="hitPoint">受击位置</param>
+    /// <param name="hitPoint">受击位置，传入shader</param>
     public void TakeDamage(int damage, Vector3 hitPoint)
     {
         HP -= damage;
@@ -34,7 +34,7 @@ public class EnemyController : MonoBehaviour
     }
 
     public float duration;//抖动时间
-    public float JitterScale = 0.1f;
+    public float JitterScale = 0.1f;//抖动幅度
     /// <summary>
     /// 往受击抖动shader传参开始抖动
     /// </summary>

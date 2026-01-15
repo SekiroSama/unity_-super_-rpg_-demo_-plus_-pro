@@ -6,6 +6,8 @@
         _HitRadius ("受击振动范围", float) = 0.5
         _WaveSpeed ("振动速度", float) = 50
         _WaveFrequency ("波纹密度", float) = 10
+        _HitFalloff("衰减指数", Range(0.5, 5)) = 2
+        _StrengthScale("振幅倍率", Range(0, 10)) = 1
     }
     SubShader
     {
@@ -38,11 +40,13 @@
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
-            float4 _HitPos;
-            float _HitStrength;
+            float4 _HitPos;//外部传入
+            float _HitStrength;//外部传入
             float _HitRadius;
             float _WaveSpeed;
             float _WaveFrequency;
+            float _HitFalloff;
+            float _StrengthScale;
 
             v2f vert (appdata v)
             {
@@ -51,7 +55,7 @@
                 float3 wpos = mul(unity_ObjectToWorld, v.vertex).xyz;
                 float dist = distance(wpos, _HitPos.xyz);
 
-                float import = saturate((_HitRadius - dist) / _HitRadius) * _HitStrength;
+                float import = pow(saturate((_HitRadius - dist) / _HitRadius), _HitFalloff) * _HitStrength * _StrengthScale;
                 import *= sin(_Time.y * _WaveSpeed + dist * _WaveFrequency);
 
                 o.vertex = UnityObjectToClipPos(v.vertex + import * v.normal);
