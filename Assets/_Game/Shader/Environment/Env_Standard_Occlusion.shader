@@ -77,13 +77,17 @@
             }
             fixed4 frag (v2f i) : SV_Target
             {
-                float disPlayerToCamera = distance(_PlayerPos, _WorldSpaceCameraPos);
-                float disPosToCamera = distance(i.worldPos, _WorldSpaceCameraPos);
-                if(disPlayerToCamera > disPosToCamera){
-                    float3 dirCameraToPlayar = normalize(_PlayerPos.xyz - _WorldSpaceCameraPos);
-                    float3 dirCameraToPos = normalize(i.worldPos - _WorldSpaceCameraPos);
-                    clip(_ClipFloat - dot(dirCameraToPlayar, dirCameraToPos));
-                }
+                //float disPlayerToCamera = distance(_PlayerPos, _WorldSpaceCameraPos);
+                //float disPosToCamera = distance(i.worldPos, _WorldSpaceCameraPos);
+                //if(disPlayerToCamera > disPosToCamera){
+                //    float3 dirCameraToPlayar = normalize(_PlayerPos.xyz - _WorldSpaceCameraPos);
+                //    float3 dirCameraToPos = normalize(i.worldPos - _WorldSpaceCameraPos);
+                //    clip(_ClipFloat - dot(dirCameraToPlayar, dirCameraToPos));
+                //}
+                float4 lineVec = normalize(_WorldSpaceCameraPos - _PlayerPos);
+                float4 pixelVec = normalize(i.worldPos - _PlayerPos);
+                float t = saturate(dot(pixelVec,lineVec) / dot(lineVec, lineVec));
+                //明天干
 
                 //世界空间下光的方向
                 fixed3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
@@ -114,6 +118,19 @@
                 fixed3 color = UNITY_LIGHTMODEL_AMBIENT.rgb * albedo + lambertColor * atten;
                 return fixed4(color.rgb, 1);
             }
+
+            float Dither4x4(float4 pos, float alpha)
+            {
+                float4x4 baier =   float4x4(1, 9, 3, 11,
+                                            13, 5, 15, 7,
+                                            4, 12, 2, 10,
+                                            16, 8, 14, 6);
+                float x = fmod(pos.x, 4);
+                float y = fmod(pos.y, 4);
+                float menkan = baier[(int)x][(int)y]/16;
+                return alpha - menkan;
+            }
+
             ENDCG
         }
         Pass
