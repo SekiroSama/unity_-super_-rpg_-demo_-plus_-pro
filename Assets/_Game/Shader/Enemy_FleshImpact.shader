@@ -55,7 +55,7 @@
                 float3 wpos = mul(unity_ObjectToWorld, v.vertex).xyz;
                 float dist = distance(wpos, _HitPos.xyz);
 
-                float import = pow(saturate((_HitRadius - dist) / _HitRadius), _HitFalloff) * _HitStrength * _StrengthScale;
+                float import = pow(saturate((_HitRadius - dist) / max(_HitRadius, 0.001)), _HitFalloff) * _HitStrength * _StrengthScale;
                 import *= sin(_Time.y * _WaveSpeed + dist * _WaveFrequency);
 
                 o.vertex = UnityObjectToClipPos(v.vertex + import * v.normal);
