@@ -23,7 +23,7 @@ public class PlayerAttackState : StateBase
 
     public override void OnUpdate()
     {
-        if (GameInputManager.Instance.CurrentInput.IsAttack)
+        if (GameManager.Instance.gameInputManager.CurrentInput.IsAttack)
         {
             _hasAtkInput = true;
         }
@@ -56,7 +56,7 @@ public class PlayerAttackState : StateBase
                 }
             }
         }
-        owner.FaceInput(GameInputManager.Instance.CurrentInput.MoveVector);
+        owner.FaceInput(GameManager.Instance.gameInputManager.CurrentInput.MoveVector);
     }
 
     public override void OnExit()

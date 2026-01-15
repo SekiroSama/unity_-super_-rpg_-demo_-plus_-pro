@@ -20,14 +20,19 @@ public class PlayerController : MonoBehaviour
     public bool UseRootMotion = false;
 
     public WeaponController weaponController;
+    public Transform LookPos;//用于环境遮挡裁剪
+
     private void Start()
     {
+        GameManager.Instance.InitPlayerController(this);
         CC = this.GetComponent<CharacterController>();
         animator = this.GetComponent<Animator>();
         _camTransform = Camera.main.transform;
 
         stateMachine = new StateMachine(this);
         stateMachine.Initialize<PlayerIdleState>();
+
+        LookPos = this.transform.Find("LookPos");
     }
 
     private void Update()
@@ -75,7 +80,7 @@ public class PlayerController : MonoBehaviour
         camForward.Normalize(); camRight.Normalize();
 
         Vector3 moveDir = camRight * input.x + camForward * input.y;
-        return moveDir;
+        return moveDir.normalized;
     }
 
     private void OnAnimatorMove()

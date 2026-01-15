@@ -12,19 +12,19 @@ public class PlayerRunState : StateBase
 
     public override void OnUpdate()
     {
-        if (GameInputManager.Instance.CurrentInput.IsAttack)
+        if (GameManager.Instance.gameInputManager.CurrentInput.IsAttack)
         {
             stateMachine.ChangeState<PlayerAttackState>();
             return;
         }
 
-        if (GameInputManager.Instance.CurrentInput.MoveVector.sqrMagnitude <= 0.01)
+        if (GameManager.Instance.gameInputManager.CurrentInput.MoveVector.sqrMagnitude <= 0.01)
         {
             stateMachine.ChangeState<PlayerIdleState>();
             return;
         }
 
-        owner.Move(GameInputManager.Instance.CurrentInput.MoveVector);
-        owner.UpdateAnimation(GameInputManager.Instance.CurrentInput.MoveVector.magnitude);
+        owner.Move(GameManager.Instance.gameInputManager.CurrentInput.MoveVector);
+        owner.UpdateAnimation(GameManager.Instance.gameInputManager.CurrentInput.MoveVector.magnitude);
     }
 }

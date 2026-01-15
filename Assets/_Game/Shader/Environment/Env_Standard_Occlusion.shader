@@ -1,4 +1,4 @@
-﻿Shader "Unlit/带凹凸纹理的高光反射效果"
+﻿Shader "Custom/Environment/StandardOcclusion"
 {
    Properties
     {
@@ -6,6 +6,7 @@
         _MainTex("MainTex", 2D) = ""{}
         _BumpMap("BumpMap", 2D) = ""{}
         _BumpScale("BumpScale", Range(0,1)) = 1
+        _ClipFloat ("ClipFloat", Range(0, 1)) = 0.9
     }
     SubShader
     {
@@ -26,6 +27,8 @@
             sampler2D _BumpMap;//法线纹理
             float4 _BumpMap_ST;//法线纹理的缩放和平移
             float _BumpScale;//凹凸程度
+            float4 _PlayerPos;//玩家位置
+            float _ClipFloat;//裁剪阈值 cosθ
             struct v2f
             {
                 float4 pos:SV_POSITION;
@@ -42,6 +45,7 @@
                 float4 TtoW0:TEXCOORD1;
                 float4 TtoW1:TEXCOORD2;
                 float4 TtoW2:TEXCOORD3;
+                float3 worldPos : TEXCOORD5;
                 SHADOW_COORDS(4)
             };
             v2f vert (appdata_full v)
@@ -55,6 +59,7 @@
                 //得到世界空间下的 顶点位置 用于之后在片元中计算视角方向（世界空间下的）
                 //data.worldPos = mul(unity_ObjectToWorld, v.vertex);
                 float3 worldPos = mul(unity_ObjectToWorld, v.vertex);
+                data.worldPos = worldPos;
                 //把模型空间下的法线、切线转换到世界空间下
                 float3 worldNormal = UnityObjectToWorldNormal(v.normal);
                 float3 worldTangent = UnityObjectToWorldDir(v.tangent);
@@ -72,6 +77,14 @@
             }
             fixed4 frag (v2f i) : SV_Target
             {
+                float disPlayerToCamera = distance(_PlayerPos, _WorldSpaceCameraPos);
+                float disPosToCamera = distance(i.worldPos, _WorldSpaceCameraPos);
+                if(disPlayerToCamera > disPosToCamera){
+                    float3 dirCameraToPlayar = normalize(_PlayerPos.xyz - _WorldSpaceCameraPos);
+                    float3 dirCameraToPos = normalize(i.worldPos - _WorldSpaceCameraPos);
+                    clip(_ClipFloat - dot(dirCameraToPlayar, dirCameraToPos));
+                }
+
                 //世界空间下光的方向
                 fixed3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
                 //世界空间下视角方向
@@ -120,6 +133,8 @@
             sampler2D _BumpMap;//法线纹理
             float4 _BumpMap_ST;//法线纹理的缩放和平移
             float _BumpScale;//凹凸程度
+            float4 _PlayerPos;//玩家位置
+            float _ClipFloat;//裁剪阈值 cosθ
             struct v2f
             {
                 float4 pos:SV_POSITION;
@@ -137,6 +152,7 @@
                 float4 TtoW1:TEXCOORD2;
                 float4 TtoW2:TEXCOORD3;
                 SHADOW_COORDS(4)
+                float3 worldPos : TEXCOORD5;
             };
             v2f vert (appdata_full v)
             {
@@ -149,6 +165,7 @@
                 //得到世界空间下的 顶点位置 用于之后在片元中计算视角方向（世界空间下的）
                 //data.worldPos = mul(unity_ObjectToWorld, v.vertex);
                 float3 worldPos = mul(unity_ObjectToWorld, v.vertex);
+                data.worldPos = worldPos;
                 //把模型空间下的法线、切线转换到世界空间下
                 float3 worldNormal = UnityObjectToWorldNormal(v.normal);
                 float3 worldTangent = UnityObjectToWorldDir(v.tangent);
@@ -166,6 +183,14 @@
             }
             fixed4 frag (v2f i) : SV_Target
             {
+                float disPlayerToCamera = distance(_PlayerPos, _WorldSpaceCameraPos);
+                float disPosToCamera = distance(i.worldPos, _WorldSpaceCameraPos);
+                if(disPlayerToCamera > disPosToCamera){
+                    float3 dirCameraToPlayar = normalize(_PlayerPos.xyz - _WorldSpaceCameraPos);
+                    float3 dirCameraToPos = normalize(i.worldPos - _WorldSpaceCameraPos);
+                    clip(_ClipFloat - dot(dirCameraToPlayar, dirCameraToPos));
+                }
+
                 //世界空间下光的方向
                 fixed3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
                 //世界空间下视角方向

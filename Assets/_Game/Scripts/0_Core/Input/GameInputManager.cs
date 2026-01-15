@@ -2,23 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameInputManager : MonoBehaviour
+public class GameInputManager
 {
-    private static GameInputManager _instance;
-    public static GameInputManager Instance
-    {
-        get
-        {
-            return _instance;
-        }
-    }
-
-    private void Awake()
-    {
-        _instance = this;
-        DontDestroyOnLoad(this.gameObject);
-    }
-
     public struct PlayerInputData
     {
         public Vector2 MoveVector;
@@ -31,14 +16,13 @@ public class GameInputManager : MonoBehaviour
     //接收ui按钮输入
     private bool _virtualAttackPressed = false;
 
-    private void Start()
+    public void OnStart()
     {
         Cursor.lockState = CursorLockMode.Locked;//CursorLockMode影响鼠标运动逻辑，Locked大概率会隐藏但在某些环境不行
         Cursor.visible = false;//确保隐藏
-
     }
 
-    private void Update()
+    public void OnUpdate()
     {
         _playerInputData = new PlayerInputData();
         _playerInputData.MoveVector.x = Input.GetAxis("Horizontal");
@@ -50,6 +34,5 @@ public class GameInputManager : MonoBehaviour
 
         _playerInputData.IsAttack = Input.GetMouseButtonDown(0) || _virtualAttackPressed;
         _virtualAttackPressed = false;
-        //Debug.Log("MoveVector: " + playerInputData.MoveVector);
     }
 }
