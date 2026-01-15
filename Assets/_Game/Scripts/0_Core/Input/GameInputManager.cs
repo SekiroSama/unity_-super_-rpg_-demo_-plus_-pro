@@ -30,6 +30,14 @@ public class GameInputManager : MonoBehaviour
 
     //接收ui按钮输入
     private bool _virtualAttackPressed = false;
+
+    private void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;//CursorLockMode影响鼠标运动逻辑，Locked大概率会隐藏但在某些环境不行
+        Cursor.visible = false;//确保隐藏
+
+    }
+
     private void Update()
     {
         _playerInputData = new PlayerInputData();
