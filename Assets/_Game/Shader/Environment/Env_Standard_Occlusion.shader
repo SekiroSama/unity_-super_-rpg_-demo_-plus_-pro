@@ -6,7 +6,7 @@
         _MainTex("MainTex", 2D) = ""{}
         _BumpMap("BumpMap", 2D) = ""{}
         _BumpScale("BumpScale", Range(0,1)) = 1
-        _ClipFloat ("ClipFloat", Range(0, 1)) = 0.9
+        _ClipRadius ("ClipRadius", Range(0, 1)) = 0.9
     }
     SubShader
     {
@@ -28,7 +28,7 @@
             float4 _BumpMap_ST;//法线纹理的缩放和平移
             float _BumpScale;//凹凸程度
             float4 _PlayerPos;//玩家位置
-            float _ClipFloat;//裁剪阈值 cosθ
+            float _ClipRadius;//裁剪半径
             struct v2f
             {
                 float4 pos:SV_POSITION;
@@ -48,6 +48,19 @@
                 float3 worldPos : TEXCOORD5;
                 SHADOW_COORDS(4)
             };
+
+            float Dither4x4(float4 pos, float alpha)
+            {
+                float4x4 baier =   float4x4(1, 9, 3, 11,
+                                            13, 5, 15, 7,
+                                            4, 12, 2, 10,
+                                            16, 8, 14, 6);
+                float x = fmod(pos.x, 4);
+                float y = fmod(pos.y, 4);
+                float menkan = baier[(int)x][(int)y]/16;
+                return alpha - menkan;
+            }
+
             v2f vert (appdata_full v)
             {
                 v2f data;
@@ -77,17 +90,15 @@
             }
             fixed4 frag (v2f i) : SV_Target
             {
-                //float disPlayerToCamera = distance(_PlayerPos, _WorldSpaceCameraPos);
-                //float disPosToCamera = distance(i.worldPos, _WorldSpaceCameraPos);
-                //if(disPlayerToCamera > disPosToCamera){
-                //    float3 dirCameraToPlayar = normalize(_PlayerPos.xyz - _WorldSpaceCameraPos);
-                //    float3 dirCameraToPos = normalize(i.worldPos - _WorldSpaceCameraPos);
-                //    clip(_ClipFloat - dot(dirCameraToPlayar, dirCameraToPos));
-                //}
-                float4 lineVec = normalize(_WorldSpaceCameraPos - _PlayerPos);
-                float4 pixelVec = normalize(i.worldPos - _PlayerPos);
-                float t = saturate(dot(pixelVec,lineVec) / dot(lineVec, lineVec));
-                //明天干
+                _PlayerPos += 0.4;
+                float3 lineVec = _WorldSpaceCameraPos - _PlayerPos;
+                float3 pixelVec = i.worldPos - _PlayerPos;
+                float t = saturate(dot(pixelVec,lineVec) / dot(lineVec, lineVec));//计算pv在lv上的投影算法，避免开根号
+                float3 closestPoint = _PlayerPos + lineVec * t; 
+                float dist = distance(i.worldPos, closestPoint);//点到直线的距离 因为不能直接传直线，要先有一个点，所以要算垂足，所以先算投影
+                float alpha = smoothstep(_ClipRadius, _ClipRadius + 0.5, dist);
+                clip(Dither4x4(i.pos, alpha));
+
 
                 //世界空间下光的方向
                 fixed3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
@@ -118,19 +129,6 @@
                 fixed3 color = UNITY_LIGHTMODEL_AMBIENT.rgb * albedo + lambertColor * atten;
                 return fixed4(color.rgb, 1);
             }
-
-            float Dither4x4(float4 pos, float alpha)
-            {
-                float4x4 baier =   float4x4(1, 9, 3, 11,
-                                            13, 5, 15, 7,
-                                            4, 12, 2, 10,
-                                            16, 8, 14, 6);
-                float x = fmod(pos.x, 4);
-                float y = fmod(pos.y, 4);
-                float menkan = baier[(int)x][(int)y]/16;
-                return alpha - menkan;
-            }
-
             ENDCG
         }
         Pass
@@ -151,7 +149,7 @@
             float4 _BumpMap_ST;//法线纹理的缩放和平移
             float _BumpScale;//凹凸程度
             float4 _PlayerPos;//玩家位置
-            float _ClipFloat;//裁剪阈值 cosθ
+            float _ClipRadius;//裁剪半径
             struct v2f
             {
                 float4 pos:SV_POSITION;
@@ -171,6 +169,19 @@
                 SHADOW_COORDS(4)
                 float3 worldPos : TEXCOORD5;
             };
+
+            float Dither4x4(float4 pos, float alpha)
+            {
+                float4x4 baier =   float4x4(1, 9, 3, 11,
+                                            13, 5, 15, 7,
+                                            4, 12, 2, 10,
+                                            16, 8, 14, 6);
+                float x = fmod(pos.x, 4);
+                float y = fmod(pos.y, 4);
+                float menkan = baier[(int)x][(int)y]/16;
+                return alpha - menkan;
+            }
+
             v2f vert (appdata_full v)
             {
                 v2f data;
@@ -200,13 +211,14 @@
             }
             fixed4 frag (v2f i) : SV_Target
             {
-                float disPlayerToCamera = distance(_PlayerPos, _WorldSpaceCameraPos);
-                float disPosToCamera = distance(i.worldPos, _WorldSpaceCameraPos);
-                if(disPlayerToCamera > disPosToCamera){
-                    float3 dirCameraToPlayar = normalize(_PlayerPos.xyz - _WorldSpaceCameraPos);
-                    float3 dirCameraToPos = normalize(i.worldPos - _WorldSpaceCameraPos);
-                    clip(_ClipFloat - dot(dirCameraToPlayar, dirCameraToPos));
-                }
+                _PlayerPos += 0.4;
+                float3 lineVec = _WorldSpaceCameraPos - _PlayerPos;
+                float3 pixelVec = i.worldPos - _PlayerPos;
+                float t = saturate(dot(pixelVec,lineVec) / dot(lineVec, lineVec));//计算pv在lv上的投影算法，避免开根号
+                float3 closestPoint = _PlayerPos + lineVec * t; 
+                float dist = distance(i.worldPos, closestPoint);//点到直线的距离 因为不能直接传直线，要先有一个点，所以要算垂足，所以先算投影
+                float alpha = smoothstep(_ClipRadius, _ClipRadius + 0.5, dist);
+                clip(Dither4x4(i.pos, alpha));
 
                 //世界空间下光的方向
                 fixed3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
