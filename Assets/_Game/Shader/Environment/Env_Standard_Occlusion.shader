@@ -57,7 +57,7 @@
                                             16, 8, 14, 6);
                 float x = fmod(pos.x, 4);
                 float y = fmod(pos.y, 4);
-                float menkan = baier[(int)x][(int)y]/16;
+                float menkan = baier[(int)x][(int)y]/17;
                 return alpha - menkan;
             }
 
@@ -93,10 +93,10 @@
                 _PlayerPos += 0.4;
                 float3 lineVec = _WorldSpaceCameraPos - _PlayerPos;
                 float3 pixelVec = i.worldPos - _PlayerPos;
-                float t = saturate(dot(pixelVec,lineVec) / dot(lineVec, lineVec));//计算pv在lv上的投影算法，避免开根号
-                float3 closestPoint = _PlayerPos + lineVec * t; 
+                float t = dot(pixelVec,lineVec) / dot(lineVec, lineVec);//计算pv在lv上的投影算法，避免开根号
+                float3 closestPoint = _PlayerPos + lineVec * saturate(t); 
                 float dist = distance(i.worldPos, closestPoint);//点到直线的距离 因为不能直接传直线，要先有一个点，所以要算垂足，所以先算投影
-                float alpha = smoothstep(_ClipRadius, _ClipRadius + 0.5, dist);
+                float alpha = (t <0 || t > 1) ? 1 : smoothstep(0, _ClipRadius, dist);//_ClipRadius = 0时关闭裁剪
                 clip(Dither4x4(i.pos, alpha));
 
 
@@ -217,7 +217,7 @@
                 float t = saturate(dot(pixelVec,lineVec) / dot(lineVec, lineVec));//计算pv在lv上的投影算法，避免开根号
                 float3 closestPoint = _PlayerPos + lineVec * t; 
                 float dist = distance(i.worldPos, closestPoint);//点到直线的距离 因为不能直接传直线，要先有一个点，所以要算垂足，所以先算投影
-                float alpha = smoothstep(_ClipRadius, _ClipRadius + 0.5, dist);
+                float alpha = smoothstep(1 - _ClipRadius, 1, dist);//alpha > 1时关闭裁剪
                 clip(Dither4x4(i.pos, alpha));
 
                 //世界空间下光的方向

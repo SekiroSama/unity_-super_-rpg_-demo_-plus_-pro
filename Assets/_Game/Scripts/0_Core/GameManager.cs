@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Cinemachine;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,25 +14,38 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    public GameInputManager gameInputManager { get; private set; } = new GameInputManager();
+    public InputManager InputManager { get; private set; } = new InputManager(); 
     public CameraManager cameraManager { get; private set; } = new CameraManager();
+    public TerrainManager terrainManager { get; private set; } = new TerrainManager();
     public PlayerController playerController { get; private set; }
+
+    [SerializeField]
+    private CinemachineCollider camCollider;
+    [SerializeField]
+    private CinemachineFreeLook camFreeLook;
+
+    [SerializeField]
+    private MeshRenderer[] meshRenderers;
 
     private void Awake()
     {
         _instance = this;
         Application.targetFrameRate = 60;
-
+        cameraManager.camCollider = camCollider;
+        cameraManager.camFreeLook = camFreeLook;
+        terrainManager.meshRenderers = meshRenderers;
+        terrainManager?.onAwake();
     }
 
     private void Start()
     {
-        gameInputManager?.OnStart();
+        InputManager?.OnStart();
+        cameraManager?.OnStart();
     }
 
     void Update()
     {
-        gameInputManager?.OnUpdate();
+        InputManager?.OnUpdate();
         cameraManager?.OnUpdate();
     }
 

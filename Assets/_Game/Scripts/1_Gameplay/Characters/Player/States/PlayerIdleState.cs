@@ -12,13 +12,13 @@ public class PlayerIdleState : StateBase
 
     public override void OnUpdate()
     {
-        if (GameManager.Instance.gameInputManager.CurrentInput.IsAttack)
+        if (GameManager.Instance.InputManager.CurrentInput.IsAttack)
         {
             stateMachine.ChangeState<PlayerAttackState>();
             return;
         }
 
-        if (GameManager.Instance.gameInputManager.CurrentInput.MoveVector.sqrMagnitude > 0.01)
+        if (GameManager.Instance.InputManager.CurrentInput.MoveVector.sqrMagnitude > 0.01)
         {
             stateMachine.ChangeState<PlayerRunState>();
             return;
