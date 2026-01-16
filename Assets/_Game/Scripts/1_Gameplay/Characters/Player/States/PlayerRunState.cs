@@ -25,6 +25,6 @@ public class PlayerRunState : StateBase
         }
 
         owner.Move(GameManager.Instance.InputManager.CurrentInput.MoveVector);
-        owner.UpdateAnimation(GameManager.Instance.InputManager.CurrentInput.MoveVector.magnitude);
+        owner.UpdateLocomotion(GameManager.Instance.InputManager.CurrentInput.MoveVector.magnitude);
     }
 }

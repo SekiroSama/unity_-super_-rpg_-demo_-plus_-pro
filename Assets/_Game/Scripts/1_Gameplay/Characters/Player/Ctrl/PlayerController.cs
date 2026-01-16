@@ -96,7 +96,7 @@ public class PlayerController : MonoBehaviour
     /// 让角色混合树动画更新
     /// </summary>
     /// <param name="speed"></param>
-    public void UpdateAnimation(float speed)
+    public void UpdateLocomotion(float speed)
     {
         animator.SetFloat(id: AnimHash.MoveSpeed, value: speed, dampTime: 0.1f, deltaTime: Time.deltaTime);
     }

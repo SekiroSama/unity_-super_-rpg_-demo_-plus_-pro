@@ -6,7 +6,7 @@ public class PlayerIdleState : StateBase
 {
     public override void OnEnter()
     {
-        owner.UpdateAnimation(0f);
+        owner.UpdateLocomotion(0f);
         owner.PlayAnimation(AnimHash.Locomotion, 0.1f);
     }
 
@@ -24,6 +24,6 @@ public class PlayerIdleState : StateBase
             return;
         }
 
-        owner.UpdateAnimation(0f);
+        owner.UpdateLocomotion(0f);
     }
 }
