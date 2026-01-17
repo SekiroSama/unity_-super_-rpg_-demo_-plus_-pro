@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
         cameraManager.camFreeLook = camFreeLook;
         terrainManager.meshRenderers = meshRenderers;
         terrainManager?.onAwake();
+        InputManager?.OnAwake();
     }
 
     private void Start()
