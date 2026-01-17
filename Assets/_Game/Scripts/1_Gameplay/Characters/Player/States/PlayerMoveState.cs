@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerRunState : StateBase
+public class PlayerMoveState : StateBase
 {
 
     public override void OnEnter()
     {
-
+        owner.PlayAnimation(AnimationConfig.StateHashes.Locomotion, AnimationConfig.TransitionSettings.NormalTransitionDuration);
     }
 
     public override void OnUpdate()

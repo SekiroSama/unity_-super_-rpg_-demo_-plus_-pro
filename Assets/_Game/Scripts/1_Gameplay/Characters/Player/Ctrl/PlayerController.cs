@@ -107,11 +107,8 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void OnAnimatorMove()
     {
-        if (UseRootMotion)
-        {
-            CC.Move(animator.deltaPosition);
-            this.transform.rotation *= animator.deltaRotation;
-        }
+        CC.Move(animator.deltaPosition);
+        this.transform.rotation *= animator.deltaRotation;
     }
 
     /// <summary>
@@ -120,7 +117,7 @@ public class PlayerController : MonoBehaviour
     /// <param name="speed"></param>
     public void UpdateLocomotion(float speed)
     {
-        animator.SetFloat(id: AnimHash.MoveSpeed, value: speed, dampTime: 0.1f, deltaTime: Time.deltaTime);
+        animator.SetFloat(id: AnimationConfig.Parameters.Speed, value: speed, dampTime: 0.1f, deltaTime: Time.deltaTime);
     }
 
     /// <summary>

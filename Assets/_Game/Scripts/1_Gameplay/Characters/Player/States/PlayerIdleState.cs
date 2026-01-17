@@ -1,13 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static AnimationConfig;
 
 public class PlayerIdleState : StateBase
 {
     public override void OnEnter()
     {
         owner.UpdateLocomotion(0f);
-        owner.PlayAnimation(AnimHash.Locomotion, 0.1f);
+
+        if(stateMachine.PreviousState is PlayerAttackState)
+        {
+            owner.PlayAnimation(AnimationConfig.StateHashes.Idle, AnimationConfig.TransitionSettings.AttackOverTransitionDuration);
+        }
+        else
+        {
+            owner.PlayAnimation(AnimationConfig.StateHashes.Idle, AnimationConfig.TransitionSettings.NormalTransitionDuration);
+        }
     }
 
     public override void OnUpdate()
@@ -20,7 +29,7 @@ public class PlayerIdleState : StateBase
 
         if (GameManager.Instance.InputManager.CurrentInput.MoveVector.sqrMagnitude > 0.01)
         {
-            stateMachine.ChangeState<PlayerRunState>();
+            stateMachine.ChangeState<PlayerMoveState>();
             return;
         }
 

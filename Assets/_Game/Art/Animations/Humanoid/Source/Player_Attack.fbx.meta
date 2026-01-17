@@ -16,12 +16,9 @@ ModelImporter:
     optimizeGameObjects: 0
     removeConstantScaleCurves: 0
     motionNodeName: 
-    rigImportErrors: 
-    rigImportWarnings: "Copied Avatar Rig Configuration mis-match. Bone length in
-      copied configuration does not match position in animation file:\n\t'mixamorig:LeftUpLeg'
-      : position error = 16.661081 mm\n\t'mixamorig:LeftLeg' : position error = 36.438225
-      mm\n\t'mixamorig:LeftFoot' : position error = 23.462648 mm\n\t'mixamorig:LeftToeBase'
-      : position error = 18.399612 mm\n"
+    rigImportErrors: "Copied Avatar Rig Configuration mis-match. Transform hierarchy
+      does not match:\n\tTransform 'Character1_Hips' for human bone 'Hips' not found\n"
+    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 

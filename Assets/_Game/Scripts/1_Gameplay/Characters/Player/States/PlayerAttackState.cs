@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerAttackState : StateBase
 {
-    int[] comboHashIDs = new int[3] { AnimHash.Attack01, AnimHash.Attack02, AnimHash.Attack03 };
+    int[] comboHashIDs = new int[3] { AnimationConfig.StateHashes.Attack01, AnimationConfig.StateHashes.Attack02, AnimationConfig.StateHashes.Attack03 };
     int comboIndex = 0;
     bool _hasAtkInput;
     float _waitTimer;

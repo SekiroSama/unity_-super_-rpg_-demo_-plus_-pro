@@ -5,7 +5,8 @@ using UnityEngine;
 public class StateMachine
 {
     public StateBase CurrentState;
-    public PlayerController owner;
+    public StateBase PreviousState;
+    public PlayerController owner; 
     Dictionary<System.Type, StateBase> States = new Dictionary<System.Type, StateBase>();
 
     public StateMachine(PlayerController owner)
@@ -42,6 +43,7 @@ public class StateMachine
         }
 
         CurrentState?.OnExit();
+        PreviousState = CurrentState;
         CurrentState = States[typeof(T)];
         CurrentState.OnEnter();
     }
