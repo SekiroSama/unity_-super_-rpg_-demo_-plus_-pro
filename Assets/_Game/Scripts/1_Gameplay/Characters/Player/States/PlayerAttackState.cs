@@ -11,8 +11,6 @@ public class PlayerAttackState : StateBase
 
     public override void OnEnter()
     {
-        owner.UpdateLocomotion(0f);
-
         comboIndex = 0;
         owner.PlayAnimation(comboHashIDs[comboIndex]);
         _hasAtkInput = false;

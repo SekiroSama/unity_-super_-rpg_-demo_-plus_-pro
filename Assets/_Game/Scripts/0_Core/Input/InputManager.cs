@@ -9,6 +9,7 @@ public class InputManager
     {
         public Vector2 MoveVector;
         public bool IsAttack;
+        public bool isMoveing;
     }
 
     PlayerInputData _playerInputData;
@@ -76,7 +77,11 @@ public class InputManager
     {
         _playerInputData.MoveVector.x = Input.GetAxis("Horizontal");
         _playerInputData.MoveVector.y = Input.GetAxis("Vertical");
-        _playerInputData.MoveVector.Normalize();
+        _playerInputData.isMoveing = Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0;
+        if (_playerInputData.MoveVector.sqrMagnitude > 1f)
+        {
+            _playerInputData.MoveVector.Normalize();
+        }
     }
 
     /// <summary>

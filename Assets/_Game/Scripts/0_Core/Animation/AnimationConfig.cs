@@ -39,6 +39,7 @@ public class AnimationConfig
         public const float NormalTransitionDuration = 0.1f;
         public const float AttackTransitionDuration = 0.05f;
         public const float AttackOverTransitionDuration = 0.5f;
+        public const float SuperTransitionDuration = 1f;
     }
 
 }

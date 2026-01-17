@@ -5,9 +5,10 @@ using static AnimationConfig;
 
 public class PlayerIdleState : StateBase
 {
+    private float _restTimer = 0f;
     public override void OnEnter()
     {
-        owner.UpdateLocomotion(0f);
+        _restTimer = 0f;
 
         if(stateMachine.PreviousState is PlayerAttackState)
         {
@@ -33,6 +34,12 @@ public class PlayerIdleState : StateBase
             return;
         }
 
-        owner.UpdateLocomotion(0f);
+        _restTimer += Time.deltaTime;
+        if(_restTimer > 10f)
+        {
+            owner.PlayAnimation(AnimationConfig.StateHashes.Rest, AnimationConfig.TransitionSettings.NormalTransitionDuration);
+            _restTimer = -10f;
+            return;
+        }
     }
 }

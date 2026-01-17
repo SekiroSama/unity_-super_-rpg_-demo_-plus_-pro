@@ -25,6 +25,5 @@ public class PlayerMoveState : StateBase
         }
 
         owner.Move(GameManager.Instance.InputManager.CurrentInput.MoveVector);
-        owner.UpdateLocomotion(GameManager.Instance.InputManager.CurrentInput.MoveVector.magnitude);
     }
 }

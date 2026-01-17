@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using UnityEngine;
 using UnityEngine.Windows;
+using static UnityEngine.UI.GridLayoutGroup;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,8 +12,8 @@ public class PlayerController : MonoBehaviour
 
     private StateMachine stateMachine;
 
-    float moveSpeed = 5f;
-    float rotatSpeed = 10f;
+    public float moveSpeed = 5f;
+    public float rotatSpeed = 10f;
 
     Transform _camTransform;
 
@@ -21,8 +22,6 @@ public class PlayerController : MonoBehaviour
 
     public WeaponController weaponController;
     public Transform LookPos;//用于环境遮挡裁剪
-
-    //private float _gravity = -9.81f;
 
     private void Start()
     {
@@ -41,6 +40,8 @@ public class PlayerController : MonoBehaviour
     {
         stateMachine.OnUpdate();
 
+        UpdateLocomotion(GameManager.Instance.InputManager.CurrentInput.MoveVector.magnitude);
+
         HandGravity();
     }
 
@@ -53,15 +54,18 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// 让角色位移旋转
+    /// 让角色旋转移动
     /// </summary>
     /// <param name="input">输入方向</param>
     public void Move(Vector2 input)
     {
         Vector3 moveDir = GetCameraRelativeDir(input);
 
-        CC.Move(moveDir * moveSpeed * Time.deltaTime);
         FaceDirection(moveDir);
+        if(GameManager.Instance.InputManager.CurrentInput.isMoveing)
+        {
+            CC.Move(moveDir * moveSpeed * Time.deltaTime);
+        }
     }
 
     /// <summary>
@@ -107,6 +111,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void OnAnimatorMove()
     {
+        if(!UseRootMotion) return;
         CC.Move(animator.deltaPosition);
         this.transform.rotation *= animator.deltaRotation;
     }
@@ -117,7 +122,7 @@ public class PlayerController : MonoBehaviour
     /// <param name="speed"></param>
     public void UpdateLocomotion(float speed)
     {
-        animator.SetFloat(id: AnimationConfig.Parameters.Speed, value: speed, dampTime: 0.1f, deltaTime: Time.deltaTime);
+        animator.SetFloat(AnimationConfig.Parameters.Speed, speed);
     }
 
     /// <summary>
