@@ -22,6 +22,8 @@ public class PlayerController : MonoBehaviour
     public WeaponController weaponController;
     public Transform LookPos;//用于环境遮挡裁剪
 
+    //private float _gravity = -9.81f;
+
     private void Start()
     {
         GameManager.Instance.InitPlayerController(this);
@@ -38,13 +40,22 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         stateMachine.OnUpdate();
-        //Debug.Log(stateMachine.CurrentState);
+
+        HandGravity();
+    }
+
+    /// <summary>
+    /// 处理角色重力
+    /// </summary>
+    private void HandGravity()
+    {
+        CC.Move(Physics.gravity * Time.deltaTime);
     }
 
     /// <summary>
     /// 让角色位移旋转
     /// </summary>
-    /// <param name="input"></param>
+    /// <param name="input">输入方向</param>
     public void Move(Vector2 input)
     {
         Vector3 moveDir = GetCameraRelativeDir(input);
@@ -63,13 +74,21 @@ public class PlayerController : MonoBehaviour
         FaceDirection(moveDir);
     }
 
+    /// <summary>
+    /// 让角色面向moveDir
+    /// </summary>
+    /// <param name="moveDir"></param>
     private void FaceDirection(Vector3 moveDir)
     {
         if(moveDir.sqrMagnitude <= 0.01f) return;
         this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(moveDir), rotatSpeed * Time.deltaTime);
     }
 
-
+    /// <summary>
+    /// 计算相机相对方向的移动向量
+    /// </summary>
+    /// <param name="input">输入方向</param>
+    /// <returns></returns>
     private Vector3 GetCameraRelativeDir(Vector2 input)
     {
         if (input.sqrMagnitude <= 0.01) return Vector3.zero;
@@ -83,6 +102,9 @@ public class PlayerController : MonoBehaviour
         return moveDir.normalized;
     }
 
+    /// <summary>
+    /// 处理角色根运动
+    /// </summary>
     private void OnAnimatorMove()
     {
         if (UseRootMotion)
