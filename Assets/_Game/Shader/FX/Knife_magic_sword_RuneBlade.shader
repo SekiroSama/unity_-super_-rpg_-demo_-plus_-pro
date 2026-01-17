@@ -10,10 +10,26 @@
         _AuraWidth("AuraWidth", Range(0.01, 0.1)) = 0.1
         _AuraFlowMap("AuraFlowMap", 2D) = ""{}//噪波贴图（云雾图）
         _FlowSpeed("FlowSpeed", float) = 1
+        //_DissolveVal ("DissolveVal", Range(0, 1)) = 0//溶解程度
     }
     SubShader
     {
         Tags{ "RenderType"="Opaque" "Queue"="Geometry"}
+
+        CGINCLUDE
+        #include "UnityCG.cginc"
+        #include "Lighting.cginc"
+        #include "AutoLight.cginc"
+        float4 _MainColor;//漫反射颜色
+        sampler2D _MainTex;//颜色纹理
+        float4 _MainTex_ST;//颜色纹理的缩放和平移
+        sampler2D _BumpMap;//法线纹理
+        float4 _BumpMap_ST;//法线纹理的缩放和平移
+        float _BumpScale;//凹凸程度
+        sampler2D _AuraFlowMap;//噪波贴图（云雾图）
+        float _DissolveVal;//溶解程度
+        ENDCG
+
         Pass
         {
             Tags { "LightMode"="ForwardBase" }
@@ -21,28 +37,11 @@
             #pragma vertex vert
             #pragma fragment frag
             #pragma multi_compile_fwdbase
-            #include "UnityCG.cginc"
-            #include "Lighting.cginc"
-            #include "AutoLight.cginc"
-            float4 _MainColor;//漫反射颜色
-            sampler2D _MainTex;//颜色纹理
-            float4 _MainTex_ST;//颜色纹理的缩放和平移
-            sampler2D _BumpMap;//法线纹理
-            float4 _BumpMap_ST;//法线纹理的缩放和平移
-            float _BumpScale;//凹凸程度
+
             struct v2f
             {
                 float4 pos:SV_POSITION;
-                //float2 uvTex:TEXCOORD0;
-                //float2 uvBump:TEXCOORD1;
-                //我们可以单独的声明两个float2的成员用于记录 颜色和法线纹理的uv坐标
-                //也可以直接声明一个float4的成员 xy用于记录颜色纹理的uv，zw用于记录法线纹理的uv
                 float4 uv:TEXCOORD0;
-                //顶点相对于世界坐标的位置 主要用于 之后的 视角方向的计算
-                //float3 worldPos:TEXCOORD1;
-                //切线 到 世界空间的 变换矩阵
-                //float3x3 rotation:TEXCOORD2;
-                //代表我们切线空间到世界空间的 变换矩阵的3行
                 float4 TtoW0:TEXCOORD1;
                 float4 TtoW1:TEXCOORD2;
                 float4 TtoW2:TEXCOORD3;
@@ -76,6 +75,8 @@
             }
             fixed4 frag (v2f i) : SV_Target
             {
+                clip(tex2D(_AuraFlowMap, i.uv.xy).r - _DissolveVal);
+
                 //世界空间下光的方向
                 fixed3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
                 //世界空间下视角方向
@@ -88,9 +89,6 @@
                 //乘以凹凸程度的系数
                 tangentNormal.xy *= _BumpScale;
                 tangentNormal.z = sqrt(1.0 - saturate(dot(tangentNormal.xy, tangentNormal.xy)));
-                //把计算完毕后的切线空间下的法线转换到世界空间下
-                //float3x3 rotation = float3x3(i.TtoW0.xyz, i.TtoW1.xyz, i.TtoW2.xyz );
-                //float3 worldNormal = mul(rotation, tangentNormal);
                 //本质 就是在进行矩阵运算
                 float3 worldNormal = float3(dot(i.TtoW0.xyz, tangentNormal), dot(i.TtoW1.xyz, tangentNormal), dot(i.TtoW2.xyz, tangentNormal));
                 //接下来就来处理 带颜色纹理的 布林方光照模型计算
@@ -115,28 +113,10 @@
             #pragma vertex vert
             #pragma fragment frag
             #pragma multi_compile_fwdadd
-            #include "UnityCG.cginc"
-            #include "Lighting.cginc"
-            #include "AutoLight.cginc"
-            float4 _MainColor;//漫反射颜色
-            sampler2D _MainTex;//颜色纹理
-            float4 _MainTex_ST;//颜色纹理的缩放和平移
-            sampler2D _BumpMap;//法线纹理
-            float4 _BumpMap_ST;//法线纹理的缩放和平移
-            float _BumpScale;//凹凸程度
             struct v2f
             {
                 float4 pos:SV_POSITION;
-                //float2 uvTex:TEXCOORD0;
-                //float2 uvBump:TEXCOORD1;
-                //我们可以单独的声明两个float2的成员用于记录 颜色和法线纹理的uv坐标
-                //也可以直接声明一个float4的成员 xy用于记录颜色纹理的uv，zw用于记录法线纹理的uv
                 float4 uv:TEXCOORD0;
-                //顶点相对于世界坐标的位置 主要用于 之后的 视角方向的计算
-                //float3 worldPos:TEXCOORD1;
-                //切线 到 世界空间的 变换矩阵
-                //float3x3 rotation:TEXCOORD2;
-                //代表我们切线空间到世界空间的 变换矩阵的3行
                 float4 TtoW0:TEXCOORD1;
                 float4 TtoW1:TEXCOORD2;
                 float4 TtoW2:TEXCOORD3;
@@ -170,6 +150,8 @@
             }
             fixed4 frag (v2f i) : SV_Target
             {
+                clip(tex2D(_AuraFlowMap, i.uv.xy).r - _DissolveVal);
+
                 //世界空间下光的方向
                 fixed3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
                 //世界空间下视角方向
@@ -182,9 +164,6 @@
                 //乘以凹凸程度的系数
                 tangentNormal.xy *= _BumpScale;
                 tangentNormal.z = sqrt(1.0 - saturate(dot(tangentNormal.xy, tangentNormal.xy)));
-                //把计算完毕后的切线空间下的法线转换到世界空间下
-                //float3x3 rotation = float3x3(i.TtoW0.xyz, i.TtoW1.xyz, i.TtoW2.xyz );
-                //float3 worldNormal = mul(rotation, tangentNormal);
                 //本质 就是在进行矩阵运算
                 float3 worldNormal = float3(dot(i.TtoW0.xyz, tangentNormal), dot(i.TtoW1.xyz, tangentNormal), dot(i.TtoW2.xyz, tangentNormal));
                 //接下来就来处理 带颜色纹理的 布林方光照模型计算
@@ -212,10 +191,7 @@
             #include "UnityCG.cginc"
 
             float _AuraWidth;
-            sampler2D _MainTex;
-            float4 _MainTex_ST;
             float _FlowSpeed;
-            sampler2D _AuraFlowMap;
             fixed3 _AuraColor;
             struct v2f
             {
@@ -237,7 +213,7 @@
             {
                 fixed3 noise = tex2D(_AuraFlowMap, float2(i.uv.x + _Time.y * _FlowSpeed, i.uv.y + _Time.y * _FlowSpeed)) ;
 
-                return float4(_AuraColor * noise, 1);
+                return float4(_AuraColor * noise, 1 - _DissolveVal);
             }
 
             ENDCG
