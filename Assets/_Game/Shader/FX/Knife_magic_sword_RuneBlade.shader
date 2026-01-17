@@ -27,7 +27,7 @@
         float4 _BumpMap_ST;//法线纹理的缩放和平移
         float _BumpScale;//凹凸程度
         sampler2D _AuraFlowMap;//噪波贴图（云雾图）
-        float _DissolveVal;//溶解程度
+        float _DissolveVal = 0;//溶解程度
         ENDCG
 
         Pass

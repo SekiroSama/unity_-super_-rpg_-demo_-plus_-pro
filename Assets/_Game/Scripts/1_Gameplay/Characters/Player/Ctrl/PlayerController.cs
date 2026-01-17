@@ -23,7 +23,6 @@ public class PlayerController : MonoBehaviour
     public WeaponController weaponController;
     public Transform LookPos;//用于环境遮挡裁剪
 
-    private Coroutine dissolveCoroutine;//设置武器溶解效果协程
 
     private void Start()
     {
@@ -149,44 +148,23 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
-
     /// <summary>
-    /// 动画事件：武器碰撞开启
+    /// 动画事件：开始攻击
     /// </summary>
-    public void AE_WeaponOn()
+    public void AE_ATKStart()
     {
-        weaponController.OpenCollider();
-        if(dissolveCoroutine != null)
-            StopCoroutine(dissolveCoroutine);
-        dissolveCoroutine = StartCoroutine(SetWeaponDissolveVal(0));
+        weaponController.WeaponOn();
+        weaponController.WeaponRedissolveValStart();
     }
 
     /// <summary>
-    /// 动画事件：武器碰撞关闭
+    /// 动画事件：结束攻击
     /// </summary>
-    public void AE_WeaponOff()
+    public void AE_ATKEnd()
     {
-        weaponController.CloseCollider();
-        if (dissolveCoroutine != null)
-            StopCoroutine(dissolveCoroutine);
-        dissolveCoroutine = StartCoroutine(SetWeaponDissolveVal(1));
+        weaponController.WeaponOff();
+        weaponController.WeaponDissolveValStart();
     }
 
-    /// <summary>
-    /// 设置武器溶解效果
-    /// </summary>
-    /// <param name="_DissolveVal">目标溶解值</param>
-    /// <returns></returns>
-    private IEnumerator SetWeaponDissolveVal(float targetDissolveVal)
-    {
-        float dissolveVal = Shader.GetGlobalFloat("_DissolveVal");
-        float dissolveTimer = 0f;
-        while(dissolveTimer < 0.1f)
-        {
-            dissolveTimer += Time.deltaTime;
-            Shader.SetGlobalFloat("_DissolveVal", Mathf.Lerp(dissolveVal, targetDissolveVal, dissolveTimer / 0.1f));
-            yield return null;
-        }
-        Shader.SetGlobalFloat("_DissolveVal", targetDissolveVal);
-    }
+
 }

@@ -33,7 +33,7 @@
             float4 _MainTex_ST;
             float4 _Color;
             float _Speed;
-            float _DissolveVal;//溶解程度
+            float _DissolveVal = 0;//溶解程度
 
             v2f vert (appdata_base v)
             {
