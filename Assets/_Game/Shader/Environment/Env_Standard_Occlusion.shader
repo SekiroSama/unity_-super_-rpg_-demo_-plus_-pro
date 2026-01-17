@@ -90,7 +90,7 @@
             }
             fixed4 frag (v2f i) : SV_Target
             {
-                _PlayerPos += 0.4;
+                _PlayerPos.y += 0.4;
                 float3 lineVec = _WorldSpaceCameraPos - _PlayerPos;
                 float3 pixelVec = i.worldPos - _PlayerPos;
                 float t = dot(pixelVec,lineVec) / dot(lineVec, lineVec);//计算pv在lv上的投影算法，避免开根号
@@ -211,7 +211,7 @@
             }
             fixed4 frag (v2f i) : SV_Target
             {
-                _PlayerPos += 0.4;
+                _PlayerPos.y += 0.4;
                 float3 lineVec = _WorldSpaceCameraPos - _PlayerPos;
                 float3 pixelVec = i.worldPos - _PlayerPos;
                 float t = saturate(dot(pixelVec,lineVec) / dot(lineVec, lineVec));//计算pv在lv上的投影算法，避免开根号
