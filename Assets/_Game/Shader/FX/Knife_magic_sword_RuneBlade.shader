@@ -7,11 +7,12 @@
         _MainTex("MainTex", 2D) = ""{}
         _BumpMap("BumpMap", 2D) = ""{}
         _BumpScale("BumpScale", Range(0,1)) = 1
-        _AuraWidth("AuraWidth", Range(0, 0.1)) = 0.01
+        _AuraWidth ("AuraWidth", Range(0, 0.1)) = 0.01//外扩宽度
         _AuraFlowMap("AuraFlowMap", 2D) = ""{}//噪波贴图（云雾图）
         _FlowSpeed("FlowSpeed", float) = 1
         //_DissolveVal ("DissolveVal", Range(0, 1)) = 0//溶解程度 在Properties配置会无视C#Shader广播
         _MaskTex ("MaskTex", 2D) = "" { }//发光遮罩贴图
+        _FresnelPower ("FresnelPower", Range(0, 10)) = 5//菲涅尔强度
 
     }
     SubShader
@@ -30,7 +31,8 @@
         float _BumpScale;//凹凸程度
         sampler2D _AuraFlowMap;//噪波贴图（云雾图）
         float _DissolveVal = 0;//溶解程度
-        float _MaskTex = 0;//发光遮罩贴图
+        sampler2D _MaskTex;//发光遮罩贴图
+        float _FresnelPower = 0;//菲涅尔强度
         ENDCG
 
         Pass
@@ -186,7 +188,7 @@
         Pass
         {
             Tags{ "RenderType"="Transparent" "Queue"="Transparent"}
-            Blend SrcAlpha One
+            Blend One One
             ZWrite Off
             CGPROGRAM
             #pragma vertex vert
@@ -206,6 +208,7 @@
             v2f vert (appdata_full v)
             {
                 v2f data;
+                v.vertex.xyz += _AuraWidth * v.tangent.xyz;
                 data.pos = UnityObjectToClipPos(v.vertex);
                 data.wNormal = UnityObjectToWorldNormal(v.normal);
                 data.wPos = mul(unity_ObjectToWorld, v.vertex).xyz;
@@ -214,9 +217,13 @@
             }
             fixed4 frag (v2f i) : SV_Target
             {
+                float3 viewDir = normalize(_WorldSpaceCameraPos - i.wPos);
+                float fresnel = pow(1 - saturate(dot(viewDir, normalize(i.wNormal))), _FresnelPower);
+                fixed mask = tex2D(_MaskTex, i.uv).r;
+
                 fixed3 noise = tex2D(_AuraFlowMap, float2(i.uv.x + _Time.y * _FlowSpeed, i.uv.y + _Time.y * _FlowSpeed)) ;
 
-                return float4(_AuraColor * noise, 1 - _DissolveVal);
+                return float4(_AuraColor * noise * fresnel * mask * (1 -_DissolveVal) , 1);
             }
 
             ENDCG
