@@ -18,8 +18,8 @@ public class InputManager
 
     public bool isReadIngPlayerInput = true;
 
-    //接收ui按钮输入
-    private bool _virtualAttackPressed = false;
+    //接收ui按钮输入atk
+    public bool uibtnAttackPressed = false;
 
     public void OnAwake()
     {
@@ -36,13 +36,22 @@ public class InputManager
     {
         CheckAndSetCursorEnable();
 
-        if(isReadIngPlayerInput)
+        if (isReadIngPlayerInput)
         {
             UpdateMovementInput();
 
             CheckIsAttack();
         }
 
+    }
+
+    /// <summary>
+    /// 接受UI摇杆输入
+    /// </summary>
+    /// <param name="joystickDragDir"></param>
+    public void UIJoystickInput(Vector2 joystickDragDir)
+    {
+        _playerInputData.MoveVector = joystickDragDir;
     }
 
     /// <summary>
@@ -89,8 +98,12 @@ public class InputManager
     /// </summary>
     private void CheckIsAttack()
     {
-        _playerInputData.IsAttack = Input.GetMouseButtonDown(0) || _virtualAttackPressed;
-        _virtualAttackPressed = false;
+#if UNITY_ANDROID
+        _playerInputData.IsAttack = uibtnAttackPressed;
+        uibtnAttackPressed = false;
+#else
+        _playerInputData.IsAttack = Input.GetMouseButtonDown(0);
+#endif
     }
 
     /// <summary>
