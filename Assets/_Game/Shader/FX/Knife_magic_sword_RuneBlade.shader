@@ -7,10 +7,12 @@
         _MainTex("MainTex", 2D) = ""{}
         _BumpMap("BumpMap", 2D) = ""{}
         _BumpScale("BumpScale", Range(0,1)) = 1
-        _AuraWidth("AuraWidth", Range(0.01, 0.1)) = 0.1
+        _AuraWidth("AuraWidth", Range(0, 0.1)) = 0.01
         _AuraFlowMap("AuraFlowMap", 2D) = ""{}//噪波贴图（云雾图）
         _FlowSpeed("FlowSpeed", float) = 1
         //_DissolveVal ("DissolveVal", Range(0, 1)) = 0//溶解程度 在Properties配置会无视C#Shader广播
+        _MaskTex ("MaskTex", 2D) = "" { }//发光遮罩贴图
+
     }
     SubShader
     {
@@ -28,6 +30,7 @@
         float _BumpScale;//凹凸程度
         sampler2D _AuraFlowMap;//噪波贴图（云雾图）
         float _DissolveVal = 0;//溶解程度
+        float _MaskTex = 0;//发光遮罩贴图
         ENDCG
 
         Pass
