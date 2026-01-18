@@ -10,7 +10,7 @@
         _AuraWidth("AuraWidth", Range(0.01, 0.1)) = 0.1
         _AuraFlowMap("AuraFlowMap", 2D) = ""{}//噪波贴图（云雾图）
         _FlowSpeed("FlowSpeed", float) = 1
-        //_DissolveVal ("DissolveVal", Range(0, 1)) = 0//溶解程度
+        //_DissolveVal ("DissolveVal", Range(0, 1)) = 0//溶解程度 在Properties配置会无视C#Shader广播
     }
     SubShader
     {
