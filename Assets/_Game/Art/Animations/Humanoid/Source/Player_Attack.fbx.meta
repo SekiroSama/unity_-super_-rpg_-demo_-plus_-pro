@@ -68,6 +68,20 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
+      - time: 0.8577912
+        functionName: AE_WeaponColliderOn
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.9868709
+        functionName: AE_WeaponColliderOff
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 1
         functionName: AE_ATKEnd
         data: 
@@ -106,6 +120,20 @@ ModelImporter:
       events:
       - time: 0
         functionName: AE_ATKStart
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.7968494
+        functionName: AE_WeaponColliderOn
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.95185995
+        functionName: AE_WeaponColliderOff
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -154,7 +182,21 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.3870334
+      - time: 0.34022412
+        functionName: AE_WeaponColliderOn
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.42231944
+        functionName: AE_WeaponColliderOff
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.4363292
         functionName: AE_ATKEnd
         data: 
         objectReferenceParameter: {instanceID: 0}

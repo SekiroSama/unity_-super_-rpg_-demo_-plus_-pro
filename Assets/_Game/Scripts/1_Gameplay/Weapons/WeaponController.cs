@@ -13,18 +13,6 @@ public class WeaponController : MonoBehaviour
 
     }
 
-    public void OpenCollider()
-    {
-        this.GetComponent<Collider>().enabled = true;
-        whiteList.Clear();
-    }
-
-    public void CloseCollider()
-    {
-        this.GetComponent<Collider>().enabled = false;
-    }
-
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
@@ -42,17 +30,18 @@ public class WeaponController : MonoBehaviour
     /// <summary>
     /// 动画事件：武器碰撞开启
     /// </summary>
-    public void WeaponOn()
+    public void WeaponColliderOn()
     {
-        this.OpenCollider();
+        this.GetComponent<Collider>().enabled = true;
+        whiteList.Clear();
     }
 
     /// <summary>
     /// 动画事件：武器碰撞关闭
     /// </summary>
-    public void WeaponOff()
+    public void WeaponColliderOff()
     {
-        this.CloseCollider();
+        this.GetComponent<Collider>().enabled = false;
     }
 
     /// <summary>

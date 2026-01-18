@@ -153,7 +153,6 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void AE_ATKStart()
     {
-        weaponController.WeaponOn();
         weaponController.WeaponRedissolveValStart();
     }
 
@@ -162,9 +161,22 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void AE_ATKEnd()
     {
-        weaponController.WeaponOff();
         weaponController.WeaponDissolveValStart();
     }
 
+    /// <summary>
+    /// 动画事件：武器碰撞开启
+    /// </summary>
+    public void AE_WeaponColliderOn()
+    {
+        weaponController.WeaponColliderOn();
+    }
 
+    /// <summary>
+    /// 动画事件：武器碰撞关闭
+    /// </summary>
+    public void AE_WeaponColliderOff()
+    {
+        weaponController.WeaponColliderOff();
+    }
 }
