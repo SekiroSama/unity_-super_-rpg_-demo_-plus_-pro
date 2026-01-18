@@ -153,7 +153,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void AE_ATKStart()
     {
-        weaponController.WeaponRedissolveValStart();
+        weaponController.WeaponRedissolveValStart();//开始反溶解
     }
 
     /// <summary>
@@ -161,7 +161,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void AE_ATKEnd()
     {
-        weaponController.WeaponDissolveValStart();
+        weaponController.WeaponDissolveValStart();//开始溶解
     }
 
     /// <summary>

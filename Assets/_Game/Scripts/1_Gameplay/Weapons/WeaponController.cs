@@ -51,7 +51,7 @@ public class WeaponController : MonoBehaviour
     {
         if (dissolveCoroutine != null)
             StopCoroutine(dissolveCoroutine);
-        dissolveCoroutine = StartCoroutine(SetWeaponDissolveVal(0));
+        dissolveCoroutine = StartCoroutine(SetWeaponDissolveVal(0, 0.1f, 0));
     }
 
     /// <summary>
@@ -61,25 +61,34 @@ public class WeaponController : MonoBehaviour
     {
         if (dissolveCoroutine != null)
             StopCoroutine(dissolveCoroutine);
-        dissolveCoroutine = StartCoroutine(SetWeaponDissolveVal(1, 1f));
+        dissolveCoroutine = StartCoroutine(SetWeaponDissolveVal(1, 2f, 2f));
     }
 
     /// <summary>
     /// 设置武器溶解效果
     /// </summary>
-    /// <param name="_DissolveVal">目标溶解值</param>
+    /// <param name="targetDissolveVal">目标溶解值</param>
+    /// <param name="transitionDuration">溶解持续时间</param>
+    /// <param name="startTime">溶解开始时间</param>
     /// <returns></returns>
-    private IEnumerator SetWeaponDissolveVal(float targetDissolveVal, float transitionDuration = 0.1f)
+    private IEnumerator SetWeaponDissolveVal(float targetDissolveVal, float transitionDuration = 0.1f, float startTime = 0f)
     {
         if (hideWeapon)
         {
             float dissolveVal = Shader.GetGlobalFloat("_DissolveVal");
             float dissolveTimer = 0f;
-            while (dissolveTimer < transitionDuration)
+            while (dissolveTimer - startTime < transitionDuration)
             {
                 dissolveTimer += Time.deltaTime;
-                Shader.SetGlobalFloat("_DissolveVal", Mathf.Lerp(dissolveVal, targetDissolveVal, dissolveTimer / transitionDuration));
-                yield return null;
+                if(dissolveTimer < startTime)
+                {
+                    yield return null;
+                }
+                else
+                {
+                    Shader.SetGlobalFloat("_DissolveVal", Mathf.Lerp(dissolveVal, targetDissolveVal, (dissolveTimer - startTime) / transitionDuration));
+                    yield return null;
+                }
             }
             Shader.SetGlobalFloat("_DissolveVal", targetDissolveVal);
         }
