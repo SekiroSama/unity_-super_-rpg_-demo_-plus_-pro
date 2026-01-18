@@ -28,8 +28,12 @@ public class InputManager
 
     public void OnStart()
     {
+#if UNITY_ANDROID && !UNITY_EDITOR
+
+#else
         Cursor.lockState = CursorLockMode.Locked;//CursorLockMode影响鼠标运动逻辑，Locked大概率会隐藏但在某些环境不行
         Cursor.visible = false;//确保隐藏
+#endif
     }
 
     public void OnUpdate()
@@ -42,7 +46,6 @@ public class InputManager
 
             CheckIsAttack();
         }
-
     }
 
     /// <summary>
@@ -59,6 +62,9 @@ public class InputManager
     /// </summary>
     private void CheckAndSetCursorEnable()
     {
+#if UNITY_ANDROID && !UNITY_EDITOR
+        //移动平台不处理鼠标
+#else
         //激活鼠标
         if (Input.GetKeyDown(KeyCode.LeftAlt))
         {
@@ -77,6 +83,7 @@ public class InputManager
             Cursor.visible = false;//确保隐藏
             isReadIngPlayerInput = true;
         }
+#endif
     }
 
     /// <summary>
@@ -98,7 +105,7 @@ public class InputManager
     /// </summary>
     private void CheckIsAttack()
     {
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
         _playerInputData.IsAttack = uibtnAttackPressed;
         uibtnAttackPressed = false;
 #else

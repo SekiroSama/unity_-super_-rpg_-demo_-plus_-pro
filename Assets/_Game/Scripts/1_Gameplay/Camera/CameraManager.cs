@@ -22,13 +22,18 @@ public class CameraManager
             GameManager.Instance.terrainManager.SetClipRadiusWork(_currentMode == OcclusionMode.ShaderCutout);
         }
     }
-    public CinemachineCollider camCollider;
     public CinemachineFreeLook camFreeLook;
+    public CinemachineCollider camCollider;
 
     public void OnStart()
     {
         currentMode = OcclusionMode.CameraCollision;
-        GameManager.Instance.terrainManager.SetClipRadiusWork(_currentMode == OcclusionMode.ShaderCutout);
+        GameManager.Instance.terrainManager.SetClipRadiusWork(_currentMode == OcclusionMode.ShaderCutout);//设置地形遮挡裁剪
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+        camFreeLook.m_XAxis.m_InputAxisName = "";
+        camFreeLook.m_YAxis.m_InputAxisName = "";
+#endif
     }
 
     public void OnUpdate()
