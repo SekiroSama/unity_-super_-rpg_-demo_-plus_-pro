@@ -6599,8 +6599,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ae196684c7b66b4e86300a15f8187fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 5
+  rotatSpeed: 10
   UseRootMotion: 0
   weaponController: {fileID: 6996604458749748505}
+  LookPos: {fileID: 2546347062103162459}
 --- !u!143 &941589012896754498
 CharacterController:
   m_ObjectHideFlags: 0
@@ -6622,11 +6625,11 @@ CharacterController:
   serializedVersion: 3
   m_Height: 1.62
   m_Radius: 0.25
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
+  m_SlopeLimit: 30
+  m_StepOffset: 0.15
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.81, z: 0}
+  m_Center: {x: 0, y: 0.89, z: 0}
 --- !u!1 &6897651559336398489
 GameObject:
   m_ObjectHideFlags: 0

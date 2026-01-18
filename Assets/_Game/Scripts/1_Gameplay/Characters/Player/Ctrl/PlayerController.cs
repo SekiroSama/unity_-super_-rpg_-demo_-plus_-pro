@@ -26,7 +26,8 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        GameManager.Instance.InitPlayerController(this);
+        //GameManager.Instance.InitPlayerController(this);
+
         CC = this.GetComponent<CharacterController>();
         animator = this.GetComponent<Animator>();
         _camTransform = Camera.main.transform;

@@ -1,6 +1,7 @@
 ﻿using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -27,6 +28,10 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private MeshRenderer[] meshRenderers;
 
+    [SerializeField]
+    private GameObject playerPrefab;
+
+
     private void Awake()
     {
         _instance = this;
@@ -36,6 +41,8 @@ public class GameManager : MonoBehaviour
         terrainManager.meshRenderers = meshRenderers;
         terrainManager?.onAwake();
         InputManager?.OnAwake();
+
+        InitPlayerController();
     }
 
     private void Start()
@@ -50,8 +57,10 @@ public class GameManager : MonoBehaviour
         cameraManager?.OnUpdate();
     }
 
-    public void InitPlayerController(PlayerController playerController)
+    public void InitPlayerController()
     {
-        this.playerController = playerController;
+        this.playerController = Instantiate(playerPrefab).GetComponent<PlayerController>();
+        cameraManager.camFreeLook.Follow = this.playerController.transform;
+        cameraManager.camFreeLook.LookAt = this.playerController.LookPos;
     }
 }
