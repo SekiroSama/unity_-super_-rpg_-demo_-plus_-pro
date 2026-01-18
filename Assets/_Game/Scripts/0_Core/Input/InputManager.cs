@@ -1,5 +1,4 @@
-﻿using Cinemachine;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,9 +20,12 @@ public class InputManager
     //接收ui按钮输入atk
     public bool uibtnAttackPressed = false;
 
+    private float sensitivity = 1f;
+
     public void OnAwake()
     {
         _playerInputData = new PlayerInputData();
+        sensitivity = 1080f / Screen.width;
     }
 
     public void OnStart()
@@ -45,7 +47,38 @@ public class InputManager
             UpdateMovementInput();
 
             CheckIsAttack();
+
+            UpdateFreelookInput();
         }
+    }
+
+    /// <summary>
+    /// Android更新相机输入
+    /// </summary>
+    private void UpdateFreelookInput()
+    {
+#if UNITY_ANDROID && !UNITY_EDITOR
+        Touch[] touches = Input.touches;
+        for (int i = 0; i < touches.Length; i++)
+        {
+            if (touches[i].position.x > Screen.width / 2)
+            {
+                GameManager.Instance.cameraManager.camFreeLook.m_XAxis.Value += touches[i].deltaPosition.x * sensitivity;
+                GameManager.Instance.cameraManager.camFreeLook.m_YAxis.Value -= touches[i].deltaPosition.y * sensitivity * 0.01f;
+                break;
+            }
+        }
+#endif
+        //Touch[] touches = Input.touches;
+        //for (int i = 0; i < touches.Length; i++)
+        //{
+        //    if (touches[i].position.x > Screen.width / 2)
+        //    {
+        //        GameManager.Instance.cameraManager.camFreeLook.m_XAxis.Value += touches[i].deltaPosition.x * sensitivity;
+        //        GameManager.Instance.cameraManager.camFreeLook.m_YAxis.Value -= touches[i].deltaPosition.y * sensitivity * 0.01f;
+        //        break;
+        //    }
+        //}
     }
 
     /// <summary>
@@ -55,6 +88,7 @@ public class InputManager
     public void UIJoystickInput(Vector2 joystickDragDir)
     {
         _playerInputData.MoveVector = joystickDragDir;
+        _playerInputData.isMoveing = _playerInputData.MoveVector.sqrMagnitude > 0.01;
     }
 
     /// <summary>
@@ -91,6 +125,9 @@ public class InputManager
     /// </summary>
     private void UpdateMovementInput()
     {
+#if UNITY_ANDROID && !UNITY_EDITOR
+        //android在ui层处理
+#else
         _playerInputData.MoveVector.x = Input.GetAxis("Horizontal");
         _playerInputData.MoveVector.y = Input.GetAxis("Vertical");
         _playerInputData.isMoveing = Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0;
@@ -98,6 +135,7 @@ public class InputManager
         {
             _playerInputData.MoveVector.Normalize();
         }
+#endif
     }
 
     /// <summary>

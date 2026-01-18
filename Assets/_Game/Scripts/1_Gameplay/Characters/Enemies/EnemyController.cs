@@ -30,7 +30,6 @@ public class EnemyController : MonoBehaviour
             StopCoroutine(_jitterCoroutine);
         }
         _jitterCoroutine = StartCoroutine(HitJitter());
-        Debug.Log("hit");
     }
 
     public float duration;//抖动时间

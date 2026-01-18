@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 using UnityEngine;
-using UnityEngine.Windows;
-using static UnityEngine.UI.GridLayoutGroup;
 
 public class PlayerController : MonoBehaviour
 {
     CharacterController CC;
     private Animator animator;
 
-    private StateMachine stateMachine;
+    public StateMachine stateMachine;
 
     public float moveSpeed = 5f;
     public float rotatSpeed = 10f;
@@ -26,8 +24,6 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        //GameManager.Instance.InitPlayerController(this);
-
         CC = this.GetComponent<CharacterController>();
         animator = this.GetComponent<Animator>();
         _camTransform = Camera.main.transform;
@@ -38,10 +34,11 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        //状态帧更新
         stateMachine.OnUpdate();
-
+        //角色混合树动画参数更新
         UpdateLocomotion(GameManager.Instance.InputManager.CurrentInput.MoveVector.magnitude);
-
+        //处理角色重力
         HandGravity();
     }
 
@@ -117,7 +114,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// 让角色混合树动画更新
+    /// 让角色混合树动画参数更新
     /// </summary>
     /// <param name="speed"></param>
     public void UpdateLocomotion(float speed)

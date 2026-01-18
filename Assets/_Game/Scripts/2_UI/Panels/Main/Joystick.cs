@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class Joystick : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public Image imgJoystickHandle;
+    public Transform imgJoystickHandle;
     private Vector2 joystickDragDir;
     private Vector2 handleStartPos;//摇杆把手初始位置
     private float backgroundRadius = 100f;
@@ -15,20 +15,23 @@ public class Joystick : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        backgroundRadius = this.GetComponent<RectTransform>().rect.width;
+        backgroundRadiusSqr = backgroundRadius * backgroundRadius;
         handleStartPos = this.transform.position;
         HandJoystickHandlePos(eventData.position);
-        HandJoystickDragDir(imgJoystickHandle.transform.position);
+        HandJoystickDragDir(imgJoystickHandle.position);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         HandJoystickHandlePos(eventData.position);
-        HandJoystickDragDir(imgJoystickHandle.transform.position);
+        HandJoystickDragDir(imgJoystickHandle.position);
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         ResetJoystickHandlePos();
+        HandJoystickDragDir(imgJoystickHandle.position);
     }
 
     /// <summary>
@@ -40,11 +43,11 @@ public class Joystick : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         if((touchPos - handleStartPos).sqrMagnitude> backgroundRadiusSqr)
         {
             Vector2 dir = (touchPos - handleStartPos).normalized;
-            imgJoystickHandle.transform.position = handleStartPos + dir * backgroundRadius;
+            imgJoystickHandle.position = handleStartPos + dir * backgroundRadius;
         }
         else
         {
-            imgJoystickHandle.transform.position = touchPos;
+            imgJoystickHandle.position = touchPos;
         }
     }
 
@@ -56,12 +59,14 @@ public class Joystick : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         joystickDragDir = (imgJoystickHandlePos - handleStartPos)/ backgroundRadius;
         GameManager.Instance.InputManager.UIJoystickInput(joystickDragDir);
-        Debug.Log("joystickDragDir:"+ joystickDragDir);
     }
 
+    /// <summary>
+    /// 重置摇杆把手位置
+    /// </summary>
     private void ResetJoystickHandlePos()
     {
-        imgJoystickHandle.transform.position = handleStartPos;
+        imgJoystickHandle.position = handleStartPos;
     }
 
     private void ResethandleStartPos()
