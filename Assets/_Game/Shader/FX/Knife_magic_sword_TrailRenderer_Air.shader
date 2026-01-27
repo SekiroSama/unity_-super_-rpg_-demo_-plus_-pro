@@ -1,4 +1,4 @@
-﻿Shader "Unlit/Knife_magic_sword_AirDistortion"
+﻿Shader "Custom/Weapon/Knife_magic_sword_TrailRenderer_Air"
 {
     Properties
     {
@@ -8,6 +8,7 @@
     }
     SubShader
     {
+        Cull Off
         Tags { "Queue"="Transparent" "RenderType" = "Opaque" }
         GrabPass { "_GrabTexture" }
 
