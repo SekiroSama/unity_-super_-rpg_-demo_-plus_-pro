@@ -5,10 +5,9 @@ public class 开发日志
 {
     List<string> toDoList = new List<string>()
     {
+        "预制体回放在Resources_Build文件夹下",
+        "武器动态生成，位置可以用现在调好的子节点位置",
         "武器的刀光效果：需要在动画事件中控制TrailRenderer的开启和关闭",
-        "完善事件中心",
-        "实现滞空状态和地面状态的切换",
-        "Timer类：用于计时和定时任务",
     };
 
 
