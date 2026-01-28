@@ -8,9 +8,10 @@
     }
     SubShader
     {
-        Cull Off
-        Tags { "Queue"="Transparent" "RenderType" = "Opaque" }
+        Tags { "Queue"="Transparent" "RenderType" = "Transparent" }
         GrabPass { "_GrabTexture" }
+        Cull Off
+        ZWrite Off
 
         Pass
         {
