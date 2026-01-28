@@ -2823,7 +2823,7 @@ GameObject:
   - component: {fileID: 1573851469}
   - component: {fileID: 1573851468}
   - component: {fileID: 1573851467}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3510,6 +3510,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ecffc60be91820409e490de3fafbf2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Timer: 0
   camCollider: {fileID: 2048213498}
   camFreeLook: {fileID: 2048213496}
   meshRenderers:

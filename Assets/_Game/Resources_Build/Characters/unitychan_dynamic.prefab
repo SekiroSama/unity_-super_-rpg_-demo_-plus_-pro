@@ -4678,6 +4678,37 @@ Transform:
   - {fileID: 8004497562086551869}
   m_Father: {fileID: 2841450164439716727}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4631223751143546364
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2258547067131302845}
+  m_Layer: 0
+  m_Name: GroundCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2258547067131302845
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4631223751143546364}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.086, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8435432054635782683}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4668269655589002917
 GameObject:
   m_ObjectHideFlags: 0
@@ -6419,13 +6450,14 @@ Transform:
   m_GameObject: {fileID: 6857425962871685034}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.472, y: 0, z: 1.0913818}
+  m_LocalPosition: {x: 1.472, y: 0.009, z: 1.0913818}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3285940234168593137}
   - {fileID: 903194751565526833}
   - {fileID: 2546347062103162459}
+  - {fileID: 2258547067131302845}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &5467454231968323294
@@ -6601,6 +6633,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   rotatSpeed: 10
+  walkSpeed: 5
+  runSpeed: 10
+  fadeTime: 10
+  grdCheckPos: {fileID: 2258547067131302845}
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 256
+  checkRadius: 0.1
+  isGrounded: 0
   UseRootMotion: 0
   weaponController: {fileID: 6996604458749748505}
   LookPos: {fileID: 2546347062103162459}
