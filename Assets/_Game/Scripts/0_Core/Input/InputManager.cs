@@ -133,13 +133,9 @@ public class InputManager
         _playerInputData.MoveVector.x = Input.GetAxis("Horizontal");
         _playerInputData.MoveVector.y = Input.GetAxis("Vertical");
         _playerInputData.isMoveing = Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0;
-        if (_playerInputData.MoveVector.sqrMagnitude > .5f && !_playerInputData.IsRun)
+        if (_playerInputData.MoveVector.sqrMagnitude > 1f)
         {
-            _playerInputData.MoveVector = _playerInputData.MoveVector.normalized * .5f;
-        }
-        else if (_playerInputData.MoveVector.sqrMagnitude > .5f && _playerInputData.IsRun)
-        {
-            _playerInputData.MoveVector = _playerInputData.MoveVector.normalized * 1.5f;
+            _playerInputData.MoveVector.Normalize();
         }
 #endif
     }

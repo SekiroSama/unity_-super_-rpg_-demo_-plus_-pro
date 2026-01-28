@@ -47,7 +47,8 @@ public class PlayerController : MonoBehaviour
         //状态帧更新
         stateMachine.OnUpdate();
         //角色混合树动画参数更新
-        UpdateLocomotion(GameManager.Instance.inputManager.CurrentInput.MoveVector.magnitude);
+
+        //UpdateLocomotion(GameManager.Instance.InputManager.CurrentInput.MoveVector.magnitude);
         //处理角色重力
         HandGravity();
         CheckIsGrounded();
@@ -168,6 +169,7 @@ public class PlayerController : MonoBehaviour
     public void AE_ATKStart()
     {
         weaponController.WeaponRedissolveValStart();//开始反溶解
+        
     }
 
     /// <summary>
@@ -176,6 +178,7 @@ public class PlayerController : MonoBehaviour
     public void AE_ATKEnd()
     {
         weaponController.WeaponDissolveValStart();//开始溶解
+        
     }
 
     /// <summary>
@@ -184,6 +187,7 @@ public class PlayerController : MonoBehaviour
     public void AE_WeaponColliderOn()
     {
         weaponController.WeaponColliderOn();
+        weaponController.WeaponTrailOn();
     }
 
     /// <summary>
@@ -192,6 +196,7 @@ public class PlayerController : MonoBehaviour
     public void AE_WeaponColliderOff()
     {
         weaponController.WeaponColliderOff();
+        weaponController.WeaponTrailOff();
     }
     #endregion
 

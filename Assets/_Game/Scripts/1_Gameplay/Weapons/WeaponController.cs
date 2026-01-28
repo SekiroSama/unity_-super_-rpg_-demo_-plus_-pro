@@ -5,9 +5,14 @@ using UnityEngine;
 public class WeaponController : MonoBehaviour
 {
     List<int> whiteList = new List<int>();
+    private TrailRenderer[] trailRenderer; 
     private Coroutine dissolveCoroutine;//设置武器溶解效果协程
     public bool hideWeapon = false;
 
+    private void Awake()
+    {
+        trailRenderer = GetComponentsInChildren<TrailRenderer>();
+    }
     private void Start()
     {
 
@@ -26,7 +31,20 @@ public class WeaponController : MonoBehaviour
             }
         }
     }
-
+    public void WeaponTrailOn()
+    {
+        for (int i = 0; i < trailRenderer.Length; i++)
+        {
+            trailRenderer[i].enabled = true;
+        }
+    }
+    public void WeaponTrailOff()
+    {
+        for (int i = 0; i < trailRenderer.Length; i++)
+        {
+            trailRenderer[i].enabled = false;
+        }
+    }
     /// <summary>
     /// 动画事件：武器碰撞开启
     /// </summary>

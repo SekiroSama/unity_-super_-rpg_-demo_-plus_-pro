@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerMoveState : PlayerGroundState
 {
-
+    
     public override void OnEnter()
     {
         owner.PlayAnimation(AnimationConfig.StateHashes.Locomotion, AnimationConfig.TransitionSettings.NormalTransitionDuration);
@@ -14,6 +14,9 @@ public class PlayerMoveState : PlayerGroundState
     {
         base.OnUpdate();
 
+        //角色混合树动画参数更新
+        owner.UpdateLocomotion(inputValue);
+          
         owner.Move(GameManager.Instance.inputManager.CurrentInput.MoveVector);
     }
 }

@@ -3510,7 +3510,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ecffc60be91820409e490de3fafbf2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Timer: 0
+  runTimer: 0
   camCollider: {fileID: 2048213498}
   camFreeLook: {fileID: 2048213496}
   meshRenderers:

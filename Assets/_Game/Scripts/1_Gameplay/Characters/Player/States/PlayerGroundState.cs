@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class PlayerGroundState : StateBase
 {
+    public float inputValue;
+    public float runValue;
     public override void OnEnter()
     {
-
+       
     }
     public override void OnUpdate()
     {
+
+        inputValue = GameManager.Instance.inputManager.CurrentInput.MoveVector.sqrMagnitude;
         if (GameManager.Instance.inputManager.CurrentInput.IsAttack)
         {
             stateMachine.ChangeState<PlayerAttackState>();
@@ -30,7 +34,7 @@ public class PlayerGroundState : StateBase
             stateMachine.ChangeState<PlayerRunState>();
             return;
         }
-
+        
     }
     public override void OnExit()
     {
