@@ -1,8 +1,14 @@
 ﻿
 using System.Collections.Generic;
+using UnityChan;
 
-public class 开发日志
+public class 开发日志_Sekiro
 {
+    void 高亮显示()
+    {
+        toDoList[0] = Last + Doing; 
+    }
+
     List<string> toDoList = new List<string>()
     {
         "预制体回放在Resources_Build文件夹下",
