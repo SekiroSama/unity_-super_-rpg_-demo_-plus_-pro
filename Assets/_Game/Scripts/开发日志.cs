@@ -5,7 +5,10 @@ public class 开发日志
 {
     List<string> toDoList = new List<string>()
     {
-        "武器的刀光效果：需要在动画事件中控制TrailRenderer的开启和关闭"
+        "武器的刀光效果：需要在动画事件中控制TrailRenderer的开启和关闭",
+        "完善事件中心",
+        "实现滞空状态和地面状态的切换",
+        
     };
 
 

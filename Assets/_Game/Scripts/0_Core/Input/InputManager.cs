@@ -7,6 +7,7 @@ public class InputManager
     public struct PlayerInputData
     {
         public Vector2 MoveVector;
+        public bool IsRun;
         public bool IsAttack;
         public bool isMoveing;
     }
@@ -45,6 +46,8 @@ public class InputManager
         if (isReadIngPlayerInput)
         {
             UpdateMovementInput();
+
+            CheckIsAccelerate();
 
             CheckIsAttack();
 
@@ -119,7 +122,6 @@ public class InputManager
         }
 #endif
     }
-
     /// <summary>
     /// 更新移动输入
     /// </summary>
@@ -131,13 +133,32 @@ public class InputManager
         _playerInputData.MoveVector.x = Input.GetAxis("Horizontal");
         _playerInputData.MoveVector.y = Input.GetAxis("Vertical");
         _playerInputData.isMoveing = Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0;
-        if (_playerInputData.MoveVector.sqrMagnitude > 1f)
+        if (_playerInputData.MoveVector.sqrMagnitude > .5f && !_playerInputData.IsRun)
         {
-            _playerInputData.MoveVector.Normalize();
+            _playerInputData.MoveVector = _playerInputData.MoveVector.normalized * .5f;
+        }
+        else if (_playerInputData.MoveVector.sqrMagnitude > .5f && _playerInputData.IsRun)
+        {
+            _playerInputData.MoveVector = _playerInputData.MoveVector.normalized * 1.5f;
         }
 #endif
     }
-
+    /// <summary>
+    /// 检查是否加速跑
+    /// </summary>
+    private void CheckIsAccelerate()
+    {
+#if UNITY_ANDROID && !UNITY_EDITOR
+        //待实现
+#else
+        _playerInputData.IsRun = Input.GetKey(KeyCode.LeftShift);
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            _playerInputData.IsRun = false;
+            return;
+        }
+#endif
+    }
     /// <summary>
     /// 检查是否攻击
     /// </summary>

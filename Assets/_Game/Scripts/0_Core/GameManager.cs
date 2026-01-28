@@ -14,8 +14,8 @@ public class GameManager : MonoBehaviour
             return _instance;
         }
     }
-    
-    public InputManager InputManager { get; private set; } = new InputManager(); 
+    public float Timer = 0;
+    public InputManager InputManager { get; private set; } = new InputManager();
     public CameraManager cameraManager { get; private set; } = new CameraManager();
     public TerrainManager terrainManager { get; private set; } = new TerrainManager();
     public PlayerController playerController { get; private set; }
@@ -53,6 +53,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        Timer += Time.deltaTime;
         InputManager?.OnUpdate();
         cameraManager?.OnUpdate();
     }

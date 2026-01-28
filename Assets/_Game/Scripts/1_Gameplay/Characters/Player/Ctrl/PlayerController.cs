@@ -10,14 +10,24 @@ public class PlayerController : MonoBehaviour
 
     public StateMachine stateMachine;
 
+
+    //[HideInInspector]
     public float moveSpeed = 5f;
+    [Header("主角移动")]
     public float rotatSpeed = 10f;
-
+    public float walkSpeed = 5f;
+    public float runSpeed = 10f;
+    [Tooltip("跑步过渡时间")]
+    public float fadeTime = 10f;
     Transform _camTransform;
-
+    [Header("物理检测")]
+    public Transform grdCheckPos;//地面检测点
+    public LayerMask whatIsGround;//地面层
+    public float checkRadius;//检测半径
+    public bool isGrounded;
     [HideInInspector]
     public bool UseRootMotion = false;
-
+    [Header("武器脚本")]
     public WeaponController weaponController;
     public Transform LookPos;//用于环境遮挡裁剪
 
@@ -40,7 +50,9 @@ public class PlayerController : MonoBehaviour
         UpdateLocomotion(GameManager.Instance.InputManager.CurrentInput.MoveVector.magnitude);
         //处理角色重力
         HandGravity();
+        CheckIsGrounded();
     }
+    #region 角色运动状态
 
     /// <summary>
     /// 处理角色重力
@@ -59,7 +71,7 @@ public class PlayerController : MonoBehaviour
         Vector3 moveDir = GetCameraRelativeDir(input);
 
         FaceDirection(moveDir);
-        if(GameManager.Instance.InputManager.CurrentInput.isMoveing)
+        if (GameManager.Instance.InputManager.CurrentInput.isMoveing)
         {
             CC.Move(moveDir * moveSpeed * Time.deltaTime);
         }
@@ -81,7 +93,7 @@ public class PlayerController : MonoBehaviour
     /// <param name="moveDir"></param>
     private void FaceDirection(Vector3 moveDir)
     {
-        if(moveDir.sqrMagnitude <= 0.01f) return;
+        if (moveDir.sqrMagnitude <= 0.01f) return;
         this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(moveDir), rotatSpeed * Time.deltaTime);
     }
 
@@ -108,7 +120,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void OnAnimatorMove()
     {
-        if(!UseRootMotion) return;
+        if (!UseRootMotion) return;
         CC.Move(animator.deltaPosition);
         this.transform.rotation *= animator.deltaRotation;
     }
@@ -121,6 +133,8 @@ public class PlayerController : MonoBehaviour
     {
         animator.SetFloat(AnimationConfig.Parameters.Speed, speed);
     }
+    #endregion
+    #region 角色动画状态
 
     /// <summary>
     /// 让角色更新动画
@@ -139,12 +153,14 @@ public class PlayerController : MonoBehaviour
     public bool IsAnimationFinished(int animHash, float exitTime = 0.95f)
     {
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        if(stateInfo.shortNameHash == animHash && stateInfo.normalizedTime >= exitTime)
+        if (stateInfo.shortNameHash == animHash && stateInfo.normalizedTime >= exitTime)
         {
             return true;
         }
         return false;
     }
+    #endregion
+    #region 动画事件
 
     /// <summary>
     /// 动画事件：开始攻击
@@ -176,5 +192,23 @@ public class PlayerController : MonoBehaviour
     public void AE_WeaponColliderOff()
     {
         weaponController.WeaponColliderOff();
+    }
+    #endregion
+
+    private void OnDrawGizmos()
+    {
+        if (grdCheckPos != null)
+        {
+            // 如果检测到地面，球体变绿；否则变红
+            bool isGrounded = Physics.CheckSphere(grdCheckPos.position, checkRadius, whatIsGround);
+            Gizmos.color = isGrounded ? Color.green : Color.red;
+
+            // 画出实心球或线框球
+            Gizmos.DrawWireSphere(grdCheckPos.position, checkRadius);
+        }
+    }
+    public void CheckIsGrounded()
+    {
+        isGrounded = Physics.CheckSphere(grdCheckPos.position, checkRadius, whatIsGround);
     }
 }

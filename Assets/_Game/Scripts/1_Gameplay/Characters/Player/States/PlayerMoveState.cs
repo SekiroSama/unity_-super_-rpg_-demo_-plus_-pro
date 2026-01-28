@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMoveState : StateBase
+public class PlayerMoveState : PlayerGroundState
 {
 
     public override void OnEnter()
@@ -12,17 +12,7 @@ public class PlayerMoveState : StateBase
 
     public override void OnUpdate()
     {
-        if (GameManager.Instance.InputManager.CurrentInput.IsAttack)
-        {
-            stateMachine.ChangeState<PlayerAttackState>();
-            return;
-        }
-
-        if (GameManager.Instance.InputManager.CurrentInput.MoveVector.sqrMagnitude <= 0.01)
-        {
-            stateMachine.ChangeState<PlayerIdleState>();
-            return;
-        }
+        base.OnUpdate();
 
         owner.Move(GameManager.Instance.InputManager.CurrentInput.MoveVector);
     }
