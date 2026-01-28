@@ -28,7 +28,7 @@ public class MainPanel : MonoBehaviour
 
     void OnbtnATK()
     {
-        GameManager.Instance.InputManager.uibtnAttackPressed = true;
+        GameManager.Instance.inputManager.uibtnAttackPressed = true;
     }
 
     // Update is called once per frame

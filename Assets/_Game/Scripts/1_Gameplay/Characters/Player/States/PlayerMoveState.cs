@@ -14,6 +14,6 @@ public class PlayerMoveState : PlayerGroundState
     {
         base.OnUpdate();
 
-        owner.Move(GameManager.Instance.InputManager.CurrentInput.MoveVector);
+        owner.Move(GameManager.Instance.inputManager.CurrentInput.MoveVector);
     }
 }

@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,12 +16,12 @@ public class PlayerRunState: PlayerGroundState
         {
            owner.moveSpeed = Mathf.Lerp(owner.walkSpeed, owner.runSpeed, GameManager.Instance.Timer/owner.fadeTime);
         }
-        if (!GameManager.Instance.InputManager.CurrentInput.IsRun)
+        if (!GameManager.Instance.inputManager.CurrentInput.IsRun)
         {
             stateMachine.ChangeState<PlayerMoveState>();
             return;
         }
-        owner.Move(GameManager.Instance.InputManager.CurrentInput.MoveVector);
+        owner.Move(GameManager.Instance.inputManager.CurrentInput.MoveVector);
     }
     public override void OnExit() 
     {

@@ -47,7 +47,7 @@ public class PlayerController : MonoBehaviour
         //状态帧更新
         stateMachine.OnUpdate();
         //角色混合树动画参数更新
-        UpdateLocomotion(GameManager.Instance.InputManager.CurrentInput.MoveVector.magnitude);
+        UpdateLocomotion(GameManager.Instance.inputManager.CurrentInput.MoveVector.magnitude);
         //处理角色重力
         HandGravity();
         CheckIsGrounded();
@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour
         Vector3 moveDir = GetCameraRelativeDir(input);
 
         FaceDirection(moveDir);
-        if (GameManager.Instance.InputManager.CurrentInput.isMoveing)
+        if (GameManager.Instance.inputManager.CurrentInput.isMoveing)
         {
             CC.Move(moveDir * moveSpeed * Time.deltaTime);
         }

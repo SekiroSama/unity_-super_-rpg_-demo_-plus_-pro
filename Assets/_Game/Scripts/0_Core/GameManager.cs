@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
         }
     }
     public float Timer = 0;
-    public InputManager InputManager { get; private set; } = new InputManager();
+    public InputManager inputManager { get; private set; } = new InputManager();
     public CameraManager cameraManager { get; private set; } = new CameraManager();
     public TerrainManager terrainManager { get; private set; } = new TerrainManager();
     public PlayerController playerController { get; private set; }
@@ -40,21 +40,21 @@ public class GameManager : MonoBehaviour
         cameraManager.camFreeLook = camFreeLook;
         terrainManager.meshRenderers = meshRenderers;
         terrainManager?.onAwake();
-        InputManager?.OnAwake();
+        inputManager?.OnAwake();
 
         InitPlayerController();
     }
 
     private void Start()
     {
-        InputManager?.OnStart();
+        inputManager?.OnStart();
         cameraManager?.OnStart();
     }
 
     void Update()
     {
         Timer += Time.deltaTime;
-        InputManager?.OnUpdate();
+        inputManager?.OnUpdate();
         cameraManager?.OnUpdate();
     }
 

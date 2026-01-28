@@ -58,7 +58,7 @@ public class Joystick : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     private void HandJoystickDragDir(Vector2 imgJoystickHandlePos)
     {
         joystickDragDir = (imgJoystickHandlePos - handleStartPos)/ backgroundRadius;
-        GameManager.Instance.InputManager.UIJoystickInput(joystickDragDir);
+        GameManager.Instance.inputManager.UIJoystickInput(joystickDragDir);
     }
 
     /// <summary>
