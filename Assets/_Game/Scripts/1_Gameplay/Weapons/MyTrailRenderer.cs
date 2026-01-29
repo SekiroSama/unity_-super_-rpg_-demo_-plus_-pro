@@ -12,6 +12,7 @@ public class MyTrailRenderer : MonoBehaviour
     private float minVertexDistanceSqr;
     public float trailLifeTime = 0.2f;
     public int subdivisions = 5;// 每段之间插值的点数
+    public bool isEmitting = false;
 
     private struct TrailSnapshot
     {
@@ -26,16 +27,17 @@ public class MyTrailRenderer : MonoBehaviour
     private MeshFilter meshFilter;
 
 
-
-    private Vector3 _initialWorldPosition;
-    private Quaternion _initialWorldRotation;
-
     public void InitMyTrailRenderer(Transform tipTransform, Transform baseTransform)
     {
         this.tipTransform = tipTransform;
         this.baseTransform = baseTransform;
     }
 
+    private void OnDisable()
+    {
+        snapshotList.Clear();
+        smoothedList.Clear();
+    }
 
     private void Start()
     {
@@ -43,14 +45,17 @@ public class MyTrailRenderer : MonoBehaviour
         trailMesh = new Mesh();
         meshFilter = this.GetComponent<MeshFilter>();
         meshFilter.mesh = trailMesh;
-
-        //// 记录初始的世界坐标和旋转
-        //_initialWorldPosition = transform.position;
-        //_initialWorldRotation = transform.rotation;
     }
 
     void LateUpdate()
     {
+        if (!isEmitting)
+        {
+            snapshotList.Clear();
+            smoothedList.Clear();
+            trailMesh.Clear();
+            return;
+        }
         AddNewTrailSnapshot();
 
         RemoveOldTrailSnapshot();
@@ -58,13 +63,6 @@ public class MyTrailRenderer : MonoBehaviour
         SmoothSnapshotList();
 
         CreateMesh();
-
-        meshFilter.mesh = trailMesh;
-
-        //// 每帧都将世界位置和旋转重置为初始值
-        //// 这将抵消父物体在本帧的所有变换影响
-        //transform.position = _initialWorldPosition;
-        //transform.rotation = _initialWorldRotation;
     }
 
     /// <summary>
@@ -116,12 +114,12 @@ public class MyTrailRenderer : MonoBehaviour
     /// </summary>
     private void CreateMesh()
     {
+        trailMesh.Clear();
         if (smoothedList.Count < 2)
         {
             return;
         }
 
-        trailMesh.Clear();
         Vector3[] meshPoints = new Vector3[smoothedList.Count * 2];
         for (int i = 0; i < meshPoints.Length; i++)
         {
