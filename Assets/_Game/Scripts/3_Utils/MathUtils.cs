@@ -7,6 +7,7 @@ public static class MathUtils
 {
     /// <summary>
     /// Catmull-Rom插值算法计算插值点
+    /// </summary>
     /// 最终坐标 = 0.5 * (A项 + B项 + C项 + D项)。
     /// 四项分解逻辑：
     /// A项（常数项）：只与起点 P1 有关。
@@ -17,7 +18,6 @@ public static class MathUtils
     /// 逻辑：(2 * P0 - 5 * P1 + 4 * P2 - P3) * tt
     /// D项（三次项）：与 ttt 成正比，受所有点影响。
     /// 逻辑：(-P0 + 3 * P1 - 3 * P2 + P3) * ttt
-    /// </summary>
     /// <param name="prevPos">前一个辅助点</param>
     /// <param name="startPos">当前线段起点</param>
     /// <param name="endPos">当前线段终点</param>
