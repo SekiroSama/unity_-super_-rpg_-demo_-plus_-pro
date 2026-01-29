@@ -336,6 +336,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hideWeapon: 0
+  tipTransform: {fileID: 4608978789034275223}
+  baseTransform: {fileID: 7294515361622272856}
 --- !u!65 &3187344038366853685
 BoxCollider:
   m_ObjectHideFlags: 0

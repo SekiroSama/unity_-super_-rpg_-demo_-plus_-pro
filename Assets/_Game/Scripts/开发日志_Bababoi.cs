@@ -12,14 +12,14 @@ public class 开发日志_Bababoi
     List<string> toDoList = new List<string>()
     {
         //"武器的刀光效果：需要在动画事件中控制TrailRenderer的开启和关闭",
-         "刀光效果更新，使用MyTrailRenderer预制体渲染，在动画事件控制生成或销毁，需要保证世界坐标为000，需要调用InitMyTrailRenderer传入首尾位置",
+        // "刀光效果更新，使用MyTrailRenderer预制体渲染，在动画事件控制生成或销毁，需要保证世界坐标为000，需要调用InitMyTrailRenderer传入首尾位置",
         "计时器",
         "任务中心",
         "状态切换优化",
         "跳跃和空中状态"
     };
 
-    string Last = "缓存池";
-    string Doing = "刀光效果更新，使用MyTrailRenderer预制体渲染，在动画事件控制生成或销毁，需要保证世界坐标为000，需要调用InitMyTrailRenderer传入首尾位置";
+    string Last = "刀光效果更新，使用MyTrailRenderer预制体渲染，在动画事件控制生成或销毁，需要保证世界坐标为000，需要调用InitMyTrailRenderer传入首尾位置";
+    string Doing = "调整参数，确认刀光效果";
 
 }

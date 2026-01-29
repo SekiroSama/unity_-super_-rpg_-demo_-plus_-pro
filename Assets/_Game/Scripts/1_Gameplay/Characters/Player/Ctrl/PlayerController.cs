@@ -187,7 +187,7 @@ public class PlayerController : MonoBehaviour
     public void AE_WeaponColliderOn()
     {
         weaponController.WeaponColliderOn();
-        //weaponController.WeaponTrailOn();
+        weaponController.WeaponTrailOn();  
     }
 
     /// <summary>
@@ -196,7 +196,7 @@ public class PlayerController : MonoBehaviour
     public void AE_WeaponColliderOff()
     {
         weaponController.WeaponColliderOff();
-        //weaponController.WeaponTrailOff();
+        weaponController.WeaponTrailOff();
     }
     #endregion
 

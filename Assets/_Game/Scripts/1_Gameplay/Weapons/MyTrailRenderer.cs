@@ -72,7 +72,7 @@ public class MyTrailRenderer : MonoBehaviour
     /// </summary>
     private void AddNewTrailSnapshot()
     {
-        TrailSnapshot trailSnapshot = new TrailSnapshot() { tipPos = tipTransform.position, basePos = baseTransform.position, timeStamp = Time.time };
+        TrailSnapshot trailSnapshot = new TrailSnapshot() { tipPos = tipTransform.position, basePos = baseTransform.position, timeStamp = Time.time };  
         if (snapshotList.Count == 0 || (trailSnapshot.tipPos - snapshotList[snapshotList.Count - 1].tipPos).sqrMagnitude > minVertexDistanceSqr)
         {
             snapshotList.Add(trailSnapshot);
