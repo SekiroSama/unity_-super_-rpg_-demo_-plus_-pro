@@ -23,7 +23,7 @@ public class 开发日志_Sekiro
     //string test = "TrailRenderer官方属性Emitting可以控制开启和关闭";
 
     string Last = "优化刀光接口isEmitting,可以直接MyTrailRenderer.isEmitting";
-    string Doing = "";
+    string Doing = "行为树基类";
 
 
 }
