@@ -12,7 +12,7 @@ public class LogNode : BTNode
         _message = log;
     }
 
-    public override NodeStatus Evaluate()
+    public override NodeStatus Evaluate(Blackboard blackboard)
     {
         Debug.Log(_message);
         currentStatus = NodeStatus.SUCCESS;
