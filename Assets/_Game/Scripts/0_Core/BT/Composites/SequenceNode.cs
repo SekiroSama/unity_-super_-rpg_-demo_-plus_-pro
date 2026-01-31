@@ -5,6 +5,7 @@ using UnityEngine;
 public class SequenceNode : BTNode
 {
     List<BTNode> childNodes;
+    private int _currentChildIndex = 0;
 
     public SequenceNode(List<BTNode> childNodes)
     {
@@ -13,7 +14,7 @@ public class SequenceNode : BTNode
 
     public override NodeStatus Evaluate(Blackboard blackboard)
     {
-        for (int i = 0; i < childNodes.Count; i++)
+        for (int i = _currentChildIndex; i < childNodes.Count; i++)
         {
             switch(childNodes[i].Evaluate(blackboard))
             {
@@ -21,13 +22,16 @@ public class SequenceNode : BTNode
                     continue;
                 case NodeStatus.FAILURE:
                     currentStatus = NodeStatus.FAILURE;
+                    _currentChildIndex = 0;
                     return currentStatus;
                 case NodeStatus.RUNNING:
                     currentStatus = NodeStatus.RUNNING;
+                    _currentChildIndex = i;
                     return currentStatus;
             }
         }
         currentStatus = NodeStatus.SUCCESS;
+        _currentChildIndex = 0;
         return currentStatus;
     }
 }
