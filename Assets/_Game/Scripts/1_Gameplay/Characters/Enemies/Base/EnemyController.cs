@@ -5,8 +5,12 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     public int HP = 100;
-    SkinnedMeshRenderer meshRenderer;
-    Material material;
+    public float duration;//抖动时间
+    public float JitterScale = 0.1f;//抖动幅度
+
+    private SkinnedMeshRenderer meshRenderer;
+    private Material material;
+    private Coroutine _jitterCoroutine;//抖动协程引用
 
     private void Start()
     {
@@ -14,7 +18,6 @@ public class EnemyController : MonoBehaviour
         material = meshRenderer.material;
     }
 
-    private Coroutine _jitterCoroutine;
     /// <summary>
     /// 受到伤害
     /// </summary>
@@ -32,8 +35,7 @@ public class EnemyController : MonoBehaviour
         _jitterCoroutine = StartCoroutine(HitJitter());
     }
 
-    public float duration;//抖动时间
-    public float JitterScale = 0.1f;//抖动幅度
+
     /// <summary>
     /// 往受击抖动shader传参开始抖动
     /// </summary>

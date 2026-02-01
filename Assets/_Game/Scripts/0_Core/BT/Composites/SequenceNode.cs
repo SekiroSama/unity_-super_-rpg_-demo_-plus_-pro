@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 序列节点,遍历执行所有子节点
+/// </summary>
 public class SequenceNode : BTNode
 {
     List<BTNode> childNodes;
