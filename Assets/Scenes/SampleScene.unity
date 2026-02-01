@@ -630,10 +630,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 130964, guid: c644a2181ac22e740968a7ece97e8f36, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1191003369}
+      addedObject: {fileID: 1191003370}
     - targetCorrespondingSourceObject: {fileID: 130964, guid: c644a2181ac22e740968a7ece97e8f36, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1191003370}
+      addedObject: {fileID: 1191003374}
     - targetCorrespondingSourceObject: {fileID: 150284, guid: c644a2181ac22e740968a7ece97e8f36, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1099951756}
@@ -2317,21 +2317,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 130964, guid: c644a2181ac22e740968a7ece97e8f36, type: 3}
   m_PrefabInstance: {fileID: 340503858}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1191003369
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1191003366}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5a84e6c17da4db4b89b72574798fe62, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HP: 100
-  duration: 0.5
-  JitterScale: 1
 --- !u!54 &1191003370
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2364,6 +2349,21 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 411342, guid: c644a2181ac22e740968a7ece97e8f36, type: 3}
   m_PrefabInstance: {fileID: 340503858}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1191003374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1191003366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8663a0201271d7e4baf031b8ec9cc292, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HP: 100
+  Duration: 0.1
+  JitterScale: 2
 --- !u!1 &1201697977
 GameObject:
   m_ObjectHideFlags: 3
@@ -2787,12 +2787,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1521991675}
+  - component: {fileID: 1521991676}
   m_Layer: 0
   m_Name: '[Terrain]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1521991675
 Transform:
@@ -2811,6 +2812,37 @@ Transform:
   - {fileID: 959651831}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1521991676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1521991674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 4a670ed17f46fed4ea51b9531b323ca1, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &1573851466
 GameObject:
   m_ObjectHideFlags: 0
