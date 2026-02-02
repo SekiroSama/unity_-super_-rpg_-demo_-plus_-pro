@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     public CameraManager cameraManager { get; private set; } = new CameraManager();
     public TerrainManager terrainManager { get; private set; } = new TerrainManager();
     public PlayerController playerController { get; private set; }
+    public EnemyController enemyController { get; private set; }
 
     [SerializeField]
     private CinemachineCollider camCollider;
@@ -31,6 +32,10 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private GameObject playerPrefab;
+    [SerializeField]
+    private GameObject enemyPrefab;
+    [SerializeField]
+    private Transform CharactersTransform;
 
 
     private void Awake()
@@ -44,6 +49,7 @@ public class GameManager : MonoBehaviour
         inputManager?.OnAwake();
 
         InitPlayerController();
+        InitEnemyController();
     }
 
     private void Start()
@@ -60,10 +66,23 @@ public class GameManager : MonoBehaviour
         cameraManager?.OnUpdate();
     }
 
+    /// <summary>
+    /// 创建角色
+    /// </summary>
     public void InitPlayerController()
     {
         this.playerController = Instantiate(playerPrefab).GetComponent<PlayerController>();
         cameraManager.camFreeLook.Follow = this.playerController.transform;
         cameraManager.camFreeLook.LookAt = this.playerController.LookPos;
+        this.playerController.gameObject.transform.SetParent(CharactersTransform);
+    }
+
+    /// <summary>
+    /// 创建敌人
+    /// </summary>
+    public void InitEnemyController()
+    {
+        this.enemyController = Instantiate(enemyPrefab).GetComponent<EnemyController>();
+        this.enemyController.gameObject.transform.SetParent(CharactersTransform);
     }
 }
