@@ -21,14 +21,19 @@ public abstract class EnemyController : MonoBehaviour
     {
         _meshRenderer = this.GetComponentInChildren<SkinnedMeshRenderer>();
         _material = _meshRenderer.material;
-        _navMeshAgent = _meshRenderer.GetComponent<NavMeshAgent>();
+        _navMeshAgent = this.GetComponent<NavMeshAgent>();
     }
 
+
+
+    #region AI_navMeshAgent
     /// <summary>
     /// 移动到目标位置
     /// </summary>
     public virtual void MoveToTarget(Vector3 targetPos)
     {
+        if(!CheckisOnNavMeshAndFix()) return;
+        _navMeshAgent.isStopped = false;
         _navMeshAgent.SetDestination(targetPos);
     }
 
@@ -37,8 +42,35 @@ public abstract class EnemyController : MonoBehaviour
     /// </summary>
     public void StopMove()
     {
+        if (!CheckisOnNavMeshAndFix()) return;
         _navMeshAgent.isStopped = true;
     }
+
+    /// <summary>
+    /// 检查是否在导航网格上，不在则尝试修复
+    /// </summary>
+    /// <returns></returns>
+    private bool CheckisOnNavMeshAndFix()
+    {
+        if (!_navMeshAgent.isOnNavMesh)
+        {
+            NavMeshHit navMeshHit = new NavMeshHit();
+            if(NavMesh.SamplePosition(transform.position, out navMeshHit, 10f, NavMesh.AllAreas))
+            {
+                _navMeshAgent.Warp(navMeshHit.position);
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    #endregion
+
+
 
     /// <summary>
     /// 受到伤害
