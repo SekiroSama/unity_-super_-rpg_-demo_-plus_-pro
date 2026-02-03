@@ -17,9 +17,9 @@ public class FatFatDragon_AI : Enemy_AI
     {
         List<BTNode> childNodes = new List<BTNode>();
         childNodes.Add(new MoveToTargetNode(Enemy_AIBlackBoard_Config.KEY_Player_PlayerPos, stoppingDistance));
-        childNodes.Add(new LogNode("recive"));
+        //childNodes.Add(new LogNode("recive"));
         childNodes.Add(new WaitNode(5f));
-        childNodes.Add(new LogNode("WaitNodeover"));
+        //childNodes.Add(new LogNode("WaitNodeover"));
         SequenceNode root = new SequenceNode(childNodes);
 
         return root;
