@@ -8,8 +8,10 @@ using UnityEngine;
 public class MoveToTargetNode : BTNode
 {
     private string _targetKey;
-    private float _stoppingDistance;
-    private Transform _targetTransform;
+    private float _stoppingDistanceSqr;
+    private Vector3 _targetPos;
+    private Vector3 _currentPos;
+    private EnemyController enemyController;
 
     /// <summary>
     /// init
@@ -19,15 +21,31 @@ public class MoveToTargetNode : BTNode
     public MoveToTargetNode(string targetKey, float stoppingDistance)
     {
         _targetKey = targetKey;
-        _stoppingDistance = stoppingDistance;
+        _stoppingDistanceSqr = stoppingDistance * stoppingDistance;
     }
 
     public override NodeStatus Evaluate(Blackboard blackboard)
     {
-        _targetTransform = blackboard.GetValue<Transform>(_targetKey);
+        enemyController = blackboard.GetValue<EnemyController>(Enemy_AI_Config.KEY_SELF_EnemyController);
+        if (enemyController == null)
+        {
+            currentStatus = NodeStatus.FAILURE;
+            return currentStatus;
+        }
 
-
-
-        return currentStatus;
+        _currentPos = enemyController.transform.position;
+        _targetPos = blackboard.GetValue<Vector3>(_targetKey);
+        if((_currentPos - _targetPos).sqrMagnitude > _stoppingDistanceSqr)
+        {
+            enemyController.MoveToTarget(_targetPos);
+            currentStatus = NodeStatus.RUNNING;
+            return currentStatus;
+        }
+        else
+        {
+            enemyController.StopMove();
+            currentStatus = NodeStatus.SUCCESS;
+            return currentStatus;
+        }
     }
 }

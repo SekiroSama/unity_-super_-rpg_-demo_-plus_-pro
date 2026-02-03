@@ -1,32 +1,86 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class EnemyController : MonoBehaviour
+public abstract class EnemyController : MonoBehaviour
 {
     public int HP = 100;
-    public float duration;//抖动时间
-    public float JitterScale = 0.1f;//抖动幅度
 
-    private SkinnedMeshRenderer meshRenderer;
-    private Material material;
+    [SerializeField]
+    private float Duration;//抖动时间
+    [SerializeField]
+    private float JitterScale = 1f;//抖动幅度
+
+    private SkinnedMeshRenderer _meshRenderer;
+    private Material _material;
     private Coroutine _jitterCoroutine;//抖动协程引用
+    private NavMeshAgent _navMeshAgent;//导航组件
 
-    private void Start()
+    public virtual void Start()
     {
-        meshRenderer = this.GetComponentInChildren<SkinnedMeshRenderer>();
-        material = meshRenderer.material;
+        _meshRenderer = this.GetComponentInChildren<SkinnedMeshRenderer>();
+        _material = _meshRenderer.material;
+        _navMeshAgent = this.GetComponent<NavMeshAgent>();
     }
+
+
+
+    #region AI_navMeshAgent
+    /// <summary>
+    /// 移动到目标位置
+    /// </summary>
+    public virtual void MoveToTarget(Vector3 targetPos)
+    {
+        if(!CheckisOnNavMeshAndFix()) return;
+        _navMeshAgent.isStopped = false;
+        _navMeshAgent.SetDestination(targetPos);
+    }
+
+    /// <summary>
+    /// 停止移动
+    /// </summary>
+    public void StopMove()
+    {
+        if (!CheckisOnNavMeshAndFix()) return;
+        _navMeshAgent.isStopped = true;
+    }
+
+    /// <summary>
+    /// 检查是否在导航网格上，不在则尝试修复
+    /// </summary>
+    /// <returns></returns>
+    private bool CheckisOnNavMeshAndFix()
+    {
+        if (!_navMeshAgent.isOnNavMesh)
+        {
+            NavMeshHit navMeshHit = new NavMeshHit();
+            if(NavMesh.SamplePosition(transform.position, out navMeshHit, 10f, NavMesh.AllAreas))
+            {
+                _navMeshAgent.Warp(navMeshHit.position);
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    #endregion
+
+
 
     /// <summary>
     /// 受到伤害
     /// </summary>
     /// <param name="damage">伤害值</param>
     /// <param name="hitPoint">受击位置，传入shader</param>
-    public void TakeDamage(int damage, Vector3 hitPoint)
+    public virtual void TakeDamage(int damage, Vector3 hitPoint)
     {
         HP -= damage;
-        material.SetVector("_HitPos", hitPoint);
+        _material.SetVector("_HitPos", hitPoint);
 
         if(_jitterCoroutine != null)
         {
@@ -42,14 +96,14 @@ public class EnemyController : MonoBehaviour
     /// <returns></returns>
     private IEnumerator HitJitter()
     {
-        material.SetFloat("_HitStrength", JitterScale);
+        _material.SetFloat("_HitStrength", JitterScale);
         float timer = 0;
-        while(timer < duration)
+        while(timer < Duration)
         {
             timer += Time.deltaTime;
-            float progress = timer / duration;
+            float progress = timer / Duration;
             float val = Mathf.Lerp(JitterScale, 0, progress);
-            material.SetFloat("_HitStrength", val);
+            _material.SetFloat("_HitStrength", val);
             yield return null;
         }
     }

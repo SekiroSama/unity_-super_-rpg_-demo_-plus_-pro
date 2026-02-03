@@ -6,10 +6,11 @@ public class 开发日志_Sekiro
 {
     void 高亮显示()
     {
-        toDoList[0] = Last + Doing; 
+        BababoitoDoList[0] = null;
+        SekiroDoList[0] = null;
     }
 
-    List<string> toDoList = new List<string>()
+    List<string> BababoitoDoList = new List<string>()
     {
         //"预制体会放在Resources_Build文件夹下",
         //"武器的刀光效果：需要在动画事件中控制TrailRenderer的开启和关闭",
@@ -18,14 +19,11 @@ public class 开发日志_Sekiro
         "优化刀光接口isEmitting,可以直接MyTrailRenderer.isEmitting"
     };
 
-
-    
-    //string test = "TrailRenderer官方属性Emitting可以控制开启和关闭";
-
-    string Last = "优化刀光接口isEmitting,可以直接MyTrailRenderer.isEmitting";
-    string Doing = "行为树基类";
-
-
+    List<string> SekiroDoList = new List<string>()
+    {
+        //"行为树基类",
+        "行为树拓展",
+    };
 }
 
 
