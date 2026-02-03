@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.AI;
 
 public abstract class EnemyController : MonoBehaviour
 {
     public int HP = 100;
+    public float MaxMoveSpeed = 9f;
 
     [SerializeField]
     private float Duration;//抖动时间
@@ -16,25 +18,50 @@ public abstract class EnemyController : MonoBehaviour
     private Material _material;
     private Coroutine _jitterCoroutine;//抖动协程引用
     private NavMeshAgent _navMeshAgent;//导航组件
+    private Animator _animator;
+    private float _targetSpeedRatio;//目标速度
+
+    public Animator animator => _animator;
 
     public virtual void Start()
     {
         _meshRenderer = this.GetComponentInChildren<SkinnedMeshRenderer>();
         _material = _meshRenderer.material;
         _navMeshAgent = this.GetComponent<NavMeshAgent>();
+        _animator = this.GetComponent<Animator>();
+    }
+
+    public virtual void Update()
+    {
+        UpdateCurrentSpeed();
     }
 
 
+
+
+    public virtual void SetTargetSpeed(float speedRatio)
+    {
+        _targetSpeedRatio = speedRatio;
+    }
+
+    protected virtual void UpdateCurrentSpeed()
+    {
+        this.animator.SetFloat(EnemyAnimationConfig.Parameters.Speed, _targetSpeedRatio, 0.1f, Time.deltaTime);
+    }
 
     #region AI_navMeshAgent
     /// <summary>
     /// 移动到目标位置
     /// </summary>
-    public virtual void MoveToTarget(Vector3 targetPos)
+    /// <param name="targetPos">目标位置</param>
+    /// <param name="speedRatio">速度比值</param>
+    public virtual void MoveToTarget(Vector3 targetPos, float speedRatio)
     {
         if(!CheckisOnNavMeshAndFix()) return;
         _navMeshAgent.isStopped = false;
         _navMeshAgent.SetDestination(targetPos);
+        _navMeshAgent.speed = speedRatio * MaxMoveSpeed;
+        SetTargetSpeed(speedRatio);
     }
 
     /// <summary>
@@ -44,6 +71,7 @@ public abstract class EnemyController : MonoBehaviour
     {
         if (!CheckisOnNavMeshAndFix()) return;
         _navMeshAgent.isStopped = true;
+        SetTargetSpeed(0f);
     }
 
     /// <summary>
@@ -66,10 +94,7 @@ public abstract class EnemyController : MonoBehaviour
         }
         return true;
     }
-
-
     #endregion
-
 
 
     /// <summary>

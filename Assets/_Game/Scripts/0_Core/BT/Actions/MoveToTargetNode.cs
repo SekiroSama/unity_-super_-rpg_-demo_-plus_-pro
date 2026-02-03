@@ -11,7 +11,7 @@ public class MoveToTargetNode : BTNode
     private float _stoppingDistanceSqr;
     private Vector3 _targetPos;
     private Vector3 _currentPos;
-    private EnemyController enemyController;
+    private EnemyController _enemyController;
 
     /// <summary>
     /// init
@@ -26,24 +26,30 @@ public class MoveToTargetNode : BTNode
 
     public override NodeStatus Evaluate(Blackboard blackboard)
     {
-        enemyController = blackboard.GetValue<EnemyController>(Enemy_AI_Config.KEY_SELF_EnemyController);
-        if (enemyController == null)
+        _enemyController = blackboard.GetValue<EnemyController>(Enemy_AIBlackBoard_Config.KEY_SELF_EnemyController);
+        if (_enemyController == null)
         {
             currentStatus = NodeStatus.FAILURE;
             return currentStatus;
         }
 
-        _currentPos = enemyController.transform.position;
+        _currentPos = _enemyController.transform.position;
         _targetPos = blackboard.GetValue<Vector3>(_targetKey);
-        if((_currentPos - _targetPos).sqrMagnitude > _stoppingDistanceSqr)
+        if((_currentPos - _targetPos).sqrMagnitude > 4 * _stoppingDistanceSqr)
         {
-            enemyController.MoveToTarget(_targetPos);
+            _enemyController.MoveToTarget(_targetPos, EnemyAnimationConfig.FatFatDragonSettings.FatFatDragonRunSpeedRatio);
+            currentStatus = NodeStatus.RUNNING;
+            return currentStatus;
+        }
+        else if ((_currentPos - _targetPos).sqrMagnitude > _stoppingDistanceSqr)
+        {
+            _enemyController.MoveToTarget(_targetPos, EnemyAnimationConfig.FatFatDragonSettings.FatFatDragonWalkSpeedRatio);
             currentStatus = NodeStatus.RUNNING;
             return currentStatus;
         }
         else
         {
-            enemyController.StopMove();
+            _enemyController.StopMove();
             currentStatus = NodeStatus.SUCCESS;
             return currentStatus;
         }

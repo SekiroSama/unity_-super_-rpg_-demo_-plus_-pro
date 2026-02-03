@@ -2,11 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAnimationConfig_FatFatDragon
+public class EnemyAnimationConfig
 {
     public static class Parameters
     {
-        //public static readonly int Speed = Animator.StringToHash("Speed");
+        public static readonly int Speed = Animator.StringToHash("Speed");
+    }
+
+    public static class FatFatDragonSettings
+    {
+        public const float FatFatDragonWalkSpeedRatio = 0.33f;
+        public const float FatFatDragonRunSpeedRatio = 1f;
     }
 
     public static class StateHashes
@@ -34,11 +40,5 @@ public class EnemyAnimationConfig_FatFatDragon
         //{ typeof(PlayerAttackState), new int[] { Parameters.Speed } },
     };
 
-    public static class TransitionSettings
-    {
-        //public const float NormalTransitionDuration = 0.1f;
-        //public const float AttackTransitionDuration = 0.05f;
-        //public const float AttackOverTransitionDuration = 0.5f;
-        //public const float SuperTransitionDuration = 1f;
-    }
+
 }
