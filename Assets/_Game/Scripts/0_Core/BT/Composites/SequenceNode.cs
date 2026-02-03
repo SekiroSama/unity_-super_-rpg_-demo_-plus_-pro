@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 序列节点,遍历执行所有子节点
+/// 序列节点,遍历执行所有子节点 成功继续失败返回
 /// </summary>
 public class SequenceNode : BTNode
 {
