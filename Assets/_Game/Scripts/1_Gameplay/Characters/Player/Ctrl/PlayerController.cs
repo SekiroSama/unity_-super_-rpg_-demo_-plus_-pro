@@ -54,6 +54,12 @@ public class PlayerController : MonoBehaviour
         CheckIsGrounded();
     }
     #region 角色运动状态
+    
+    public void AddForce(Vector2 force)
+    {
+        
+    }
+
 
     /// <summary>
     /// 处理角色重力

@@ -6,6 +6,7 @@ public class PlayerRunState : PlayerGroundState
 {
     float runTimer = 0;
     int timerId;
+    
     public override void OnEnter()
     {
         owner.PlayAnimation(AnimationConfig_UnityChan.StateHashes.Locomotion, AnimationConfig_UnityChan.TransitionSettings.NormalTransitionDuration);
