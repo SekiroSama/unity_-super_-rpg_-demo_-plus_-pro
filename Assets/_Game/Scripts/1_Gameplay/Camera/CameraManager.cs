@@ -25,6 +25,13 @@ public class CameraManager
     public CinemachineFreeLook camFreeLook;
     public CinemachineCollider camCollider;
 
+    public void Init(CinemachineCollider camCollider, CinemachineFreeLook camFreeLook)
+    {
+        this.camCollider = camCollider;
+        this.camFreeLook = camFreeLook;
+    }
+
+
     public void OnStart()
     {
         currentMode = OcclusionMode.CameraCollision;

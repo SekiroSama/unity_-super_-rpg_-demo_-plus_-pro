@@ -96,8 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dc8abd784afee048add509d479b9f41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tipTransform: {fileID: 0}
-  baseTransform: {fileID: 0}
   minVertexDistance: 0.1
   trailLifeTime: 0.2
   subdivisions: 10
+  isEmitting: 0

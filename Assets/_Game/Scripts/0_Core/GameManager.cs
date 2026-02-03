@@ -1,7 +1,6 @@
 ﻿using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -38,16 +37,22 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        _instance = this;
-        Application.targetFrameRate = 60;
-        cameraManager.camCollider = camCollider;
-        cameraManager.camFreeLook = camFreeLook;
-        terrainManager.meshRenderers = meshRenderers;
+        SetApplicationTargetFrameRate(60);
+
+        this.Init();
+        cameraManager?.Init(camCollider, camFreeLook);
+        terrainManager?.Init(meshRenderers);
+
         terrainManager?.onAwake();
         inputManager?.OnAwake();
 
         InitPlayerController();
         InitEnemyController();
+    }
+
+    private void Init()
+    {
+        _instance = this;
     }
 
     private void Start()
@@ -60,6 +65,15 @@ public class GameManager : MonoBehaviour
     {
         inputManager?.OnUpdate();
         cameraManager?.OnUpdate();
+    }
+
+    /// <summary>
+    /// 设置应用目标帧率
+    /// </summary>
+    /// <param name="frameRate"></param>
+    public void SetApplicationTargetFrameRate(int frameRate)
+    {
+        Application.targetFrameRate = frameRate;
     }
 
     /// <summary>
