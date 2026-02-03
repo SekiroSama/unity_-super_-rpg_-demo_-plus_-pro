@@ -20,6 +20,7 @@ public class CameraManager
             if (_currentMode == value) return;
             _currentMode = value;
             GameManager.Instance.terrainManager.SetClipRadiusWork(_currentMode == OcclusionMode.ShaderCutout);
+            OnChangeOcclusionMode();
         }
     }
     public CinemachineFreeLook camFreeLook;
@@ -44,6 +45,11 @@ public class CameraManager
     }
 
     public void OnUpdate()
+    {
+
+    }
+
+    private void OnChangeOcclusionMode()
     {
         //广播玩家位置给全局shader 所有shader声明了_PlayerPos变量都能用
         if (GameManager.Instance.playerController != null)
