@@ -15,13 +15,15 @@ public class FatFatDragon_AI : Enemy_AI
 
     protected override BTNode BuildTree()
     {
-        List<BTNode> childNodes = new List<BTNode>();
-        childNodes.Add(new MoveToTargetNode(Enemy_AIBlackBoard_Config.KEY_Player_PlayerPos, stoppingDistance));
-        //childNodes.Add(new LogNode("recive"));
-        childNodes.Add(new WaitNode(5f));
-        //childNodes.Add(new LogNode("WaitNodeover"));
-        SequenceNode root = new SequenceNode(childNodes);
+        List<BTNode> root_ChildNodes = new List<BTNode>();//root节点
 
+        //List<BTNode> root_atk_childNodes = new List<BTNode>();//攻击节点
+        //root_atk_childNodes.Add(new SequenceNode());
+        //List<BTNode> root_atk__childNodes = new List<BTNode>();
+
+        root_ChildNodes.Add(new MoveToTargetNode(Enemy_AIBlackBoard_Config.KEY_Player_PlayerPos, stoppingDistance));
+
+        SelectorNode root = new SelectorNode(root_ChildNodes);
         return root;
     }
 
