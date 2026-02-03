@@ -39,14 +39,23 @@ public class FatFatDragon_AI : Enemy_AI
     /// <summary>
     /// FatFatDragon_AI行为逻辑
     /// </summary>
-    //  SequenceNode 序列节点 成功继续
+    //  SelectorNode 选择节点 失败继续成功返回
     //  {
-    /// <param name="巡逻">在一条指定路径上巡逻</param> 发现player返回成功 否则返回ing
-    /// <param name="战斗_普通">进入普通战斗状态</param> 通常返回ing 切换状态返回成功
-    /// <param name="战斗_发怒">进入发怒战斗状态</param> 通常返回ing 切换状态返回成功
-    /// <param name="逃跑_低血量">进入逃跑状态</param> 通常返回ing 切换状态返回成功
+    ///    <param name="Death">死了</param> 通常返回失败 如果死了返回成功
+    ///    <param name="逃跑_低血量">进入逃跑状态</param> 通常返回ing 如果已经跑过了返回失败
+    ///    <param name="战斗_发怒">进入发怒战斗状态</param> 通常返回ing 如果没在战斗状态 如果不在发怒 返回失败
+    ///    <param name="战斗_普通">进入普通战斗状态</param> 通常返回ing 如果没在战斗状态 返回失败
+    ///    <param name="巡逻">在一条指定路径上巡逻</param> 通常返回ing 发现player返回成功 
     //  }
 
+
+
+    /// <summary>
+    /// 逃跑_低血量行为逻辑
+    /// </summary>
+    /// <param name="移动">移动到指定位置（巢穴）</param>
+    /// <param name="睡觉">睡觉时可缓慢回血，但收到双倍伤害</param>
+    /// <param name="进入发怒">进入发怒战斗状态</param>
 
 
     /// <summary>
@@ -74,13 +83,6 @@ public class FatFatDragon_AI : Enemy_AI
     /// <param name="更快追捕player">移动到player</param>
     /// <param name="发怒攻击">发动攻击更频繁</param>
     /// <param name="被破韧">韧性小于0，但韧性更难被降低</param>
-
-    /// <summary>
-    /// 逃跑_低血量行为逻辑
-    /// </summary>
-    /// <param name="移动">移动到指定位置（巢穴）</param>
-    /// <param name="睡觉">睡觉时可缓慢回血，但收到双倍伤害</param>
-    /// <param name="进入发怒">进入发怒战斗状态</param>
 
     protected override BTNode BuildTree()
     {
