@@ -7,6 +7,7 @@ public class InputManager
     public struct PlayerInputData
     {
         public Vector2 MoveVector;
+        public bool isJump;
         public bool IsRun;
         public bool IsAttack;
         public bool isMoveing;
@@ -50,6 +51,8 @@ public class InputManager
             CheckIsAccelerate();
 
             CheckIsAttack();
+
+            CheckIsJump();
 
             UpdateFreelookInput();
         }
@@ -167,7 +170,15 @@ public class InputManager
         _playerInputData.IsAttack = Input.GetMouseButtonDown(0);
 #endif
     }
-
+    private void CheckIsJump()
+    {
+#if UNITY_ANDROID && !UNITY_EDITOR
+        _playerInputData.IsAttack = uibtnAttackPressed;
+        uibtnAttackPressed = false;
+#else
+        _playerInputData.isJump = Input.GetKey(KeyCode.Space);
+#endif
+    }
     /// <summary>
     /// 重置输入数据
     /// </summary>

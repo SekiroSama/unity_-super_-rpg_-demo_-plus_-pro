@@ -6,13 +6,15 @@ public class AnimationConfig_UnityChan
 {
     public static class Parameters
     {
-        public static readonly int Speed = Animator.StringToHash("Speed");
+        public static readonly int XSpeed = Animator.StringToHash("XSpeed");
+        public static readonly int YSpeed = Animator.StringToHash("YSpeed");
     }
 
     public static class StateHashes
     {
         public static readonly int Locomotion = Animator.StringToHash("Locomotion");
         public static readonly int Idle = Animator.StringToHash("Idle");
+        public static readonly int Jump = Animator.StringToHash("Jump");
         public static readonly int WalkBack = Animator.StringToHash("WalkBack");
         public static readonly int Rest = Animator.StringToHash("Rest");
         public static readonly int Attack01 = Animator.StringToHash("Attack01");
@@ -29,9 +31,9 @@ public class AnimationConfig_UnityChan
 
     public static readonly Dictionary<System.Type, int[]> StateToParameters = new Dictionary<System.Type, int[]>
     {
-        { typeof(PlayerIdleState), new int[] { Parameters.Speed } },
-        { typeof(PlayerMoveState), new int[] { Parameters.Speed } },
-        { typeof(PlayerAttackState), new int[] { Parameters.Speed } },
+        { typeof(PlayerIdleState), new int[] { Parameters.XSpeed } },
+        { typeof(PlayerMoveState), new int[] { Parameters.XSpeed } },
+        { typeof(PlayerAttackState), new int[] { Parameters.XSpeed } },
     };
 
     public static class TransitionSettings

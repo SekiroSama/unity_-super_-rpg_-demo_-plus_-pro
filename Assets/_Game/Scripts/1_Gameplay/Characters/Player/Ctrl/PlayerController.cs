@@ -132,7 +132,7 @@ public class PlayerController : MonoBehaviour
     /// <param name="speed"></param>
     public void UpdateLocomotion(float speed)
     {
-        animator.SetFloat(AnimationConfig_UnityChan.Parameters.Speed, speed);
+        animator.SetFloat(AnimationConfig_UnityChan.Parameters.XSpeed, speed);
     }
     #endregion
     #region 角色动画状态
