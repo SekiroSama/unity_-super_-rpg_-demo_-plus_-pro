@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AnimationConfig
+public class AnimationConfig_UnityChan
 {
     public static class Parameters
     {

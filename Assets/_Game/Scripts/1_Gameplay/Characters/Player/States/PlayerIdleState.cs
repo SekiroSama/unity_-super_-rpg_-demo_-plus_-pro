@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static AnimationConfig;
+using static AnimationConfig_UnityChan;
 
 public class PlayerIdleState : PlayerGroundState
 {
@@ -12,11 +12,11 @@ public class PlayerIdleState : PlayerGroundState
 
         if (stateMachine.PreviousState is PlayerAttackState)
         {
-            owner.PlayAnimation(AnimationConfig.StateHashes.Idle, AnimationConfig.TransitionSettings.AttackOverTransitionDuration);
+            owner.PlayAnimation(AnimationConfig_UnityChan.StateHashes.Idle, AnimationConfig_UnityChan.TransitionSettings.AttackOverTransitionDuration);
         }
         else
         {
-            owner.PlayAnimation(AnimationConfig.StateHashes.Idle, AnimationConfig.TransitionSettings.NormalTransitionDuration);
+            owner.PlayAnimation(AnimationConfig_UnityChan.StateHashes.Idle, AnimationConfig_UnityChan.TransitionSettings.NormalTransitionDuration);
         }
     }
 
@@ -26,7 +26,7 @@ public class PlayerIdleState : PlayerGroundState
         _restTimer += Time.deltaTime;
         if (_restTimer > 10f)
         {
-            owner.PlayAnimation(AnimationConfig.StateHashes.Rest, AnimationConfig.TransitionSettings.NormalTransitionDuration);
+            owner.PlayAnimation(AnimationConfig_UnityChan.StateHashes.Rest, AnimationConfig_UnityChan.TransitionSettings.NormalTransitionDuration);
             _restTimer = -10f;
             return;
         }

@@ -8,7 +8,7 @@ public class PlayerRunState : PlayerGroundState
     int timerId;
     public override void OnEnter()
     {
-        owner.PlayAnimation(AnimationConfig.StateHashes.Locomotion, AnimationConfig.TransitionSettings.NormalTransitionDuration);
+        owner.PlayAnimation(AnimationConfig_UnityChan.StateHashes.Locomotion, AnimationConfig_UnityChan.TransitionSettings.NormalTransitionDuration);
         runTimer = 0;
         timerId = TimerMgr.Instance.CreateTimer(false, 8000, () => { }, 200, () =>
         {
