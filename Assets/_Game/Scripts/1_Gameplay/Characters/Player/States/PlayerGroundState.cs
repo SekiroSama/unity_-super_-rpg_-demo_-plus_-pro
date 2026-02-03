@@ -19,6 +19,11 @@ public class PlayerGroundState : StateBase
             stateMachine.ChangeState<PlayerAttackState>();
             return;
         }
+        if (GameManager.Instance.inputManager.CurrentInput.isJump)
+        {
+            stateMachine.ChangeState<PlayerAirState>();
+            return;
+        }
         if (GameManager.Instance.inputManager.CurrentInput.MoveVector.sqrMagnitude <= 0.01)
         {
             stateMachine.ChangeState<PlayerIdleState>();
