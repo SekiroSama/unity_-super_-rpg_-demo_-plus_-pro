@@ -13,6 +13,8 @@ public class PoolData
     //用来记录使用中的对象的 
     private List<GameObject> usedList = new List<GameObject>();
 
+    //抽屉上限 场景上同时存在的对象的上限个数
+    private int maxNum;
 
     //抽屉根对象 用来进行布局管理的对象
     private GameObject rootObj;
@@ -21,6 +23,11 @@ public class PoolData
     public int Count => dataStack.Count;
 
     public int UsedCount => usedList.Count;
+
+    /// <summary>
+    /// 进行使用中对象数量和最大容量进行比较 小于返回true 需要实例化
+    /// </summary>
+    public bool NeedCreate => usedList.Count < maxNum;
 
     /// <summary>
     /// 初始化构造函数
@@ -41,6 +48,15 @@ public class PoolData
         //创建抽屉时 外部肯定是会动态创建一个对象的
         //我们应该将其记录到 使用中的对象容器中
         PushUsedList(usedObj);
+
+        PoolObj poolObj = usedObj.GetComponent<PoolObj>();
+        if (poolObj == null)
+        {
+            Debug.LogError("请为使用缓存池功能的预设体对象挂载PoolObj脚本 用于设置数量上限");
+            return;
+        }
+        //记录上限数量值
+        maxNum = poolObj.maxNum;
     }
 
     /// <summary>
@@ -108,6 +124,31 @@ public class PoolData
 }
 
 /// <summary>
+/// 方便在字典当中用里式替换原则 存储子类对象
+/// </summary>
+public abstract class PoolObjectBase { }
+
+/// <summary>
+/// 用于存储 数据结构类 和 逻辑类 （不继承mono的）容器类
+/// </summary>
+/// <typeparam name="T"></typeparam>
+public class PoolObject<T> : PoolObjectBase where T : class
+{
+    public Queue<T> poolObjs = new Queue<T>();
+}
+
+/// <summary>
+/// 想要被复用的 数据结构类、逻辑类 都必须要继承该接口
+/// </summary>
+public interface IPoolObject
+{
+    /// <summary>
+    /// 重置数据的方法
+    /// </summary>
+    void ResetInfo();
+}
+
+/// <summary>
 /// 缓存池(对象池)模块 管理器
 /// </summary>
 public class PoolMgr : BaseManager<PoolMgr>
@@ -116,26 +157,42 @@ public class PoolMgr : BaseManager<PoolMgr>
     //值 其实代表的就是一个 抽屉对象
     private Dictionary<string, PoolData> poolDic = new Dictionary<string, PoolData>();
 
+    /// <summary>
+    /// 用于存储数据结构类、逻辑类对象的 池子的字典容器
+    /// </summary>
+    private Dictionary<string, PoolObjectBase> poolObjectDic = new Dictionary<string, PoolObjectBase>();
+
     //池子根对象
     private GameObject poolObj;
 
     //是否开启布局功能
-    public static bool isOpenLayout = false;
+    public static bool isOpenLayout = true;
 
-    private PoolMgr() { }
+    private PoolMgr()
+    {
+
+        //如果根物体为空 就创建
+        if (poolObj == null && isOpenLayout)
+            poolObj = new GameObject("Pool");
+
+    }
 
     /// <summary>
     /// 拿东西的方法
     /// </summary>
     /// <param name="name">抽屉容器的名字</param>
     /// <returns>从缓存池中取出的对象</returns>
-    public GameObject GetObj(string name, int maxNum = 50)
+    public GameObject GetObj(string name)
     {
+        //如果根物体为空 就创建
+        if (poolObj == null && isOpenLayout)
+            poolObj = new GameObject("Pool");
+
         GameObject obj;
 
         #region 加入了数量上限后的逻辑判断
         if (!poolDic.ContainsKey(name) ||
-            (poolDic[name].Count == 0 && poolDic[name].UsedCount < maxNum))
+            (poolDic[name].Count == 0 && poolDic[name].NeedCreate))
         {
             //动态创建对象
             //没有的时候 通过资源加载 去实例化出一个GameObject
@@ -179,6 +236,41 @@ public class PoolMgr : BaseManager<PoolMgr>
         return obj;
     }
 
+    /// <summary>
+    /// 获取自定义的数据结构类和逻辑类对象 （不继承Mono的）
+    /// </summary>
+    /// <typeparam name="T">数据类型</typeparam>
+    /// <returns></returns>
+    public T GetObj<T>(string nameSpace = "") where T : class, IPoolObject, new()
+    {
+        //池子的名字 是根据类的类型来决定的 就是它的类名
+        string poolName = nameSpace + "_" + typeof(T).Name;
+        //有池子
+        if (poolObjectDic.ContainsKey(poolName))
+        {
+            PoolObject<T> pool = poolObjectDic[poolName] as PoolObject<T>;
+            //池子当中是否有可以复用的内容
+            if (pool.poolObjs.Count > 0)
+            {
+                //从队列中取出对象 进行复用
+                T obj = pool.poolObjs.Dequeue() as T;
+                return obj;
+            }
+            //池子当中是空的
+            else
+            {
+                //必须保证存在无参构造函数
+                T obj = new T();
+                return obj;
+            }
+        }
+        else//没有池子
+        {
+            T obj = new T();
+            return obj;
+        }
+
+    }
 
     /// <summary>
     /// 往缓存池中放入对象
@@ -187,10 +279,6 @@ public class PoolMgr : BaseManager<PoolMgr>
     /// <param name="obj">希望放入的对象</param>
     public void PushObj(GameObject obj)
     {
-        //如果根物体为空 就创建
-        if (poolObj == null && isOpenLayout)
-            poolObj = new GameObject("Pool");
-
         #region 因为失活 父子关系都放入了 抽屉对象中处理 所以不需要再处理这些内容了
         ////总之，目的就是要把对象隐藏起来
         ////并不是直接移除对象 而是将对象失活 一会儿再用 用的时候再激活它
@@ -225,6 +313,32 @@ public class PoolMgr : BaseManager<PoolMgr>
     }
 
     /// <summary>
+    /// 将自定义数据结构类和逻辑类 放入池子中
+    /// </summary>
+    /// <typeparam name="T">对应类型</typeparam>
+    public void PushObj<T>(T obj, string nameSpace = "") where T : class, IPoolObject
+    {
+        //如果想要压入null对象 是不被允许的
+        if (obj == null)
+            return;
+        //池子的名字 是根据类的类型来决定的 就是它的类名
+        string poolName = nameSpace + "_" + typeof(T).Name;
+        //有池子
+        PoolObject<T> pool;
+        if (poolObjectDic.ContainsKey(poolName))
+            //取出池子 压入对象
+            pool = poolObjectDic[poolName] as PoolObject<T>;
+        else//没有池子
+        {
+            pool = new PoolObject<T>();
+            poolObjectDic.Add(poolName, pool);
+        }
+        //在放入池子中之前 先重置对象的数据
+        obj.ResetInfo();
+        pool.poolObjs.Enqueue(obj);
+    }
+
+    /// <summary>
     /// 用于清除整个柜子当中的数据 
     /// 使用场景 主要是 切场景时
     /// </summary>
@@ -232,5 +346,6 @@ public class PoolMgr : BaseManager<PoolMgr>
     {
         poolDic.Clear();
         poolObj = null;
+        poolObjectDic.Clear();
     }
 }

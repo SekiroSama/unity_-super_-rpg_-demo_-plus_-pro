@@ -41,6 +41,7 @@ public class WeaponController : MonoBehaviour
         //}
 
         obj = PoolMgr.Instance.GetObj("MyTrailRenderer");
+        obj.GetComponent<MyTrailRenderer>().isEmitting = true;  
         obj.GetComponent<MyTrailRenderer>().InitMyTrailRenderer(tipTransform,baseTransform);
         obj.transform.position = Vector3.zero;
     }
@@ -50,6 +51,7 @@ public class WeaponController : MonoBehaviour
         //{
         //    trailRenderer[i].enabled = false;
         //}
+        obj.GetComponent<MyTrailRenderer>().isEmitting = false;
         PoolMgr.Instance.PushObj(obj);
 
     }
