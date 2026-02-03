@@ -41,7 +41,7 @@ public abstract class Enemy_AI : MonoBehaviour
     /// </summary>
     protected virtual void InitBlackboard()
     {
-        blackboard.SetValue<EnemyController>(Enemy_AI_Config.KEY_SELF_EnemyController, enemyController);
+        blackboard.SetValue<EnemyController>(Enemy_AIBlackBoard_Config.KEY_SELF_EnemyController, enemyController);
     }
 
     /// <summary>

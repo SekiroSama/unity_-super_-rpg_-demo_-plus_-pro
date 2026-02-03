@@ -26,7 +26,7 @@ public class MoveToTargetNode : BTNode
 
     public override NodeStatus Evaluate(Blackboard blackboard)
     {
-        enemyController = blackboard.GetValue<EnemyController>(Enemy_AI_Config.KEY_SELF_EnemyController);
+        enemyController = blackboard.GetValue<EnemyController>(Enemy_AIBlackBoard_Config.KEY_SELF_EnemyController);
         if (enemyController == null)
         {
             currentStatus = NodeStatus.FAILURE;
