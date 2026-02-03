@@ -15,11 +15,11 @@ public class 开发日志_Bababoi
         // "刀光效果更新，使用MyTrailRenderer预制体渲染，在动画事件控制生成或销毁，需要保证世界坐标为000，需要调用InitMyTrailRenderer传入首尾位置",
         //"计时器",
         "任务中心",
-        "状态切换优化",
+        //"跑步状态用计时器优化",
         "跳跃和空中状态"
     };
 
-    string Last = "计时器";
-    string Doing = "状态切换优化";
+    string Last = "跑步状态用计时器优化";
+    string Doing = "跳跃和空中状态";
 
 }
