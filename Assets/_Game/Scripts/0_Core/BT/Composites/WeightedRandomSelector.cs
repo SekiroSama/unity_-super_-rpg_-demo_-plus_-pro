@@ -1,18 +1,74 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeightedRandomSelector : MonoBehaviour
+/// <summary>
+/// 随机选择节点 失败继续成功返回 直到全部失败 根据权重随机选择一个能跑的跑
+/// </summary>
+public class WeightedRandomSelector : BTNode
 {
-    // Start is called before the first frame update
-    void Start()
+    List<BTNode> childNodes;
+    List<float> weights;
+    private int _currentChildIndex = -1;
+
+    /// <summary>
+    /// init
+    /// </summary>
+    /// <param name="childNodes">子节点</param>
+    /// <param name="weights">权重,权重之和应该为1</param>
+    public WeightedRandomSelector(List<BTNode> childNodes, List<float> weights)
     {
-        
+        this.childNodes = childNodes;
+        this.weights = weights;
     }
 
-    // Update is called once per frame
-    void Update()
+    float totalWeight = 0f;
+    float randomValue = 0f;
+    public override NodeStatus Evaluate(Blackboard blackboard)
     {
-        
+        if(_currentChildIndex != -1)
+        {
+            switch (childNodes[_currentChildIndex].Evaluate(blackboard))
+            {
+                case NodeStatus.SUCCESS:
+                    currentStatus = NodeStatus.SUCCESS;
+                    _currentChildIndex = -1;
+                    return currentStatus;
+                case NodeStatus.RUNNING:
+                    currentStatus = NodeStatus.RUNNING;
+                    return currentStatus;
+                case NodeStatus.FAILURE:
+                    currentStatus = NodeStatus.FAILURE;
+                    _currentChildIndex = -1;
+                    break;
+            }
+        }
+        else
+        {
+            randomValue = Random.Range(0f, 1f);
+            for (int i = 0; i < childNodes.Count; i++)
+            {
+                if (randomValue > totalWeight && randomValue < (totalWeight += weights[i]))
+                {
+                    switch (childNodes[i].Evaluate(blackboard))
+                    {
+                        case NodeStatus.SUCCESS:
+                            currentStatus = NodeStatus.SUCCESS;
+                            return currentStatus;
+                        case NodeStatus.RUNNING:
+                            _currentChildIndex = i;
+                            currentStatus = NodeStatus.RUNNING;
+                            return currentStatus;
+                        case NodeStatus.FAILURE:
+                            currentStatus = NodeStatus.FAILURE;
+                            continue;
+                    }
+                }
+            }
+        }
+
+        _currentChildIndex = -1;
+        currentStatus = NodeStatus.FAILURE;
+        return currentStatus;
     }
 }
