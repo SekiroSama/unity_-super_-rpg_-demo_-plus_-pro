@@ -32,7 +32,9 @@ public class FatFatDragon_AI : Enemy_AI
     /// <param name="ConditionNode">条件节点</param> 比较数值大小 
     /// Actions 具体的行为节点
     /// <param name="WaitNode">等待节点</param>
-    /// <param name="MoveToTargetNode">移动节点</param>
+    /// <param DeadNode="Dead">死了</param> 通常返回失败 如果死了返回成功
+    /// <param MoveToTargetNode="移动">移动节点</param>
+    /// <param SleepNode="睡觉">睡觉时可缓慢回血，但收到双倍伤害</param> 通常返回ing 如果已经跑过了返回失败
 
 
 
@@ -41,33 +43,36 @@ public class FatFatDragon_AI : Enemy_AI
     /// </summary>
     //  SelectorNode 选择节点 失败继续成功返回
     //  {
-    ///    <param name="Death">死了</param> 通常返回失败 如果死了返回成功
-    ///    <param name="逃跑_低血量">进入逃跑状态</param> 通常返回ing 如果已经跑过了返回失败
+    ///    <param SequenceNode="死亡">死了</param> 通常返回失败 如果死了返回成功
+    ///    <param SelectorNode="逃跑_低血量">进入逃跑状态</param> 通常返回ing 如果已经跑过了返回失败
     ///    <param name="战斗_发怒">进入发怒战斗状态</param> 通常返回ing 如果没在战斗状态 如果不在发怒 返回失败
     ///    <param name="战斗_普通">进入普通战斗状态</param> 通常返回ing 如果没在战斗状态 返回失败
     ///    <param name="巡逻">在一条指定路径上巡逻</param> 通常返回ing 发现player返回成功 
     //  }
 
 
+    //  死亡行为逻辑 SequenceNode序列节点成功继续失败返回
+    //  {
+    ///    <param ConditionNode="IsDead">死了吗</param> 通常返回失败 如果死了返回成功
+    ///    <param DeadNode="Dead">死了</param> 通常返回ing
+    //  }
 
-    /// <summary>
-    /// 逃跑_低血量行为逻辑
-    /// </summary>
-    /// <param name="移动">移动到指定位置（巢穴）</param>
-    /// <param name="睡觉">睡觉时可缓慢回血，但收到双倍伤害</param>
-    /// <param name="进入发怒">进入发怒战斗状态</param>
+    //  逃跑_低血量行为逻辑 SequenceNode序列节点成功继续失败返回
+    //  {
+    /// <param ConditionNode="HaveRunChance">有无逃跑机会</param> 通常返回成功 如果无逃跑机会返回失败
+    /// <param MoveToTargetNode="移动">移动到指定位置（巢穴）</param> 通常返回ing 跑完后返回成功
+    /// <param SleepNode="睡觉">睡觉时可缓慢回血，但收到双倍伤害</param> 通常返回ing 醒了后返回成功
+    /// <param name="进入发怒">进入发怒战斗状态</param> 如果不在发怒 返回失败
+    //  }
 
 
-    /// <summary>
-    /// 巡逻行为逻辑
-    /// </summary>
-
-    /// <param name="移动">在一条指定路径上来回移动</param>
-
-    /// <param name="搜寻player">直到视野中player出现来触发战斗</param>
-    /// <param name="检查是否被攻击">检查是否受到攻击掉血来触发战斗</param>
-
-    /// <param name="进入战斗_普通">进入战斗_普通</param>
+    //  战斗_发怒行为逻辑 SelectorNode 选择节点 失败继续成功返回
+    //  {
+    /// <param name="更快追捕player">移动到player</param>
+    /// <param name="发怒攻击">发动攻击更频繁</param>
+    /// <param name="被破韧">韧性小于0，但韧性更难被降低</param>
+    /// <param name="对峙">精力不足时对峙，但精力恢复更快</param>
+    //  }
 
     /// <summary>
     /// 战斗_普通行为逻辑
@@ -76,13 +81,15 @@ public class FatFatDragon_AI : Enemy_AI
     /// <param name="普通攻击">发动攻击</param>
     /// <param name="被破韧">韧性小于0，破韧后受伤增加并倒地</param>
     /// <param name="进入发怒">从破韧恢复后进入发怒</param>
+    /// <param name="对峙">精力不足时对峙</param>
 
     /// <summary>
-    /// 战斗_发怒行为逻辑
+    /// 巡逻行为逻辑
     /// </summary>
-    /// <param name="更快追捕player">移动到player</param>
-    /// <param name="发怒攻击">发动攻击更频繁</param>
-    /// <param name="被破韧">韧性小于0，但韧性更难被降低</param>
+    /// <param name="移动">在一条指定路径上来回移动</param>
+    /// <param name="搜寻player">直到视野中player出现来触发战斗</param>
+    /// <param name="检查是否被攻击">检查是否受到攻击掉血来触发战斗</param>
+    /// <param name="进入战斗_普通">进入战斗_普通</param>
 
     protected override BTNode BuildTree()
     {
