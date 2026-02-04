@@ -15,6 +15,7 @@ public class FatFatDragon_AI : Enemy_AI
 
     // Decorators 装饰节点 有且只有一个子节点
     /// <param InverterNode="InverterNode">取反节点</param> 暂未完成
+    /// <param WaitNode="time, callback">等待节点</param>
 
 
 
@@ -28,7 +29,6 @@ public class FatFatDragon_AI : Enemy_AI
     /// Conditions 只做判断
     /// <param ConditionNode="判断条件和回调函数">条件节点</param> 比较数值大小 
     /// Actions 具体的行为节点
-    /// <param WaitNode="time, callback">等待节点</param>
     /// <param DeadNode="Dead">死了</param> 通常返回ing
     /// <param DownedNode="isDowned">倒地节点</param> 通常返回ing 恢复后返回成功
     /// <param MoveToTargetNode="homePos, speed_run">移动到指定位置（巢穴）</param> 通常返回ing 跑完后返回成功
@@ -36,7 +36,7 @@ public class FatFatDragon_AI : Enemy_AI
     /// <param BackAwayNode="对峙后退">精力不足时对峙，发怒精力恢复更快</param> 通常返回ing 精力充足成功 
     /// <param DragonShoutNode="龙吼">龙吼</param> 通常返回ing 龙吼完成过返回成功 
     /// <param ProjectileAttackNode="投射物攻击">投射物攻击</param>
-    /// <param SequenceNode="近战攻击">近战攻击</param>
+    /// <param MeleeHitNode="近战攻击">近战攻击</param>
     /// <param SearchPlayer="搜寻player">检查视野中player出现来触发战斗</param> 通常返回失败 搜到后返回成功
 
 
@@ -110,10 +110,6 @@ public class FatFatDragon_AI : Enemy_AI
     protected override BTNode BuildTree()
     {
         List<BTNode> root_ChildNodes = new List<BTNode>();//root节点
-
-        //List<BTNode> root_atk_childNodes = new List<BTNode>();//攻击节点
-        //root_atk_childNodes.Add(new SequenceNode());
-        //List<BTNode> root_atk__childNodes = new List<BTNode>();
 
         root_ChildNodes.Add(new MoveToTargetNode(Enemy_AIBlackBoard_Config.KEY_Player_PlayerPos, stoppingDistance));
 
