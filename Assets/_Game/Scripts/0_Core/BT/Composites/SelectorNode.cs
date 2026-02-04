@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using static BTNode;
 
+/// <summary>
+/// 选择节点 失败继续成功返回
+/// </summary>
 public class SelectorNode : BTNode
 {
     List<BTNode> childNodes;

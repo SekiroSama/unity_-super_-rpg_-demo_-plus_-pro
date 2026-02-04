@@ -35,7 +35,7 @@ public class MoveToTargetNode : BTNode
 
         _currentPos = _enemyController.transform.position;
         _targetPos = blackboard.GetValue<Vector3>(_targetKey);
-        if((_currentPos - _targetPos).sqrMagnitude > 4 * _stoppingDistanceSqr)
+        if((_currentPos - _targetPos).sqrMagnitude > 3 * _stoppingDistanceSqr)
         {
             _enemyController.MoveToTarget(_targetPos, EnemyAnimationConfig.FatFatDragonSettings.FatFatDragonRunSpeedRatio);
             currentStatus = NodeStatus.RUNNING;

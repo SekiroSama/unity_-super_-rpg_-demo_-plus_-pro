@@ -7,4 +7,7 @@ public static class Enemy_AIBlackBoard_Config
     public static readonly string KEY_SELF_EnemyController = "KEY_SELF_EnemyController";
     public static readonly string KEY_Player_PlayerController = "KEY_Player_PlayerController";
     public static readonly string KEY_Player_PlayerPos = "KEY_Player_PlayerPos";
+
+
 }
+
