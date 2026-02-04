@@ -13,27 +13,22 @@ public class FatFatDragon_AI : Enemy_AI
         blackboard.SetValue<Vector3>(Enemy_AIBlackBoard_Config.KEY_Player_PlayerPos, GameManager.Instance.playerController.transform.position);
     }
 
-    /// <summary>
-    /// Composites 组合节点 必须有多个子节点
-    /// </summary>
-    /// <param name="SelectorNode">选择节点</param> 失败继续成功返回 直到全部失败 选择一个能跑的跑
-    /// <param name="SequenceNode">序列节点</param> 成功继续失败返回 直到全部成功 一步一步走完整个流程
-    /// <param name="ParallelNode">并行节点</param> 成功继续失败返回 直到全部成功 同时调用所有子节点 
+    // Composites 组合节点 必须有多个子节点
+    /// <param SelectorNode="childNodes">选择节点</param> 失败继续成功返回 直到全部失败 选择一个能跑的跑
+    /// <param WeightedRandomSelector="childNodes, weights">随机选择节点</param> 评估子节点之前，会先“打乱顺序” 失败继续成功返回 直到全部失败 选择一个能跑的跑
+    /// <param SequenceNode="childNodes">序列节点</param> 成功继续失败返回 直到全部成功 一步一步走完整个流程
+    /// <param ParallelNode="childNodes">并行节点</param> 成功继续失败返回 直到全部成功 同时调用所有子节点 
 
-    /// <summary>
-    /// Decorators 装饰节点 有且只有一个子节点
-    /// </summary>
-    /// <param name="InverterNode">取反节点</param> 暂未完成
+    // Decorators 装饰节点 有且只有一个子节点
+    /// <param InverterNode="InverterNode">取反节点</param> 暂未完成
 
-    /// <summary>
-    /// LeafNodes 叶子节点 没有子节点，是树的末端。
-    /// </summary>
+    // LeafNodes 叶子节点 没有子节点，是树的末端。
     /// Conditions 只做判断
     /// <param name="ConditionNode">条件节点</param> 比较数值大小 
     /// Actions 具体的行为节点
-    /// <param name="WaitNode">等待节点</param>
+    /// <param WaitNode="time">等待节点</param>
     /// <param DeadNode="Dead">死了</param> 通常返回失败 如果死了返回成功
-    /// <param MoveToTargetNode="移动">移动节点</param>
+    /// <param MoveToTargetNode="speed">移动节点</param>
     /// <param SleepNode="睡觉">睡觉时可缓慢回血，但收到双倍伤害</param> 通常返回ing 如果已经跑过了返回失败
 
 
@@ -44,7 +39,7 @@ public class FatFatDragon_AI : Enemy_AI
     //  SelectorNode 选择节点 失败继续成功返回
     //  {
     ///    <param SequenceNode="死亡">死了</param> 通常返回失败 如果死了返回成功
-    ///    <param SelectorNode="逃跑_低血量">进入逃跑状态</param> 通常返回ing 如果已经跑过了返回失败
+    ///    <param SequenceNode="逃跑_低血量">进入逃跑状态</param> 通常返回ing 如果已经跑过了返回失败
     ///    <param name="战斗_发怒">进入发怒战斗状态</param> 通常返回ing 如果没在战斗状态 如果不在发怒 返回失败
     ///    <param name="战斗_普通">进入普通战斗状态</param> 通常返回ing 如果没在战斗状态 返回失败
     ///    <param name="巡逻">在一条指定路径上巡逻</param> 通常返回ing 发现player返回成功 
@@ -53,25 +48,31 @@ public class FatFatDragon_AI : Enemy_AI
 
     //  死亡行为逻辑 SequenceNode序列节点成功继续失败返回
     //  {
-    ///    <param ConditionNode="IsDead">死了吗</param> 通常返回失败 如果死了返回成功
+    ///    <param ConditionNode="isDead">死了吗</param> 通常返回失败 如果死了返回成功
     ///    <param DeadNode="Dead">死了</param> 通常返回ing
     //  }
 
     //  逃跑_低血量行为逻辑 SequenceNode序列节点成功继续失败返回
     //  {
-    /// <param ConditionNode="HaveRunChance">有无逃跑机会</param> 通常返回成功 如果无逃跑机会返回失败
-    /// <param MoveToTargetNode="移动">移动到指定位置（巢穴）</param> 通常返回ing 跑完后返回成功
+    /// <param ConditionNode="haveRunChance">有无逃跑机会</param> 通常返回成功 如果无逃跑机会返回失败
+    /// <param MoveToTargetNode="homePos, speed_run">移动到指定位置（巢穴）</param> 通常返回ing 跑完后返回成功
     /// <param SleepNode="睡觉">睡觉时可缓慢回血，但收到双倍伤害</param> 通常返回ing 醒了后返回成功
     /// <param name="进入发怒">进入发怒战斗状态</param> 如果不在发怒 返回失败
     //  }
 
 
-    //  战斗_发怒行为逻辑 SelectorNode 选择节点 失败继续成功返回
+    //  战斗_发怒行为逻辑 SequenceNode序列节点成功继续失败返回
     //  {
-    /// <param name="更快追捕player">移动到player</param>
-    /// <param name="发怒攻击">发动攻击更频繁</param>
-    /// <param name="被破韧">韧性小于0，但韧性更难被降低</param>
-    /// <param name="对峙">精力不足时对峙，但精力恢复更快</param>
+    /// <param ConditionNode="poise >= 0">韧性大于0继续</param> 通常返回成功 小于0返回
+    /// <param MoveToTargetNode="playerPos, speed_angry">移动到player</param> 通常返回ing 到达后返回成功
+    /// <param WeightedRandomSelector="childNodes, weights">发怒攻击,选择一个满足条件的发动，多个条件满足则随机一个</param>
+    /// <param name="对峙">精力不足时对峙，发怒精力恢复更快</param>
+    //  }
+
+    //  发怒攻击行为逻辑 WeightedRandomSelector 选择一个满足条件的发动，多个条件满足则根据权重随机一个
+    //  {
+    /// <param ConditionNode="haveRunChance">有无逃跑机会</param> 通常返回成功 如果无逃跑机会返回失败
+
     //  }
 
     /// <summary>
