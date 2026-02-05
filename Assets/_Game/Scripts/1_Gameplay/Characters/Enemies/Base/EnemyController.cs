@@ -6,10 +6,14 @@ using UnityEngine.AI;
 
 public abstract class EnemyController : MonoBehaviour
 {
-    public int HP = 100;
+    public int Hp = 100;
+    public int MaxHp = 100;
     public float MaxMoveSpeed = 9f;
 
+    public bool isDead => false;//是否死亡
     public bool isDowned = false;//是否破韧
+    public bool isSleeping = false;//是否睡觉
+    public bool isFighting = false;//是否在战斗中
 
     [SerializeField]
     private float Duration;//抖动时间
@@ -65,7 +69,7 @@ public abstract class EnemyController : MonoBehaviour
     /// </summary>
     public virtual void Downed()
     {
-        animator.SetTrigger(EnemyAnimationConfig.Parameters.IsDowned);// 播放破韧动画
+        animator.SetBool(EnemyAnimationConfig.Parameters.IsDowned, isDowned);// 播放破韧动画
     }
 
     /// <summary>
@@ -73,7 +77,7 @@ public abstract class EnemyController : MonoBehaviour
     /// </summary>
     public virtual void Sleep()
     {
-        animator.SetTrigger(EnemyAnimationConfig.Parameters.isSleeping);// 播放破韧动画
+        animator.SetBool(EnemyAnimationConfig.Parameters.isSleeping, isSleeping);// 播放破韧动画
     }
 
     /// <summary>
@@ -83,7 +87,7 @@ public abstract class EnemyController : MonoBehaviour
     /// <param name="hitPoint">受击位置，传入shader</param>
     public virtual void TakeDamage(int damage, Vector3 hitPoint)
     {
-        HP -= damage;
+        Hp -= damage;
         _material.SetVector("_HitPos", hitPoint);
 
         if(_jitterCoroutine != null)

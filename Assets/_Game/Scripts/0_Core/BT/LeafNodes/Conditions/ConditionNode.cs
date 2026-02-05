@@ -6,6 +6,7 @@ using UnityEngine.Events;
 
 /// <summary>
 /// 条件节点
+/// 比较成功返回SUCCESS 失败返回FAILURE
 /// </summary>
 /// <typeparam name="T">要比较的类型</typeparam>
 public class ConditionNode<T> : BTNode where T : IComparable
@@ -21,7 +22,7 @@ public class ConditionNode<T> : BTNode where T : IComparable
     /// <param name="blackBoardKey">谁来比较</param>
     /// <param name="targetValue">和谁比较</param>
     /// <param name="compareType">比较条件</param>
-    /// <param name="unityAction">成功回调</param>
+    /// <param name="unityAction">成功回调</param>成功才会执行
     public ConditionNode(string blackBoardKey, T targetValue, CompareType compareType, UnityAction unityAction = null)
     {
         _blackBoardKey = blackBoardKey;

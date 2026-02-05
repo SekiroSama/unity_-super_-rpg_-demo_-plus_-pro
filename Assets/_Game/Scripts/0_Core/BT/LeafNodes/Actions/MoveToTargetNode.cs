@@ -4,6 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// 移动节点
+/// 通常返回ing 跑完后返回成功
 /// </summary>
 public class MoveToTargetNode : BTNode
 {
