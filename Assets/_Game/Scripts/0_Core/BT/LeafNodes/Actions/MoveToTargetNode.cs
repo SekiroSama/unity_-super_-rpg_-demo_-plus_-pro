@@ -18,7 +18,7 @@ public class MoveToTargetNode : BTNode
     /// </summary>
     /// <param name="targetKey">黑板Key,用来取目标位置</param>
     /// <param name="stoppingDistance">停止距离</param>
-    public MoveToTargetNode(string targetKey, float stoppingDistance)
+    public MoveToTargetNode(string targetKey, float stoppingDistance, float speed)
     {
         _targetKey = targetKey;
         _stoppingDistanceSqr = stoppingDistance * stoppingDistance;

@@ -9,6 +9,8 @@ public abstract class EnemyController : MonoBehaviour
     public int HP = 100;
     public float MaxMoveSpeed = 9f;
 
+    public bool isDowned = false;//是否破韧
+
     [SerializeField]
     private float Duration;//抖动时间
     [SerializeField]
