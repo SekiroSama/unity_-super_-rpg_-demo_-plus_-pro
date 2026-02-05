@@ -17,7 +17,17 @@ public abstract class EnemyController : MonoBehaviour
     public bool isFighting = false;//是否在战斗中
     public bool isBackAwaying = false;//是否在对峙后退中
     public bool isDragonShouTriggered = false;//是否龙吼过
-    public bool isAttacking = false;//是否正在攻击
+    private bool _isAttacking = false;//是否正在攻击
+    public bool isAttacking
+    {
+        get { return _isAttacking; }
+        set 
+        { 
+            _isAttacking = value;
+            if(animator != null)
+            animator.SetBool(EnemyAnimationConfig.Parameters.IsAttacking, _isAttacking);// 进入atk动画层级
+        }
+    }
 
     [SerializeField]
     private float Duration;//抖动时间

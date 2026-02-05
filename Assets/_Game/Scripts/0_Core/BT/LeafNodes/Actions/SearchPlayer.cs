@@ -1,18 +1,12 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SearchPlayer : MonoBehaviour
+public class SearchPlayer : BTNode
 {
-    // Start is called before the first frame update
-    void Start()
+    public override NodeStatus Evaluate(Blackboard blackboard)
     {
-        
+        throw new System.NotImplementedException();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

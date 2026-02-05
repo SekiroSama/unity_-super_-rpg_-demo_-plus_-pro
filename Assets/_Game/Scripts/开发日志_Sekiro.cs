@@ -22,7 +22,8 @@ public class 开发日志_Sekiro
     List<string> SekiroDoList = new List<string>()
     {
         //"行为树基类",
-        "行为树拓展",
+        //"行为树拓展",
+        "行为树差一个完结，状态机差一点",
     };
 }
 
