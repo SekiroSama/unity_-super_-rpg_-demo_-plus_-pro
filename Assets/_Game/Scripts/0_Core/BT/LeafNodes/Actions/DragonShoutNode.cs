@@ -5,7 +5,7 @@ using static BTNode;
 
 /// <summary>
 /// 龙吼
-/// 通常返回ing 龙吼完成过返回成功 
+/// 通常返回ing 龙吼完成过返回失败
 /// </summary>
 public class DragonShoutNode : BTNode
 {
@@ -17,7 +17,7 @@ public class DragonShoutNode : BTNode
         if (_enemyController.isDragonShouTriggered)
         {
             _isDragonShouTriggered = false;
-            currentStatus = NodeStatus.SUCCESS;
+            currentStatus = NodeStatus.FAILURE;
             return currentStatus;
         }
 

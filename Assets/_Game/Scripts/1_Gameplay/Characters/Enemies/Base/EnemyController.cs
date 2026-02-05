@@ -11,12 +11,13 @@ public abstract class EnemyController : MonoBehaviour
     public float Stamina = 100;
     public float MaxMoveSpeed = 9f;
 
-    public bool isDead => false;//是否死亡
+    public bool isDead = false;//是否死亡
     public bool isDowned = false;//是否破韧
     public bool isSleeping = false;//是否睡觉
     public bool isFighting = false;//是否在战斗中
     public bool isBackAwaying = false;//是否在对峙后退中
     public bool isDragonShouTriggered = false;//是否龙吼过
+    public bool isAttacking = false;//是否正在攻击
 
     [SerializeField]
     private float Duration;//抖动时间
@@ -65,6 +66,7 @@ public abstract class EnemyController : MonoBehaviour
     public virtual void Die()
     {
         animator.SetTrigger(EnemyAnimationConfig.Parameters.Die);// 播放死亡动画
+        isDead = true;
     }
 
     /// <summary>
@@ -72,7 +74,8 @@ public abstract class EnemyController : MonoBehaviour
     /// </summary>
     public virtual void Downed()
     {
-        animator.SetBool(EnemyAnimationConfig.Parameters.IsDowned, isDowned);// 播放破韧动画
+        animator.SetTrigger(EnemyAnimationConfig.Parameters.IsDowned);// 播放破韧动画
+        isDowned = true;
     }
     
     /// <summary>
@@ -80,7 +83,8 @@ public abstract class EnemyController : MonoBehaviour
     /// </summary>
     public virtual void Sleep()
     {
-        animator.SetBool(EnemyAnimationConfig.Parameters.isSleeping, isSleeping);// 播放破韧动画
+        animator.SetBool(EnemyAnimationConfig.Parameters.isSleeping, isSleeping);// 播放睡觉动画
+        isSleeping = true;
     }
 
     /// <summary>
@@ -88,9 +92,9 @@ public abstract class EnemyController : MonoBehaviour
     /// </summary>
     public virtual void BackAway()
     {
-        
+        isBackAwaying = true;
     }
-
+    
     /// <summary>
     /// 龙吼
     /// </summary>
@@ -98,6 +102,15 @@ public abstract class EnemyController : MonoBehaviour
     {
         animator.SetTrigger(EnemyAnimationConfig.Parameters.DragonShout);// 播放龙吼动画
         isDragonShouTriggered = true;
+    }
+
+    /// <summary>
+    /// 投射物攻击
+    /// </summary>
+    public virtual void ProjectileAttack()
+    {
+        animator.SetTrigger(EnemyAnimationConfig.Parameters.DragonShout);// 播放投射物攻击动画
+        isAttacking = true;
     }
 
     /// <summary>

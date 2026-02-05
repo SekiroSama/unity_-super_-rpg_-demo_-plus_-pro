@@ -48,8 +48,8 @@ public class FatFatDragon_AI : Enemy_AI
     //  {
     ///    <param SequenceNode="死亡检查">死亡检查</param> 通常返回失败 如果死了返回成功 死亡后返回ing
     ///    <param SequenceNode="韧性检查">韧性检查</param> 通常返回失败 破韧了返回成功 倒地后返回ing
-    ///    <param SequenceNode="逃跑_低血量">进入逃跑状态</param> 通常返回ing 如果已经跑过了返回失败
-    ///    <param SequenceNode="战斗">进入战斗状态</param> 通常返回ing
+    ///    <param SequenceNode="逃跑_低血量">进入逃跑状态</param> 通常返回ing 如果已经跑过了或没有进入低血量返回失败
+    ///    <param SelectorNode="战斗">进入战斗状态</param> 通常返回ing
     ///    <param SelectorNode="巡逻">在一条指定路径上巡逻</param> 通常返回ing 进入战斗返回成功 
     //  }
 
@@ -68,23 +68,24 @@ public class FatFatDragon_AI : Enemy_AI
 
     //  逃跑_低血量 SequenceNode序列节点成功继续失败返回
     //  {
+    /// <param ConditionNode="isLowHealth">没有进入低血量</param> 通常返回成功 如果没有进入低血量返回失败
     /// <param ConditionNode="haveRunChance">有无逃跑机会</param> 通常返回成功 如果无逃跑机会返回失败
     /// <param MoveToTargetNode="homePos, speed_run">移动到指定位置（巢穴）</param> 通常返回ing 跑完后返回成功
     /// <param SleepNode="睡觉">睡觉时可缓慢回血，但收到双倍伤害</param> 通常返回ing 醒了后返回成功
     //  }
 
 
-    //  战斗 SequenceNode序列节点成功继续失败返回
+    //  战斗 SelectorNode选择节点失败继续成功返回
     //  {
-    /// <param BackAwayNode="对峙后退">精力不足时对峙，发怒精力恢复更快</param> 通常返回成功 精力不足返回ing 
-    /// <param DragonShoutNode="龙吼">龙吼</param> 通常返回ing 龙吼完成过返回成功 
+    /// <param BackAwayNode="对峙后退">精力不足时对峙，发怒精力恢复更快</param> 通常返回失败 精力不足返回ing 
+    /// <param DragonShoutNode="龙吼">龙吼</param> 通常返回ing 吼过了返回失败 
     /// <param WeightedRandomSelector="childNodes, weights">攻击,选择一个满足条件的发动，多个条件满足则随机一个</param>
     //  }
 
     //  攻击 WeightedRandomSelector 如果没有执行中的节点选择一个满足条件的发动，多个条件满足则根据权重随机一个
     //  {
-    /// <param SequenceNode="投射物攻击">投射物攻击</param> 通常返回ing
-    /// <param SequenceNode="近战攻击">近战攻击</param> 通常返回ing
+    /// <param SequenceNode="投射物攻击">投射物攻击</param> 通常返回ing 攻击完成后返回成功
+    /// <param SequenceNode="近战攻击">近战攻击</param> 通常返回ing 攻击完成后返回成功
     //  }
 
     //  投射物攻击 SequenceNode序列节点成功继续失败返回

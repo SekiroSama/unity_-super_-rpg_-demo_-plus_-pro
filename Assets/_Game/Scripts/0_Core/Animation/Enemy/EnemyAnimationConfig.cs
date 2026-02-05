@@ -9,8 +9,9 @@ public class EnemyAnimationConfig
         public static readonly int Speed = Animator.StringToHash("Speed"); 
         public static readonly int Die = Animator.StringToHash("Die");
         public static readonly int IsDowned = Animator.StringToHash("IsDowned"); 
-        public static readonly int isSleeping = Animator.StringToHash("isSleeping");
+        public static readonly int isSleeping = Animator.StringToHash("isSleeping"); 
         public static readonly int DragonShout = Animator.StringToHash("DragonShout");
+        public static readonly int ProjectileAttack = Animator.StringToHash("ProjectileAttack");
     }
 
     public static class FatFatDragonSettings

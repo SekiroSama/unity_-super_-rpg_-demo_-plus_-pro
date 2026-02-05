@@ -17,7 +17,7 @@ public class BackAwayNode : BTNode
         if(_enemyController.Stamina >= 0 || !_enemyController.isBackAwaying)
         {
             _isBackAwayTriggered = false;
-            currentStatus = NodeStatus.SUCCESS;
+            currentStatus = NodeStatus.FAILURE;
             return currentStatus;
         }
 
