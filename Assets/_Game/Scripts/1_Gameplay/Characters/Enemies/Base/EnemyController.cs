@@ -69,6 +69,14 @@ public abstract class EnemyController : MonoBehaviour
     }
 
     /// <summary>
+    /// 睡觉
+    /// </summary>
+    public virtual void Sleep()
+    {
+        animator.SetTrigger(EnemyAnimationConfig.Parameters.isSleeping);// 播放破韧动画
+    }
+
+    /// <summary>
     /// 受到伤害
     /// </summary>
     /// <param name="damage">伤害值</param>
