@@ -6,14 +6,16 @@ using UnityEngine.AI;
 
 public abstract class EnemyController : MonoBehaviour
 {
-    public int Hp = 100;
-    public int MaxHp = 100;
+    public float Hp = 100; 
+    public float MaxHp = 100;
+    public float Stamina = 100;
     public float MaxMoveSpeed = 9f;
 
     public bool isDead => false;//是否死亡
     public bool isDowned = false;//是否破韧
     public bool isSleeping = false;//是否睡觉
     public bool isFighting = false;//是否在战斗中
+    public bool isBackAwaying = false;//是否在对峙后退中
 
     [SerializeField]
     private float Duration;//抖动时间
@@ -71,13 +73,21 @@ public abstract class EnemyController : MonoBehaviour
     {
         animator.SetBool(EnemyAnimationConfig.Parameters.IsDowned, isDowned);// 播放破韧动画
     }
-
+    
     /// <summary>
     /// 睡觉
     /// </summary>
     public virtual void Sleep()
     {
         animator.SetBool(EnemyAnimationConfig.Parameters.isSleeping, isSleeping);// 播放破韧动画
+    }
+
+    /// <summary>
+    /// 对峙逻辑
+    /// </summary>
+    public virtual void BackAway()
+    {
+        
     }
 
     /// <summary>
