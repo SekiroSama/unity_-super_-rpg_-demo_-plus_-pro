@@ -114,6 +114,15 @@ public abstract class EnemyController : MonoBehaviour
     }
 
     /// <summary>
+    /// 近战攻击
+    /// </summary>
+    public virtual void MeleeHit()
+    {
+        animator.SetTrigger(EnemyAnimationConfig.Parameters.DragonShout);// 播放近战攻击动画
+        isAttacking = true;
+    }
+
+    /// <summary>
     /// 受到伤害
     /// </summary>
     /// <param name="damage">伤害值</param>
