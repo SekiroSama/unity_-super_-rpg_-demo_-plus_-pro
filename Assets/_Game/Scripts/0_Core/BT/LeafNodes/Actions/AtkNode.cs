@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using static BTNode;
 
 /// <summary>
 /// 攻击

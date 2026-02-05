@@ -34,8 +34,8 @@ public class FatFatDragon_AI : Enemy_AI
     /// <param SleepNode="睡觉">睡觉时可缓慢回血，但收到双倍伤害</param> 通常返回ing 醒了后返回成功
     /// <param BackAwayNode="对峙后退">精力不足时对峙，发怒精力恢复更快</param> 通常返回ing 精力充足成功 
     /// <param DragonShoutNode="龙吼">龙吼</param> 通常返回ing 龙吼完成过返回成功 
-    /// <param ProjectileAttackNode="投射物攻击">投射物攻击</param>
-    /// <param MeleeHitNode="近战攻击">近战攻击</param>
+    /// <param AtkNode="ProjectileAttack">投射物攻击</param>
+    /// <param AtkNode="MeleeHit">近战攻击</param>
     /// <param SearchPlayer="搜寻player">检查视野中player出现来触发战斗</param> 通常返回失败 搜到后返回成功
 
 
