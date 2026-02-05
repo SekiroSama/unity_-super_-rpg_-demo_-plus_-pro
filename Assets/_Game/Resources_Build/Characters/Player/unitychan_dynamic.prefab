@@ -6636,7 +6636,11 @@ MonoBehaviour:
   rotatSpeed: 10
   walkSpeed: 5
   runSpeed: 10
+  jumpForce: 100
+  gravity: -5
   fadeTime: 1
+  verSpeed: 0
+  horSpeed: 0
   grdCheckPos: {fileID: 2258547067131302845}
   whatIsGround:
     serializedVersion: 2

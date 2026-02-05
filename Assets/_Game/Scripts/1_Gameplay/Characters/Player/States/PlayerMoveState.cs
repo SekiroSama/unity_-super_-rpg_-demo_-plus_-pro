@@ -7,7 +7,8 @@ public class PlayerMoveState : PlayerGroundState
     
     public override void OnEnter()
     {
-        owner.PlayAnimation(AnimationConfig_UnityChan.StateHashes.Locomotion, AnimationConfig_UnityChan.TransitionSettings.NormalTransitionDuration);
+        Debug.Log(1);
+        owner.PlayAnimation(AnimationConfig_UnityChan.StateHashes.HorLocomotion, AnimationConfig_UnityChan.TransitionSettings.NormalTransitionDuration);
     }
 
     public override void OnUpdate()
@@ -15,7 +16,7 @@ public class PlayerMoveState : PlayerGroundState
         base.OnUpdate();
 
         //角色混合树动画参数更新
-        owner.UpdateLocomotion(inputValue);
+        owner.UpdateHorLocomotion(inputValue);
           
         owner.Move(GameManager.Instance.inputManager.CurrentInput.MoveVector);
     }
