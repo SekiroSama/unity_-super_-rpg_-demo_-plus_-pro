@@ -12,6 +12,7 @@ public class EnemyAnimationConfig
         public static readonly int isSleeping = Animator.StringToHash("isSleeping"); 
         public static readonly int DragonShout = Animator.StringToHash("DragonShout");
         public static readonly int ProjectileAttack = Animator.StringToHash("ProjectileAttack");
+        public static readonly int MeleeAttack = Animator.StringToHash("MeleeAttack");
     }
 
     public static class FatFatDragonSettings

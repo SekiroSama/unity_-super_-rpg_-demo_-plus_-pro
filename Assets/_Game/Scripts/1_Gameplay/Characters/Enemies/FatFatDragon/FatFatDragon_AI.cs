@@ -28,14 +28,14 @@ public class FatFatDragon_AI : Enemy_AI
     /// Conditions 只做判断
     /// <param ConditionNode="判断条件和回调函数">条件节点</param> 比较数值大小 
     /// Actions 具体的行为节点
-    /// <param DeadNode="Dead">死了</param> 通常返回ing
-    /// <param DownedNode="isDowned">倒地节点</param> 通常返回ing
+    /// <param GenericActionNode="Dead, ()=> false">死了</param> 通常返回ing
+    /// <param GenericActionNode="Downed, ()=> isDowned">倒地节点</param> 通常返回ing
     /// <param MoveToTargetNode="homePos, speed_run">移动到指定位置（巢穴）</param> 通常返回ing 跑完后返回成功
-    /// <param SleepNode="睡觉">睡觉时可缓慢回血，但收到双倍伤害</param> 通常返回ing 醒了后返回成功
-    /// <param BackAwayNode="对峙后退">精力不足时对峙，发怒精力恢复更快</param> 通常返回ing 精力充足成功 
-    /// <param DragonShoutNode="龙吼">龙吼</param> 通常返回ing 龙吼完成过返回成功 
-    /// <param AtkNode="ProjectileAttack">投射物攻击</param>
-    /// <param AtkNode="MeleeHit">近战攻击</param>
+    /// <param GenericActionNode="Sleep, ()=> isSleeping = _enemyController.isFighting || _enemyController.Hp == _enemyController.MaxHp">睡觉时可缓慢回血，但收到双倍伤害</param> 通常返回ing 醒了后返回成功
+    /// <param GenericActionNode="BackAway, ()=> _isBackAwayTriggered">精力不足时对峙，发怒精力恢复更快</param> 通常返回ing 精力充足成功 
+    /// <param GenericActionNode="DragonShout, ()=> DragonShout">龙吼</param> 通常返回ing 龙吼完成过返回成功 
+    /// <param GenericActionNode="ProjectileAttack, ()=> isAttacking">投射物攻击</param>
+    /// <param GenericActionNode="MeleeAttack, ()=> isAttacking ">近战攻击</param>
     /// <param SearchPlayer="搜寻player">检查视野中player出现来触发战斗</param> 通常返回失败 搜到后返回成功
 
 

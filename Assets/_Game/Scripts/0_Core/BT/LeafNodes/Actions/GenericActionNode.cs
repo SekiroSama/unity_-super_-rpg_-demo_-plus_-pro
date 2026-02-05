@@ -6,6 +6,7 @@ using UnityEngine.Events;
 
 /// <summary>
 /// 泛用行为节点
+/// 通常返回ing 出口委托为true时返回成功
 /// </summary>
 public class GenericActionNode : BTNode
 {

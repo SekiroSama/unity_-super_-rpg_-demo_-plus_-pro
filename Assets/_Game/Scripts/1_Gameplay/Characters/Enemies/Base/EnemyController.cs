@@ -29,7 +29,7 @@ public abstract class EnemyController : MonoBehaviour
     private Coroutine _jitterCoroutine;//抖动协程引用
     private NavMeshAgent _navMeshAgent;//导航组件
     private Animator _animator;
-    private float _targetSpeedRatio;//目标速度
+    private float _targetSpeedRatio;//目标速度比值，会乘以MaxMoveSpeed作为实际速度
 
     public Animator animator => _animator;
 
@@ -46,18 +46,23 @@ public abstract class EnemyController : MonoBehaviour
         UpdateCurrentSpeed();
     }
 
+    /// <summary>
+    /// 更新当前速度，平滑过渡到目标速度
+    /// </summary>
+    protected virtual void UpdateCurrentSpeed()
+    {
+        this.animator.SetFloat(EnemyAnimationConfig.Parameters.Speed, _targetSpeedRatio, 0.1f, Time.deltaTime);
+    }
 
-
-
+    /// <summary>
+    /// 设置目标速度比值
+    /// </summary>
+    /// <param name="speedRatio"></param>
     public virtual void SetTargetSpeed(float speedRatio)
     {
         _targetSpeedRatio = speedRatio;
     }
 
-    protected virtual void UpdateCurrentSpeed()
-    {
-        this.animator.SetFloat(EnemyAnimationConfig.Parameters.Speed, _targetSpeedRatio, 0.1f, Time.deltaTime);
-    }
 
 
     /// <summary>
@@ -109,16 +114,16 @@ public abstract class EnemyController : MonoBehaviour
     /// </summary>
     public virtual void ProjectileAttack()
     {
-        animator.SetTrigger(EnemyAnimationConfig.Parameters.DragonShout);// 播放投射物攻击动画
+        animator.SetTrigger(EnemyAnimationConfig.Parameters.ProjectileAttack);// 播放投射物攻击动画
         isAttacking = true;
     }
 
     /// <summary>
     /// 近战攻击
     /// </summary>
-    public virtual void MeleeHit()
+    public virtual void MeleeAttack()
     {
-        animator.SetTrigger(EnemyAnimationConfig.Parameters.DragonShout);// 播放近战攻击动画
+        animator.SetTrigger(EnemyAnimationConfig.Parameters.MeleeAttack);// 播放近战攻击动画
         isAttacking = true;
     }
 
