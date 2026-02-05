@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 随机选择节点 失败继续成功返回 直到全部失败 根据权重随机选择一个能跑的跑
 /// </summary>
-public class WeightedRandomSelector : BTNode
+public class WeightedRandomSelectorNode : BTNode
 {
     List<BTNode> childNodes;
     List<float> weights;
@@ -16,7 +16,7 @@ public class WeightedRandomSelector : BTNode
     /// </summary>
     /// <param name="childNodes">子节点</param>
     /// <param name="weights">权重,权重之和应该为1</param>
-    public WeightedRandomSelector(List<BTNode> childNodes, List<float> weights)
+    public WeightedRandomSelectorNode(List<BTNode> childNodes, List<float> weights)
     {
         this.childNodes = childNodes;
         this.weights = weights;
