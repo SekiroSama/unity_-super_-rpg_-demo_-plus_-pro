@@ -73,8 +73,7 @@ public abstract class EnemyController : MonoBehaviour
         _targetSpeedRatio = speedRatio;
     }
 
-
-
+    #region Actions
     /// <summary>
     /// 死亡
     /// </summary>
@@ -92,7 +91,7 @@ public abstract class EnemyController : MonoBehaviour
         animator.SetTrigger(EnemyAnimationConfig.Parameters.IsDowned);// 播放破韧动画
         isDowned = true;
     }
-    
+
     /// <summary>
     /// 睡觉
     /// </summary>
@@ -109,7 +108,7 @@ public abstract class EnemyController : MonoBehaviour
     {
         isBackAwaying = true;
     }
-    
+
     /// <summary>
     /// 龙吼
     /// </summary>
@@ -136,6 +135,22 @@ public abstract class EnemyController : MonoBehaviour
         animator.SetTrigger(EnemyAnimationConfig.Parameters.MeleeAttack);// 播放近战攻击动画
         isAttacking = true;
     }
+
+    /// <summary>
+    /// 搜索目标是否在视野内
+    /// </summary>
+    /// <param name="awarenessRadius">查找自身范围内awarenessRadius米</param>
+    /// <param name="viewAngle">扇形范围内viewAngle度</param>
+    /// <param name="viewDistance">扇形范围内viewDistance米</param>
+    /// <param name="searchTargetPos">搜寻目标位置</param>
+    /// <returns></returns>
+    public bool SearchSomething(float awarenessRadius, float viewAngle, float viewDistance, Vector3 searchTargetPos)
+    {
+
+        return false;
+    }
+    #endregion
+
 
     /// <summary>
     /// 受到伤害

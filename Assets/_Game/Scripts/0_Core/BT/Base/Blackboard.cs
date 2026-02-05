@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class Blackboard
 {
-    Dictionary<string, object> data = new Dictionary<string, object>();
+    Dictionary<Enemy_AIBlackBoard_Config, object> data = new Dictionary<Enemy_AIBlackBoard_Config, object>();
 
-    public void SetValue<T>(string key, T value)
+    public void SetValue<T>(Enemy_AIBlackBoard_Config key, T value)
     {
         data[key] = value;
     }
 
-    public T GetValue<T>(string key)
+    public T GetValue<T>(Enemy_AIBlackBoard_Config key)
     {
         if (data.TryGetValue(key, out object value))
         {
