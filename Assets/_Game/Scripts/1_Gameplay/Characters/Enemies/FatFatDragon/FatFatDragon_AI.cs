@@ -110,7 +110,7 @@ public class FatFatDragon_AI : Enemy_AI
     {
         List<BTNode> root_ChildNodes = new List<BTNode>();//root节点
 
-        root_ChildNodes.Add(new MoveToTargetNode(Enemy_AIBlackBoard_Config.KEY_Player_PlayerPos, stoppingDistance));
+        //root_ChildNodes.Add(new MoveToTargetNode(Enemy_AIBlackBoard_Config.KEY_Player_PlayerPos, stoppingDistance));
 
         SelectorNode root = new SelectorNode(root_ChildNodes);
         return root;
