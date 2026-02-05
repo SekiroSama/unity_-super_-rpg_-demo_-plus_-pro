@@ -16,6 +16,7 @@ public abstract class EnemyController : MonoBehaviour
     public bool isSleeping = false;//是否睡觉
     public bool isFighting = false;//是否在战斗中
     public bool isBackAwaying = false;//是否在对峙后退中
+    public bool isDragonShouTriggered = false;//是否龙吼过
 
     [SerializeField]
     private float Duration;//抖动时间
@@ -88,6 +89,15 @@ public abstract class EnemyController : MonoBehaviour
     public virtual void BackAway()
     {
         
+    }
+
+    /// <summary>
+    /// 龙吼
+    /// </summary>
+    public virtual void DragonShout()
+    {
+        animator.SetTrigger(EnemyAnimationConfig.Parameters.DragonShout);// 播放龙吼动画
+        isDragonShouTriggered = true;
     }
 
     /// <summary>

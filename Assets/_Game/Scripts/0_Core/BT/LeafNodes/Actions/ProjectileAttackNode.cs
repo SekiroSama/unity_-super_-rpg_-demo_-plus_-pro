@@ -1,18 +1,12 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProjectileAttackNode : MonoBehaviour
+public class ProjectileAttackNode : BTNode
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+    public override NodeStatus Evaluate(Blackboard blackboard)
     {
-        
+        throw new System.NotImplementedException();
     }
 }
