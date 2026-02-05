@@ -90,7 +90,7 @@ public abstract class EnemyController : MonoBehaviour
     /// 移动到目标位置
     /// </summary>
     /// <param name="targetPos">目标位置</param>
-    /// <param name="speedRatio">速度比值</param>
+    /// <param name="speedRatio">速度比值,为1时为MaxMoveSpeed</param>
     public virtual void MoveToTarget(Vector3 targetPos, float speedRatio)
     {
         if (!CheckisOnNavMeshAndFix()) return;
