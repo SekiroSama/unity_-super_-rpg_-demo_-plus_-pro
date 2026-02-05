@@ -8,7 +8,8 @@ public class FatFatDragon_AI : Enemy_AI
 
     protected override void InitBlackboard()
     {
-        base.InitBlackboard();
+        blackboard = new Blackboard();
+        blackboard.SetValue<EnemyController>(Enemy_AIBlackBoard_Config.KEY_SELF_EnemyController, enemyController);
         blackboard.SetValue<PlayerController>(Enemy_AIBlackBoard_Config.KEY_Player_PlayerController, GameManager.Instance.playerController);
         blackboard.SetValue<Vector3>(Enemy_AIBlackBoard_Config.KEY_Player_PlayerPos, GameManager.Instance.playerController.transform.position);
     }
@@ -17,12 +18,10 @@ public class FatFatDragon_AI : Enemy_AI
     /// <param InverterNode="InverterNode">取反节点</param> 暂未完成
     /// <param WaitNode="time, callback">等待节点</param>
 
-
-
     // Composites 组合节点 必须有多个子节点
     /// <param NoMemorySelectorNode="childNodes">无记忆选择节点</param> 每次都会评估所有节点 失败继续成功返回 直到全部失败 选择一个能跑的跑
     /// <param SelectorNode="childNodes">选择节点</param> 失败继续成功返回 直到全部失败 选择一个能跑的跑
-    /// <param WeightedRandomSelector="childNodes, weights">随机选择节点</param> 评估子节点之前，会先“打乱顺序” 失败继续成功返回 直到全部失败 选择一个能跑的跑
+    /// <param WeightedRandomSelector="childNodes, weights">随机选择节点</param> 失败继续成功返回 直到全部失败 根据权重随机选择一个能跑的跑
     /// <param SequenceNode="childNodes">序列节点</param> 成功继续失败返回 直到全部成功 一步一步走完整个流程
 
     // LeafNodes 叶子节点 没有子节点，是树的末端。
@@ -30,7 +29,7 @@ public class FatFatDragon_AI : Enemy_AI
     /// <param ConditionNode="判断条件和回调函数">条件节点</param> 比较数值大小 
     /// Actions 具体的行为节点
     /// <param DeadNode="Dead">死了</param> 通常返回ing
-    /// <param DownedNode="isDowned">倒地节点</param> 通常返回ing 恢复后返回成功
+    /// <param DownedNode="isDowned">倒地节点</param> 通常返回ing
     /// <param MoveToTargetNode="homePos, speed_run">移动到指定位置（巢穴）</param> 通常返回ing 跑完后返回成功
     /// <param SleepNode="睡觉">睡觉时可缓慢回血，但收到双倍伤害</param> 通常返回ing 醒了后返回成功
     /// <param BackAwayNode="对峙后退">精力不足时对峙，发怒精力恢复更快</param> 通常返回ing 精力充足成功 

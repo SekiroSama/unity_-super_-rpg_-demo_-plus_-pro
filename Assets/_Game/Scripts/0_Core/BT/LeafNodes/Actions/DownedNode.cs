@@ -1,18 +1,17 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DownedNode : MonoBehaviour
+/// <summary>
+/// 破韧节点
+/// 通常返回ing
+/// </summary>
+public class DownedNode : BTNode
 {
-    // Start is called before the first frame update
-    void Start()
+    public override NodeStatus Evaluate(Blackboard blackboard)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        blackboard.GetValue<EnemyController>(Enemy_AIBlackBoard_Config.KEY_SELF_EnemyController).Downed();
+        currentStatus = NodeStatus.RUNNING;
+        return currentStatus;
     }
 }

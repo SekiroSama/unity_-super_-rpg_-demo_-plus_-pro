@@ -6,7 +6,9 @@ public class EnemyAnimationConfig
 {
     public static class Parameters
     {
-        public static readonly int Speed = Animator.StringToHash("Speed");
+        public static readonly int Speed = Animator.StringToHash("Speed"); 
+        public static readonly int Die = Animator.StringToHash("Die");
+        public static readonly int IsDowned = Animator.StringToHash("IsDowned");
     }
 
     public static class FatFatDragonSettings

@@ -49,6 +49,40 @@ public abstract class EnemyController : MonoBehaviour
         this.animator.SetFloat(EnemyAnimationConfig.Parameters.Speed, _targetSpeedRatio, 0.1f, Time.deltaTime);
     }
 
+
+    /// <summary>
+    /// 死亡
+    /// </summary>
+    public virtual void Die()
+    {
+        animator.SetTrigger(EnemyAnimationConfig.Parameters.Die);// 播放死亡动画
+    }
+
+    /// <summary>
+    /// 破韧
+    /// </summary>
+    public virtual void Downed()
+    {
+        animator.SetTrigger(EnemyAnimationConfig.Parameters.IsDowned);// 播放破韧动画
+    }
+
+    /// <summary>
+    /// 受到伤害
+    /// </summary>
+    /// <param name="damage">伤害值</param>
+    /// <param name="hitPoint">受击位置，传入shader</param>
+    public virtual void TakeDamage(int damage, Vector3 hitPoint)
+    {
+        HP -= damage;
+        _material.SetVector("_HitPos", hitPoint);
+
+        if(_jitterCoroutine != null)
+        {
+            StopCoroutine(_jitterCoroutine);
+        }
+        _jitterCoroutine = StartCoroutine(HitJitter());
+    }
+
     #region AI_navMeshAgent
     /// <summary>
     /// 移动到目标位置
@@ -57,7 +91,7 @@ public abstract class EnemyController : MonoBehaviour
     /// <param name="speedRatio">速度比值</param>
     public virtual void MoveToTarget(Vector3 targetPos, float speedRatio)
     {
-        if(!CheckisOnNavMeshAndFix()) return;
+        if (!CheckisOnNavMeshAndFix()) return;
         _navMeshAgent.isStopped = false;
         _navMeshAgent.SetDestination(targetPos);
         _navMeshAgent.speed = speedRatio * MaxMoveSpeed;
@@ -83,7 +117,7 @@ public abstract class EnemyController : MonoBehaviour
         if (!_navMeshAgent.isOnNavMesh)
         {
             NavMeshHit navMeshHit = new NavMeshHit();
-            if(NavMesh.SamplePosition(transform.position, out navMeshHit, 10f, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(transform.position, out navMeshHit, 10f, NavMesh.AllAreas))
             {
                 _navMeshAgent.Warp(navMeshHit.position);
             }
@@ -95,25 +129,6 @@ public abstract class EnemyController : MonoBehaviour
         return true;
     }
     #endregion
-
-
-    /// <summary>
-    /// 受到伤害
-    /// </summary>
-    /// <param name="damage">伤害值</param>
-    /// <param name="hitPoint">受击位置，传入shader</param>
-    public virtual void TakeDamage(int damage, Vector3 hitPoint)
-    {
-        HP -= damage;
-        _material.SetVector("_HitPos", hitPoint);
-
-        if(_jitterCoroutine != null)
-        {
-            StopCoroutine(_jitterCoroutine);
-        }
-        _jitterCoroutine = StartCoroutine(HitJitter());
-    }
-
 
     /// <summary>
     /// 往受击抖动shader传参开始抖动

@@ -31,7 +31,6 @@ public abstract class Enemy_AI : MonoBehaviour
     /// <param name="enemyController">EnemyController</param>
     public virtual void Init(EnemyController enemyController)
     {
-        blackboard = new Blackboard();
         InitBlackboard();
         rootNode = BuildTree();
     }
@@ -39,10 +38,7 @@ public abstract class Enemy_AI : MonoBehaviour
     /// <summary>
     /// 初始化黑板
     /// </summary>
-    protected virtual void InitBlackboard()
-    {
-        blackboard.SetValue<EnemyController>(Enemy_AIBlackBoard_Config.KEY_SELF_EnemyController, enemyController);
-    }
+    protected abstract void InitBlackboard();
 
     /// <summary>
     /// 构建行为树

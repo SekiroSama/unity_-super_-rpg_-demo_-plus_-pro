@@ -1,18 +1,20 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DeadNode : MonoBehaviour
+/// <summary>
+/// 死亡节点
+/// 通常返回ing
+/// </summary>
+public class DeadNode : BTNode
 {
-    // Start is called before the first frame update
-    void Start()
+    private bool _isDeadTriggered = false;
+    public override NodeStatus Evaluate(Blackboard blackboard)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if(_isDeadTriggered) return currentStatus;
+        blackboard.GetValue<EnemyController>(Enemy_AIBlackBoard_Config.KEY_SELF_EnemyController).Die();
+        _isDeadTriggered = true;
+        currentStatus = NodeStatus.RUNNING;
+        return currentStatus;
     }
 }
