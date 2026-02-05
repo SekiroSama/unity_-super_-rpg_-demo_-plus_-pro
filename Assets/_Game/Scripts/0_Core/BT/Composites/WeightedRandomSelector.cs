@@ -22,7 +22,6 @@ public class WeightedRandomSelector : BTNode
         this.weights = weights;
     }
 
-    float totalWeight = 0f;
     float randomValue = 0f;
     public override NodeStatus Evaluate(Blackboard blackboard)
     {
@@ -43,30 +42,29 @@ public class WeightedRandomSelector : BTNode
                     break;
             }
         }
-        else
+        float totalWeight = 0f;
+        randomValue = Random.Range(0f, 1f);
+        for (int i = 0; i < childNodes.Count; i++)
         {
-            randomValue = Random.Range(0f, 1f);
-            for (int i = 0; i < childNodes.Count; i++)
+            if (randomValue > totalWeight && randomValue < (totalWeight += weights[i]))
             {
-                if (randomValue > totalWeight && randomValue < (totalWeight += weights[i]))
+                switch (childNodes[i].Evaluate(blackboard))
                 {
-                    switch (childNodes[i].Evaluate(blackboard))
-                    {
-                        case NodeStatus.SUCCESS:
-                            currentStatus = NodeStatus.SUCCESS;
-                            return currentStatus;
-                        case NodeStatus.RUNNING:
-                            _currentChildIndex = i;
-                            currentStatus = NodeStatus.RUNNING;
-                            return currentStatus;
-                        case NodeStatus.FAILURE:
-                            currentStatus = NodeStatus.FAILURE;
-                            continue;
-                    }
+                    case NodeStatus.SUCCESS:
+                        currentStatus = NodeStatus.SUCCESS;
+                        return currentStatus;
+                    case NodeStatus.RUNNING:
+                        _currentChildIndex = i;
+                        currentStatus = NodeStatus.RUNNING;
+                        return currentStatus;
+                    case NodeStatus.FAILURE:
+                        currentStatus = NodeStatus.FAILURE;
+                        //重新随机
+                        randomValue = Random.Range(totalWeight, 1f);
+                        continue;
                 }
             }
         }
-
         _currentChildIndex = -1;
         currentStatus = NodeStatus.FAILURE;
         return currentStatus;
