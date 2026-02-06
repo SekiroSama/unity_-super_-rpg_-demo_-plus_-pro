@@ -13,6 +13,7 @@ public class FatFatDragon_AI : Enemy_AI
         blackboard.SetValue<EnemyController>(Enemy_AIBlackBoard_Config.KEY_SELF_EnemyController, enemyController);
         blackboard.SetValue<PlayerController>(Enemy_AIBlackBoard_Config.KEY_Player_PlayerController, GameManager.Instance.playerController);
         blackboard.SetValue<Vector3>(Enemy_AIBlackBoard_Config.KEY_Player_PlayerPos, GameManager.Instance.playerController.transform.position);
+        blackboard.SetValue<Vector3>(Enemy_AIBlackBoard_Config.KEY_EnemyController_HomePos, enemyController.HomeTransform.position);
     }
 
 
@@ -45,12 +46,12 @@ public class FatFatDragon_AI : Enemy_AI
 
         //  逃跑_低血量 SequenceNode序列节点成功继续失败返回
         //  {
-        /// <param ConditionNode="isLowHealth && haveRunChance">没有进入低血量,有无逃跑机会</param> 通常返回成功 如果没有进入低血量返回失败 如果无逃跑机会返回失败
+        /// <param ConditionNode="isLowHp && haveRunChance, () => enemyController.haveRunChance = false">没有进入低血量,有无逃跑机会</param> 通常返回成功 如果没有进入低血量返回失败 如果无逃跑机会返回失败
         /// <param MoveToTargetNode="homePos, speed_run">移动到指定位置（巢穴）</param> 通常返回ing 跑完后返回成功
         /// <param GenericActionNode="Sleep, ()=> !isSleeping = _enemyController.isFighting || _enemyController.Hp == _enemyController.MaxHp">睡觉时可缓慢回血，但收到双倍伤害</param> 通常返回ing 醒了后返回成功
         //  }
         List<BTNode> root_runAway_ChildNodes = new List<BTNode>();//逃跑_低血量 子节点
-        ConditionNode root_runAway_ConditionNode = new ConditionNode(() => enemyController.isLowHealth && enemyController.haveRunChance);
+        ConditionNode root_runAway_ConditionNode = new ConditionNode(() => enemyController.isLowHp && enemyController.haveRunChance, () => enemyController.RunAwayChance--);
         root_runAway_ChildNodes.Add(root_runAway_ConditionNode);
         MoveToTargetNode root_runAway_MoveToTargetNode = new MoveToTargetNode(Enemy_AIBlackBoard_Config.KEY_EnemyController_HomePos, 0f, enemyController.curentSpeedRatio);
         root_runAway_ChildNodes.Add(root_runAway_MoveToTargetNode);
@@ -146,8 +147,8 @@ public class FatFatDragon_AI : Enemy_AI
         root_ChildNodes.Add(root_deathCheck); 
         root_ChildNodes.Add(root_downedCheck);
         root_ChildNodes.Add(root_runAway);
-        root_ChildNodes.Add(root_fight);
-        root_ChildNodes.Add(root_Patrol);
+        //root_ChildNodes.Add(root_fight);
+        //root_ChildNodes.Add(root_Patrol);
         rootNode = new NoMemorySelectorNode(root_ChildNodes);//root 节点
         return rootNode;
     }

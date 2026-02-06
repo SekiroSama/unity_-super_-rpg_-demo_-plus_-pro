@@ -34,7 +34,7 @@ public class MoveToTargetNode : BTNode
         _currentPos = _enemyController.transform.position;
         _targetPos = blackboard.GetValue<Vector3>(_targetKey);
 
-        if ((_currentPos - _targetPos).sqrMagnitude > _stoppingDistanceSqr)
+        if ((_currentPos - _targetPos).sqrMagnitude > _stoppingDistanceSqr + 0.1f)
         {
             _enemyController.MoveToTarget(_targetPos, _speedRatio);
             currentStatus = NodeStatus.RUNNING;

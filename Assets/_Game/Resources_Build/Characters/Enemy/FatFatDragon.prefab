@@ -2293,10 +2293,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8663a0201271d7e4baf031b8ec9cc292, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 100
+  _Hp: 100
   MaxHp: 100
+  LowHpPersent: 0.2
   Stamina: 100
-  Poise: 100
+  MaxStamina: 100
+  _Poise: 100
+  MaxPoise: 100
+  HPRegenerationSpeed: 20
   MaxMoveSpeed: 5
   PatrolStart: {x: 0, y: 0, z: 0}
   PatrolEnd: {x: 0, y: 0, z: 0}
@@ -2312,10 +2316,10 @@ MonoBehaviour:
   isFighting: 0
   isBackAwaying: 0
   isDragonShouTriggered: 0
-  isLowHealth: 0
-  isLowStamina: 1
-  haveRunChance: 0
-  curentSpeedRatio: 0
+  isLowHp: 0
+  isLowStamina: 0
+  haveRunChance: 1
+  curentSpeedRatio: 1
   hasTakeDamage: 0
   currentPatrolTarget: {x: 0, y: 0, z: 0}
   Duration: 0.1
@@ -2332,7 +2336,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ae6a242be27c9b438490c865eec7569, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stoppingDistance: 5
 --- !u!1 &9089856476793434509
 GameObject:
   m_ObjectHideFlags: 0

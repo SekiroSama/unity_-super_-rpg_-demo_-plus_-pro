@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class WeaponController : MonoBehaviour
 {
+    public float Atk;
+    public float PoiseAtk;
+
     List<int> whiteList = new List<int>();
     private Coroutine dissolveCoroutine;//设置武器溶解效果协程
     public bool hideWeapon = false;
@@ -19,7 +22,7 @@ public class WeaponController : MonoBehaviour
             int id = enemyController.gameObject.GetInstanceID();
             if (!whiteList.Contains(id))
             {
-                enemyController.TakeDamage(1, 100, other.ClosestPoint(transform.position));
+                enemyController.TakeDamage(Atk, PoiseAtk, other.ClosestPoint(transform.position));
                 whiteList.Add(id);
             }
         }

@@ -335,6 +335,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb1d662aa94fd7b4e83e8e9c8e2c522a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Atk: 90
+  PoiseAtk: 0
   hideWeapon: 0
   tipTransform: {fileID: 4608978789034275223}
   baseTransform: {fileID: 7294515361622272856}

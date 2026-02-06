@@ -33,6 +33,8 @@ public class GameManager : MonoBehaviour
     private GameObject enemyPrefab;
     [SerializeField]
     private Transform CharactersTransform;
+    [SerializeField]
+    private Transform FatFatDragonHome;
 
 
     private void Awake()
@@ -94,5 +96,6 @@ public class GameManager : MonoBehaviour
     {
         this.enemyController = Instantiate(enemyPrefab).GetComponent<EnemyController>();
         this.enemyController.gameObject.transform.SetParent(CharactersTransform);
+        this.enemyController.Init(FatFatDragonHome);
     }
 }

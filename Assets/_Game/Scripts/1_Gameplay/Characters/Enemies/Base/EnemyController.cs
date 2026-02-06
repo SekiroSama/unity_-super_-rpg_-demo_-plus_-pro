@@ -13,14 +13,13 @@ public abstract class EnemyController : MonoBehaviour
         get => _Hp;
         set
         {
-            _Hp = value;
-            if(_Hp <= 0)
-            {
-                isDead = true;
-            }
+            _Hp = value <= MaxHp? value : MaxHp;
+            isDead = _Hp <= 0;
+            isLowHp = _Hp <= MaxHp * LowHpPersent;
         }
     }
-    public float MaxHp = 100; 
+    public float MaxHp = 100;
+    [Range(0,1)] public float LowHpPersent = 0.2f;//残血阈值
     public float Stamina = 100;//精力值
     public float MaxStamina = 100;//最大精力值
     [SerializeField] private float _Poise = 100;//韧性值
@@ -34,10 +33,12 @@ public abstract class EnemyController : MonoBehaviour
         }
     }
     public float MaxPoise = 100;//最大韧性值
+    public float HPRegenerationSpeed = 1;//睡觉回复hp速度
 
 
     [Header("移动配置类")]
     public float MaxMoveSpeed = 9f;
+    public int RunAwayChance = 2; //逃跑机会
     public Vector3 PatrolStart;//巡逻起点
     public Vector3 PatrolEnd;//巡逻终点
     public Transform HomeTransform;//巢穴坐标
@@ -57,9 +58,12 @@ public abstract class EnemyController : MonoBehaviour
     public bool isFighting = false;//是否在战斗中
     public bool isBackAwaying = false;//是否在对峙后退中
     public bool isDragonShouTriggered = false;//是否龙吼过
-    public bool isLowHealth = false;//是否低血量
+    public bool isLowHp = false;//是否低血量
     public bool isLowStamina = false;//是否低精力
-    public bool haveRunChance = false;//是否有逃跑机会
+    public bool haveRunChance//是否有逃跑机会
+    {
+        get => RunAwayChance > 0;
+    }
     private bool _isAttacking = false;//是否正在攻击
     public bool isAttacking
     {
@@ -89,6 +93,11 @@ public abstract class EnemyController : MonoBehaviour
 
     public Animator animator => _animator;
 
+    public void Init(Transform HomeTransform)
+    {
+        this.HomeTransform = HomeTransform;
+    }
+
     public virtual void Start()
     {
         _meshRenderer = this.GetComponentInChildren<SkinnedMeshRenderer>();
@@ -99,7 +108,11 @@ public abstract class EnemyController : MonoBehaviour
 
     public virtual void Update()
     {
+        if (isDead) return;
+
         UpdateCurrentSpeed();
+
+        OnSleeping();
     }
 
     /// <summary>
@@ -111,6 +124,20 @@ public abstract class EnemyController : MonoBehaviour
     }
 
     /// <summary>
+    /// 正在睡觉
+    /// </summary>
+    public virtual void OnSleeping()
+    {
+        if (!isSleeping) return;
+        Hp += Time.deltaTime * HPRegenerationSpeed;
+        isSleeping = !isFighting && Hp < MaxHp;
+        if (!isSleeping)
+        {
+            animator.SetBool(EnemyAnimationConfig.Parameters.isSleeping, false);// 播放睡觉动画
+        }
+    }
+
+    /// <summary>
     /// 设置目标速度比值
     /// </summary>
     /// <param name="speedRatio"></param>
@@ -118,6 +145,7 @@ public abstract class EnemyController : MonoBehaviour
     {
         _targetSpeedRatio = speedRatio;
     }
+
 
     #region Actions
     /// <summary>
@@ -143,9 +171,8 @@ public abstract class EnemyController : MonoBehaviour
     /// </summary>
     public virtual void Sleep()
     {
-        animator.SetBool(EnemyAnimationConfig.Parameters.isSleeping, isSleeping);// 播放睡觉动画
+        animator.SetBool(EnemyAnimationConfig.Parameters.isSleeping, true);// 播放睡觉动画
         isSleeping = true;
-        isSleeping = isFighting || Hp == MaxHp;
     }
 
     /// <summary>
@@ -200,6 +227,7 @@ public abstract class EnemyController : MonoBehaviour
         return false;
     }
     #endregion
+
 
 
     /// <summary>
