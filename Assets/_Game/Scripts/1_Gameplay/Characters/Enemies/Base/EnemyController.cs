@@ -7,7 +7,20 @@ using UnityEngine.AI;
 public abstract class EnemyController : MonoBehaviour
 {
     [Header("数值类")] 
-    public float Hp = 100; 
+    [SerializeField] private float _Hp = 100; 
+    public float Hp 
+    {
+        get => _Hp;
+        set
+        {
+            _Hp = value;
+            if(_Hp <= 0)
+            {
+                isDead = true;
+            }
+        }
+    }
+
     public float MaxHp = 100; 
     public float Stamina = 100;//精力值
     public float Poise = 100;//韧性值
@@ -197,6 +210,8 @@ public abstract class EnemyController : MonoBehaviour
         _jitterCoroutine = StartCoroutine(HitJitter());
     }
 
+
+
     #region AnimationEvents
     private void AE_AtkOver()
     {
@@ -255,6 +270,8 @@ public abstract class EnemyController : MonoBehaviour
     }
     #endregion
 
+
+    #region Shader
     /// <summary>
     /// 往受击抖动shader传参开始抖动
     /// </summary>
@@ -263,7 +280,7 @@ public abstract class EnemyController : MonoBehaviour
     {
         _material.SetFloat("_HitStrength", JitterScale);
         float timer = 0;
-        while(timer < Duration)
+        while (timer < Duration)
         {
             timer += Time.deltaTime;
             float progress = timer / Duration;
@@ -272,4 +289,5 @@ public abstract class EnemyController : MonoBehaviour
             yield return null;
         }
     }
+    #endregion
 }

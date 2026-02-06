@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class FatFatDragon_AI : Enemy_AI
 {
-    public float stoppingDistance = 10f;
+    DebugNode debugNode = new DebugNode("Debug", BTNode.NodeStatus.SUCCESS);//DebugNode
+
 
     protected override void InitBlackboard()
     {
@@ -13,6 +14,8 @@ public class FatFatDragon_AI : Enemy_AI
         blackboard.SetValue<PlayerController>(Enemy_AIBlackBoard_Config.KEY_Player_PlayerController, GameManager.Instance.playerController);
         blackboard.SetValue<Vector3>(Enemy_AIBlackBoard_Config.KEY_Player_PlayerPos, GameManager.Instance.playerController.transform.position);
     }
+
+
 
     protected override BTNode BuildTree()
     {
@@ -128,7 +131,6 @@ public class FatFatDragon_AI : Enemy_AI
         root_Patrol_ChildNodes.Add(root_SelectorNode_MoveToTargetNode);
         SelectorNode root_Patrol = new SelectorNode(root_Patrol_ChildNodes);//巡逻 节点
 
-
         /// <summary>
         /// FatFatDragon_AI行为逻辑
         /// </summary>
@@ -146,8 +148,8 @@ public class FatFatDragon_AI : Enemy_AI
         root_ChildNodes.Add(root_runAway);
         root_ChildNodes.Add(root_fight);
         root_ChildNodes.Add(root_Patrol);
-        NoMemorySelectorNode root = new NoMemorySelectorNode(root_ChildNodes);//root 节点
-        return root;
+        rootNode = new NoMemorySelectorNode(root_ChildNodes);//root 节点
+        return rootNode;
     }
 
     protected override void Update()

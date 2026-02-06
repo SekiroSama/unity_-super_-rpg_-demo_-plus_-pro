@@ -28,7 +28,7 @@ public class WeaponController : MonoBehaviour
             if (!whiteList.Contains(id))
             {
                 EnemyController enemyController = other.GetComponentInParent<EnemyController>();
-                enemyController.TakeDamage(10, other.ClosestPoint(transform.position));
+                enemyController.TakeDamage(100, other.ClosestPoint(transform.position));
                 whiteList.Add(id);
             }
         }
