@@ -153,12 +153,15 @@ public abstract class EnemyController : MonoBehaviour
     }
 
     /// <summary>
-    /// 近战攻击
+    /// 近战攻击 从近战攻击里随机一个
     /// </summary>
     public virtual void MeleeAttack()
     {
         animator.SetTrigger(EnemyAnimationConfig.Parameters.MeleeAttack);// 播放近战攻击动画
         isAttacking = true;
+
+        int randomIndex = Random.Range(0, EnemyAnimationConfig.FatFatDragonSettings.FatFatDragonMeleeAttackList.Count);
+        animator.SetTrigger(EnemyAnimationConfig.FatFatDragonSettings.FatFatDragonMeleeAttackList[randomIndex]);// 播放随机的近战攻击动画
     }
 
     /// <summary>
@@ -193,6 +196,17 @@ public abstract class EnemyController : MonoBehaviour
         }
         _jitterCoroutine = StartCoroutine(HitJitter());
     }
+
+    #region AnimationEvents
+    private void AE_AtkOver()
+    {
+        isAttacking = false;
+    }
+
+
+
+    #endregion
+
 
     #region AI_navMeshAgent
     /// <summary>
