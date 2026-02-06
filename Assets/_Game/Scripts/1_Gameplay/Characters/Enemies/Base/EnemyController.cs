@@ -7,8 +7,9 @@ using UnityEngine.AI;
 public abstract class EnemyController : MonoBehaviour
 {
     public float Hp = 100; 
-    public float MaxHp = 100;
-    public float Stamina = 100;
+    public float MaxHp = 100; 
+    public float Stamina = 100;//精力值
+    public float poise = 100;//韧性值
     public float MaxMoveSpeed = 9f;
 
     public bool isDead = false;//是否死亡
@@ -17,6 +18,9 @@ public abstract class EnemyController : MonoBehaviour
     public bool isFighting = false;//是否在战斗中
     public bool isBackAwaying = false;//是否在对峙后退中
     public bool isDragonShouTriggered = false;//是否龙吼过
+    public bool isLowHealth = false;//是否低血量
+    public bool isLowStamina = false;//是否低精力
+    public bool haveRunChance = false;//是否有逃跑机会
     private bool _isAttacking = false;//是否正在攻击
     public bool isAttacking
     {
@@ -99,6 +103,7 @@ public abstract class EnemyController : MonoBehaviour
     {
         animator.SetBool(EnemyAnimationConfig.Parameters.isSleeping, isSleeping);// 播放睡觉动画
         isSleeping = true;
+        isSleeping = isFighting || Hp == MaxHp;
     }
 
     /// <summary>

@@ -8,66 +8,36 @@ using UnityEngine.Events;
 /// 条件节点
 /// 比较成功返回SUCCESS 失败返回FAILURE
 /// </summary>
-/// <typeparam name="T">要比较的类型</typeparam>
-public class ConditionNode<T> : BTNode where T : IComparable
+public class ConditionNode: BTNode
 {
-    private Enemy_AIBlackBoard_Config _blackBoardKey;
-    private T _targetValue;
-    private CompareType _compareType;
-    private UnityAction _unityAction;
+    private Func<bool> _outAction;
+    private UnityAction _successcCallback;
+    private UnityAction _failureCallback;
 
     /// <summary>
     /// init
     /// </summary>
-    /// <param name="blackBoardKey">谁来比较</param>
-    /// <param name="targetValue">和谁比较</param>
-    /// <param name="compareType">比较条件</param>
-    /// <param name="unityAction">成功回调</param>成功才会执行
-    public ConditionNode(Enemy_AIBlackBoard_Config blackBoardKey, T targetValue, CompareType compareType, UnityAction unityAction = null)
+    /// <param name="outAction"></param>
+    /// <param name="callback"></param>
+    public ConditionNode(Func<bool> outAction, UnityAction successcCallback = null, UnityAction failureCallback = null)
     {
-        _blackBoardKey = blackBoardKey;
-        _targetValue = targetValue;
-        _compareType = compareType;
-        _unityAction = unityAction;
+        _outAction = outAction;
+        _successcCallback = successcCallback;
+        _failureCallback = failureCallback;
     }
     public override NodeStatus Evaluate(Blackboard blackboard)
     {
-        switch (_compareType)
+        if (_outAction())
         {
-            case CompareType.Greater:
-                if(Comparer<T>.Default.Compare(blackboard.GetValue<T>(_blackBoardKey), _targetValue) > 0)
-                {
-                    currentStatus = NodeStatus.SUCCESS;
-                    _unityAction?.Invoke();
-                    return NodeStatus.SUCCESS;
-                }
-                break;
-            case CompareType.Less:
-                if (Comparer<T>.Default.Compare(blackboard.GetValue<T>(_blackBoardKey), _targetValue) < 0)
-                {
-                    currentStatus = NodeStatus.SUCCESS;
-                    _unityAction?.Invoke();
-                    return NodeStatus.SUCCESS;
-                }
-                break;
-            case CompareType.Equal:
-                if (Comparer<T>.Default.Compare(blackboard.GetValue<T>(_blackBoardKey), _targetValue) == 0)
-                {
-                    currentStatus = NodeStatus.SUCCESS;
-                    _unityAction?.Invoke();
-                    return NodeStatus.SUCCESS;
-                }
-                break;
+            _successcCallback?.Invoke();
+            currentStatus = NodeStatus.SUCCESS;
+            return currentStatus;
         }
-
-        currentStatus = NodeStatus.FAILURE;
-        return currentStatus;
+        else
+        {
+            _failureCallback?.Invoke();
+            currentStatus = NodeStatus.FAILURE;
+            return currentStatus;
+        }
     }
-}
-
-public enum CompareType
-{
-    Greater,
-    Less,
-    Equal
 }
