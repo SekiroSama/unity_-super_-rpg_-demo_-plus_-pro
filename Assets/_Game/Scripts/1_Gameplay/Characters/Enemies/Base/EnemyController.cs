@@ -9,8 +9,16 @@ public abstract class EnemyController : MonoBehaviour
     public float Hp = 100; 
     public float MaxHp = 100; 
     public float Stamina = 100;//精力值
-    public float poise = 100;//韧性值
+    public float Poise = 100;//韧性值
     public float MaxMoveSpeed = 9f;
+    public float ProjectileAttackDistance = 50f;//远程攻击距离
+    public float MeleeAttackDistance = 5f;//近身攻击距离
+    public float AwarenessRadius = 10f;//近身感知距离
+    public float ViewAngle = 120f;//视角范围
+    public float ViewDistance = 25f;//视角距离
+    public Vector3 PatrolStart;//
+    public Vector3 PatrolEnd;//
+
 
     public bool isDead = false;//是否死亡
     public bool isDowned = false;//是否破韧
@@ -32,6 +40,9 @@ public abstract class EnemyController : MonoBehaviour
             animator.SetBool(EnemyAnimationConfig.Parameters.IsAttacking, _isAttacking);// 进入atk动画层级
         }
     }
+    public float curentSpeedRatio = 0f;//当前速度比值
+    public bool hasTakeDamage = false;//是否受到攻击
+    public Vector3 currentPatrolTarget;//当前巡逻目标点
 
     [SerializeField]
     private float Duration;//抖动时间

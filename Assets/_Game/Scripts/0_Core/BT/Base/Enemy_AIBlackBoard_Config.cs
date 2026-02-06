@@ -6,6 +6,7 @@ public enum Enemy_AIBlackBoard_Config
 {
     KEY_SELF_EnemyController,
     KEY_Player_PlayerController,
-    KEY_Player_PlayerPos
+    KEY_Player_PlayerPos,
+    KEY_EnemyController_CurrentPatrolTarget,
 }
 

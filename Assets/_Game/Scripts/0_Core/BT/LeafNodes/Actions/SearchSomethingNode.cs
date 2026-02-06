@@ -10,20 +10,26 @@ using UnityEngine.Events;
 public class SearchSomethingNode : BTNode
 {
     private UnityAction _callBack;
-    private Enemy_AIBlackBoard_Config _awarenessRadiusKey;
-    private Enemy_AIBlackBoard_Config _viewAnglePosKey;
-    private Enemy_AIBlackBoard_Config _viewDistancePosKey;
+    //private Enemy_AIBlackBoard_Config _awarenessRadiusKey;
+    //private Enemy_AIBlackBoard_Config _viewAnglePosKey;
+    //private Enemy_AIBlackBoard_Config _viewDistancePosKey;
     private Enemy_AIBlackBoard_Config _searchTargetPosKey;
     private Vector3 _searchTargetPos;
-    private float _awarenessRadius;
-    private float _viewAngle;
-    private float _viewDistance;
+    //private float _awarenessRadius;
+    //private float _viewAngle;
+    //private float _viewDistance;
     private EnemyController _enemyController;
-    public SearchSomethingNode(Enemy_AIBlackBoard_Config awarenessRadius, Enemy_AIBlackBoard_Config viewAngle, Enemy_AIBlackBoard_Config viewDistance, Enemy_AIBlackBoard_Config searchTargetPosKey, UnityAction callBack = null)
+
+    /// <summary>
+    /// init
+    /// </summary>
+    /// <param name="searchTargetPosKey"></param>
+    /// <param name="callBack"></param>
+    public SearchSomethingNode(Enemy_AIBlackBoard_Config searchTargetPosKey, UnityAction callBack = null)
     {
-        _awarenessRadiusKey = awarenessRadius;
-        _viewAnglePosKey = viewAngle;
-        _viewDistancePosKey = viewDistance;
+        //_awarenessRadiusKey = awarenessRadius;
+        //_viewAnglePosKey = viewAngle;
+        //_viewDistancePosKey = viewDistance;
         _searchTargetPosKey = searchTargetPosKey;
         _callBack = callBack;
     }
@@ -33,12 +39,12 @@ public class SearchSomethingNode : BTNode
     {
         _enemyController = blackboard.GetValue<EnemyController>(Enemy_AIBlackBoard_Config.KEY_SELF_EnemyController);
 
-        _awarenessRadius = blackboard.GetValue<float>(_awarenessRadiusKey);
-        _viewAngle = blackboard.GetValue<float>(_viewAnglePosKey);
-        _viewDistance = blackboard.GetValue<float>(_viewDistancePosKey);
+        //_awarenessRadius = blackboard.GetValue<float>(_awarenessRadiusKey);
+        //_viewAngle = blackboard.GetValue<float>(_viewAnglePosKey);
+        //_viewDistance = blackboard.GetValue<float>(_viewDistancePosKey);
         _searchTargetPos = blackboard.GetValue<Vector3>(_searchTargetPosKey);
 
-        if (_enemyController.SearchSomething(_awarenessRadius, _viewAngle, _viewDistance, _searchTargetPos))
+        if (_enemyController.SearchSomething(_enemyController.AwarenessRadius, _enemyController.ViewAngle, _enemyController.ViewDistance, _searchTargetPos))
         {
             _callBack?.Invoke();
             currentStatus = NodeStatus.SUCCESS;
