@@ -2293,8 +2293,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8663a0201271d7e4baf031b8ec9cc292, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HP: 100
+  Hp: 100
+  MaxHp: 100
+  Stamina: 100
+  Poise: 100
   MaxMoveSpeed: 5
+  PatrolStart: {x: 0, y: 0, z: 0}
+  PatrolEnd: {x: 0, y: 0, z: 0}
+  HomeTransform: {fileID: 0}
+  ProjectileAttackDistance: 50
+  MeleeAttackDistance: 5
+  AwarenessRadius: 10
+  ViewAngle: 120
+  ViewDistance: 25
+  isDead: 0
+  isDowned: 0
+  isSleeping: 0
+  isFighting: 0
+  isBackAwaying: 0
+  isDragonShouTriggered: 0
+  isLowHealth: 0
+  isLowStamina: 1
+  haveRunChance: 0
+  curentSpeedRatio: 0
+  hasTakeDamage: 0
+  currentPatrolTarget: {x: 0, y: 0, z: 0}
   Duration: 0.1
   JitterScale: 2
 --- !u!114 &7404015419590639437

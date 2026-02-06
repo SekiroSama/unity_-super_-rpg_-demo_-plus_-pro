@@ -6,19 +6,27 @@ using UnityEngine.AI;
 
 public abstract class EnemyController : MonoBehaviour
 {
+    [Header("数值类")] 
     public float Hp = 100; 
     public float MaxHp = 100; 
     public float Stamina = 100;//精力值
     public float Poise = 100;//韧性值
+
+    [Header("移动配置类")]
     public float MaxMoveSpeed = 9f;
-    public float ProjectileAttackDistance = 50f;//远程攻击距离
-    public float MeleeAttackDistance = 5f;//近身攻击距离
-    public float AwarenessRadius = 10f;//近身感知距离
-    public float ViewAngle = 120f;//视角范围
-    public float ViewDistance = 25f;//视角距离
     public Vector3 PatrolStart;//巡逻起点
     public Vector3 PatrolEnd;//巡逻终点
     public Transform HomeTransform;//巢穴坐标
+
+    [Header("战斗参数类")]
+    public float ProjectileAttackDistance = 50f;//远程攻击距离
+    public float MeleeAttackDistance = 5f;//近身攻击距离
+
+    [Header("感知参数类")]
+    public float AwarenessRadius = 10f;//近身感知距离
+    public float ViewAngle = 120f;//视角范围
+    public float ViewDistance = 25f;//视角距离
+
 
 
     public bool isDead = false;//是否死亡
