@@ -18,6 +18,7 @@ public abstract class EnemyController : MonoBehaviour
     public float ViewDistance = 25f;//视角距离
     public Vector3 PatrolStart;//巡逻起点
     public Vector3 PatrolEnd;//巡逻终点
+    public Transform HomeTransform;//巢穴坐标
 
 
     public bool isDead = false;//是否死亡

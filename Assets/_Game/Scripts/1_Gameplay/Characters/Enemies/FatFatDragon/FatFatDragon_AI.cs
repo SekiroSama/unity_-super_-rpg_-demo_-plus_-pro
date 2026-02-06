@@ -30,7 +30,7 @@ public class FatFatDragon_AI : Enemy_AI
 
         //  韧性检查 SequenceNode序列节点成功继续失败返回
         //  {
-        /// <param ConditionNode="poise <= 0">韧性小于等于0</param> 通常返回失败 韧性小于等于0返回成功
+        /// <param ConditionNode="isDowned">韧性小于等于0</param> 通常返回失败 韧性小于等于0返回成功
         /// <param GenericActionNode="Downed, ()=> isDowned">倒地节点</param> 通常返回ing 恢复后返回成功
         //  }
         List<BTNode> root_downedCheck_ChildNodes = new List<BTNode>();//韧性检查 子节点
@@ -44,12 +44,14 @@ public class FatFatDragon_AI : Enemy_AI
         //  {
         /// <param ConditionNode="isLowHealth && haveRunChance">没有进入低血量,有无逃跑机会</param> 通常返回成功 如果没有进入低血量返回失败 如果无逃跑机会返回失败
         /// <param MoveToTargetNode="homePos, speed_run">移动到指定位置（巢穴）</param> 通常返回ing 跑完后返回成功
-        /// <param GenericActionNode="Sleep, ()=> isSleeping = _enemyController.isFighting || _enemyController.Hp == _enemyController.MaxHp">睡觉时可缓慢回血，但收到双倍伤害</param> 通常返回ing 醒了后返回成功
+        /// <param GenericActionNode="Sleep, ()=> !isSleeping = _enemyController.isFighting || _enemyController.Hp == _enemyController.MaxHp">睡觉时可缓慢回血，但收到双倍伤害</param> 通常返回ing 醒了后返回成功
         //  }
         List<BTNode> root_runAway_ChildNodes = new List<BTNode>();//逃跑_低血量 子节点
         ConditionNode root_runAway_ConditionNode = new ConditionNode(() => enemyController.isLowHealth && enemyController.haveRunChance);
         root_runAway_ChildNodes.Add(root_runAway_ConditionNode);
-        GenericActionNode root_runAway_GenericActionNode = new GenericActionNode(enemyController.Sleep, () => enemyController.isSleeping);
+        MoveToTargetNode root_runAway_MoveToTargetNode = new MoveToTargetNode(Enemy_AIBlackBoard_Config.KEY_EnemyController_HomePos, 0f, enemyController.curentSpeedRatio);
+        root_runAway_ChildNodes.Add(root_runAway_MoveToTargetNode);
+        GenericActionNode root_runAway_GenericActionNode = new GenericActionNode(enemyController.Sleep, () => !enemyController.isSleeping);
         root_runAway_ChildNodes.Add(root_runAway_GenericActionNode);
         SequenceNode root_runAway = new SequenceNode(root_runAway_ChildNodes);
 
@@ -122,7 +124,7 @@ public class FatFatDragon_AI : Enemy_AI
         root_Patrol_ChildNodes.Add(root_SelectorNode_SearchSomethingNode);
         ConditionNode root_SelectorNode_ConditionNode = new ConditionNode(()=> enemyController.hasTakeDamage);
         root_Patrol_ChildNodes.Add(root_SelectorNode_ConditionNode);
-        MoveToTargetNode root_SelectorNode_MoveToTargetNode = new MoveToTargetNode(Enemy_AIBlackBoard_Config.KEY_EnemyController_CurrentPatrolTarget, 0, enemyController.curentSpeedRatio);
+        MoveToTargetNode root_SelectorNode_MoveToTargetNode = new MoveToTargetNode(Enemy_AIBlackBoard_Config.KEY_EnemyController_CurrentPatrolTarget, 0f, enemyController.curentSpeedRatio);
         root_Patrol_ChildNodes.Add(root_SelectorNode_MoveToTargetNode);
         SelectorNode root_Patrol = new SelectorNode(root_Patrol_ChildNodes);//巡逻 节点
 

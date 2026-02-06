@@ -9,6 +9,7 @@ public enum Enemy_AIBlackBoard_Config
     KEY_EnemyController_CurrentPatrolTarget,
     KEY_EnemyController_AtkWeights_ProjectileAttack,
     KEY_EnemyController_AtkWeights_MeleeAttack,
+    KEY_EnemyController_HomePos,
 
     KEY_Player_PlayerController,
     KEY_Player_PlayerPos,
