@@ -11,35 +11,21 @@ public class WeaponController : MonoBehaviour
     public Transform baseTransform;
     private GameObject obj;
 
-    private void Awake()
-    {
-        
-    }
-    private void Start()
-    {
-
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
-            int id = other.gameObject.GetInstanceID();
+            EnemyController enemyController = other.GetComponentInParent<EnemyController>();
+            int id = enemyController.gameObject.GetInstanceID();
             if (!whiteList.Contains(id))
             {
-                EnemyController enemyController = other.GetComponentInParent<EnemyController>();
-                enemyController.TakeDamage(100, other.ClosestPoint(transform.position));
+                enemyController.TakeDamage(1, 100, other.ClosestPoint(transform.position));
                 whiteList.Add(id);
             }
         }
     }
     public void WeaponTrailOn()
     {
-        //for (int i = 0; i < trailRenderer.Length; i++)
-        //{
-        //    trailRenderer[i].enabled = true;
-        //}
-
         obj = PoolMgr.Instance.GetObj("MyTrailRenderer");
         obj.GetComponent<MyTrailRenderer>().isEmitting = true;  
         obj.GetComponent<MyTrailRenderer>().InitMyTrailRenderer(tipTransform,baseTransform);
@@ -47,13 +33,8 @@ public class WeaponController : MonoBehaviour
     }
     public void WeaponTrailOff()
     {
-        //for (int i = 0; i < trailRenderer.Length; i++)
-        //{
-        //    trailRenderer[i].enabled = false;
-        //}
         obj.GetComponent<MyTrailRenderer>().isEmitting = false;
         PoolMgr.Instance.PushObj(obj);
-
     }
     /// <summary>
     /// 动画事件：武器碰撞开启

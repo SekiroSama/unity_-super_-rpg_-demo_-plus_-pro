@@ -39,7 +39,7 @@ public class FatFatDragon_AI : Enemy_AI
         List<BTNode> root_downedCheck_ChildNodes = new List<BTNode>();//韧性检查 子节点
         ConditionNode root_downedCheck_ConditionNode = new ConditionNode(() => enemyController.isDowned);
         root_downedCheck_ChildNodes.Add(root_downedCheck_ConditionNode);
-        GenericActionNode root_downedCheck_GenericActionNode = new GenericActionNode(enemyController.Downed, () => enemyController.isDowned);
+        GenericActionNode root_downedCheck_GenericActionNode = new GenericActionNode(enemyController.Downed, () => !enemyController.isDowned);
         root_downedCheck_ChildNodes.Add(root_downedCheck_GenericActionNode);
         SequenceNode root_downedCheck = new SequenceNode(root_downedCheck_ChildNodes);
 

@@ -20,10 +20,21 @@ public abstract class EnemyController : MonoBehaviour
             }
         }
     }
-
     public float MaxHp = 100; 
     public float Stamina = 100;//精力值
-    public float Poise = 100;//韧性值
+    public float MaxStamina = 100;//最大精力值
+    [SerializeField] private float _Poise = 100;//韧性值
+    public float Poise
+    {
+        get => _Poise;
+        set
+        {
+            _Poise = value <= MaxPoise? value : MaxPoise;
+            isDowned = _Poise <= 0;
+        }
+    }
+    public float MaxPoise = 100;//最大韧性值
+
 
     [Header("移动配置类")]
     public float MaxMoveSpeed = 9f;
@@ -39,8 +50,6 @@ public abstract class EnemyController : MonoBehaviour
     public float AwarenessRadius = 10f;//近身感知距离
     public float ViewAngle = 120f;//视角范围
     public float ViewDistance = 25f;//视角距离
-
-
 
     public bool isDead = false;//是否死亡
     public bool isDowned = false;//是否破韧
@@ -198,12 +207,12 @@ public abstract class EnemyController : MonoBehaviour
     /// </summary>
     /// <param name="damage">伤害值</param>
     /// <param name="hitPoint">受击位置，传入shader</param>
-    public virtual void TakeDamage(int damage, Vector3 hitPoint)
+    public virtual void TakeDamage(float damage, float poiseDamage, Vector3 hitPoint)
     {
         Hp -= damage;
+        Poise -= poiseDamage;
         _material.SetVector("_HitPos", hitPoint);
-
-        if(_jitterCoroutine != null)
+        if (_jitterCoroutine != null)
         {
             StopCoroutine(_jitterCoroutine);
         }
@@ -218,7 +227,11 @@ public abstract class EnemyController : MonoBehaviour
         isAttacking = false;
     }
 
-
+    private void AE_DownedOver()
+    {
+        isDowned = false;
+        Poise = MaxPoise;
+    }
 
     #endregion
 
