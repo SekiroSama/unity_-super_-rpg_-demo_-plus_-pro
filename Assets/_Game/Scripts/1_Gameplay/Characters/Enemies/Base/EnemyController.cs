@@ -16,8 +16,8 @@ public abstract class EnemyController : MonoBehaviour
     public float AwarenessRadius = 10f;//近身感知距离
     public float ViewAngle = 120f;//视角范围
     public float ViewDistance = 25f;//视角距离
-    public Vector3 PatrolStart;//
-    public Vector3 PatrolEnd;//
+    public Vector3 PatrolStart;//巡逻起点
+    public Vector3 PatrolEnd;//巡逻终点
 
 
     public bool isDead = false;//是否死亡

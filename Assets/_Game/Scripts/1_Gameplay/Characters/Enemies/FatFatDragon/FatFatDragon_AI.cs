@@ -102,7 +102,10 @@ public class FatFatDragon_AI : Enemy_AI
         SequenceNode root_fight_atk_MeleeAttack = new SequenceNode(root_fight_atk_MeleeAttack_ChildNodes);//近身攻击 节点
 
         root_fight_atk_ChildNodes.Add(root_fight_atk_ProjectileAttack);
+        root_fight_atk_Weights.Add(blackboard.GetValue<float>(Enemy_AIBlackBoard_Config.KEY_EnemyController_AtkWeights_ProjectileAttack));
         root_fight_atk_ChildNodes.Add(root_fight_atk_MeleeAttack);
+        root_fight_atk_Weights.Add(blackboard.GetValue<float>(Enemy_AIBlackBoard_Config.KEY_EnemyController_AtkWeights_MeleeAttack));
+
 
         WeightedRandomSelectorNode root_fight_atk = new WeightedRandomSelectorNode(root_fight_atk_ChildNodes, root_fight_atk_Weights);//攻击 节点
         root_fight_ChildNodes.Add(root_fight_atk);
