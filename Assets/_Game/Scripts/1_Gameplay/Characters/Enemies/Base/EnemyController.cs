@@ -20,8 +20,18 @@ public abstract class EnemyController : MonoBehaviour
     }
     public float MaxHp = 100;
     [Range(0,1)] public float LowHpPersent = 0.2f;//残血阈值
-    public float Stamina = 100;//精力值
+    private float _Stamina = 100;//精力值
+    public float Stamina
+    {
+        get => _Stamina;
+        set
+        {
+            _Stamina = value <= MaxStamina? value : MaxStamina;
+            isLowStamina = _Stamina <= MaxStamina * LowStaminaPersent;
+        }
+    }
     public float MaxStamina = 100;//最大精力值
+    [Range(0,1)] public float LowStaminaPersent = 0.2f;//低精力阈值
     [SerializeField] private float _Poise = 100;//韧性值
     public float Poise
     {
@@ -58,6 +68,7 @@ public abstract class EnemyController : MonoBehaviour
     public bool isFighting = false;//是否在战斗中
     public bool isBackAwaying = false;//是否在对峙后退中
     public bool isDragonShouTriggered = false;//是否龙吼过
+    public bool isDragonShouting = false;//是否正在龙吼
     public bool isLowHp = false;//是否低血量
     public bool isLowStamina = false;//是否低精力
     public bool haveRunChance//是否有逃跑机会
@@ -182,6 +193,7 @@ public abstract class EnemyController : MonoBehaviour
     {
         animator.SetTrigger(EnemyAnimationConfig.Parameters.DragonShout);// 播放龙吼动画
         isDragonShouTriggered = true;
+        isDragonShouting = true;
     }
 
     /// <summary>
@@ -240,17 +252,30 @@ public abstract class EnemyController : MonoBehaviour
     #endregion
 
     #region AnimationEvents
+    /// <summary>
+    /// 攻击结束
+    /// </summary>
     private void AE_AtkOver()
     {
         isAttacking = false;
     }
 
+    /// <summary>
+    /// 破韧结束
+    /// </summary>
     private void AE_DownedOver()
     {
         isDowned = false;
         Poise = MaxPoise;
     }
 
+    /// <summary>
+    /// 龙吼结束
+    /// </summary>
+    public virtual void AE_DragonShoutOver()
+    {
+        isDragonShouting = false;
+    }
     #endregion
 
     #region AI_navMeshAgent

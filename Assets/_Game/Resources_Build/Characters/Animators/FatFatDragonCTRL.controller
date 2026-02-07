@@ -189,12 +189,12 @@ AnimatorStateMachine:
   - {fileID: -2589811869180732709}
   m_EntryTransitions: []
   m_StateMachineTransitions:
-  - first: {fileID: 2064663387747371353}
-    second:
-    - {fileID: 2729010396580730251}
   - first: {fileID: 5535167900460483573}
     second:
     - {fileID: -8662366177165328082}
+  - first: {fileID: 2064663387747371353}
+    second:
+    - {fileID: 2729010396580730251}
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: 50, y: 20, z: 0}
   m_EntryPosition: {x: 50, y: 210, z: 0}
@@ -309,7 +309,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Scream
+  m_Name: DragonShout
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:

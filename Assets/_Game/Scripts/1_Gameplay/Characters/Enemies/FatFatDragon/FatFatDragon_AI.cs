@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class FatFatDragon_AI : Enemy_AI
 {
-    DebugNode debugNode = new DebugNode("Debug", BTNode.NodeStatus.SUCCESS);//DebugNode
+    DebugNode debugNodeSUCCESS = new DebugNode("Debug", BTNode.NodeStatus.SUCCESS);//DebugNode
+    DebugNode debugNodeFAILURE = new DebugNode("Debug", BTNode.NodeStatus.FAILURE);//DebugNode
 
 
     protected override void InitBlackboard()
@@ -62,17 +63,39 @@ public class FatFatDragon_AI : Enemy_AI
         //  战斗 SequenceNode序列节点成功继续失败返回
         //  {
         /// <param ConditionNode="isFighting">检查是否触发战斗</param> 通常返回失败 战斗时返回成功
-        /// <param GenericActionNode="BackAway, ()=> isLowStamina">精力不足时对峙</param> 通常返回成功 精力不足返回ing 
-        /// <param GenericActionNode="DragonShout, ()=> isDragonShouTriggered">龙吼</param> 通常返回ing 吼过了返回成功 
+        /// <param SequenceNode="BackAway, ()=> isLowStamina">精力不足时对峙</param> 通常返回成功 精力不足返回ing 
+        /// <param SequenceNode="DragonShout, ()=> isDragonShouTriggered">龙吼</param> 通常返回ing 吼过了返回成功 
         /// <param WeightedRandomSelector="childNodes, weights">攻击,选择一个满足条件的发动，多个条件满足则随机一个</param>
         //  }
         List<BTNode> root_fight_ChildNodes = new List<BTNode>();//战斗 子节点
         ConditionNode root_fight_ConditionNode = new ConditionNode(() => enemyController.isFighting);
         root_fight_ChildNodes.Add(root_fight_ConditionNode);
-        GenericActionNode root_fight_GenericActionNode_BackAway = new GenericActionNode(enemyController.BackAway, () => enemyController.isLowStamina);
-        root_fight_ChildNodes.Add(root_fight_GenericActionNode_BackAway);
-        GenericActionNode root_fight_GenericActionNode_DragonShout = new GenericActionNode(enemyController.DragonShout, () => enemyController.isDragonShouTriggered);
-        root_fight_ChildNodes.Add(root_fight_GenericActionNode_DragonShout);
+
+        //  BackAway SelectorNode成功返回失败继续
+        //  {
+        /// <param ConditionNode="isLowStamina">检查是否触发BackAway</param> 通常返回成功 精力不足返回失败
+        /// <param GenericActionNode="BackAway, ()=> isLowStamina">精力不足时对峙</param> 通常返回ing BackAway完返回成功 
+        //  }
+        List<BTNode> root_fight_BackAway_ChildNodes = new List<BTNode>();//BackAway 子节点
+        ConditionNode root_fight_BackAway_ConditionNode = new ConditionNode(() => !enemyController.isLowStamina);
+        root_fight_BackAway_ChildNodes.Add(root_fight_BackAway_ConditionNode);
+        GenericActionNode root_fight_GenericActionNode_BackAway = new GenericActionNode(enemyController.BackAway, () => enemyController.isBackAwaying);
+        root_fight_BackAway_ChildNodes.Add(root_fight_GenericActionNode_BackAway);
+        SelectorNode root_fight_BackAway = new SelectorNode(root_fight_BackAway_ChildNodes);//BackAway 节点
+        root_fight_ChildNodes.Add(root_fight_BackAway);
+
+        //  DragonShout SelectorNode成功返回失败继续
+        //  {
+        /// <param ConditionNode="isDragonShouTriggered">检查是否触发DragonShout</param> 通常返回成功 没吼过返回失败
+        /// <param GenericActionNode="DragonShout, ()=> isDragonShouTriggered">龙吼</param> 通常返回ing 吼完过返回成功 
+        //  }
+        List<BTNode> root_fight_DragonShout_ChildNodes = new List<BTNode>();//DragonShout 子节点
+        ConditionNode root_fight_DragonShout_ConditionNode = new ConditionNode(() => enemyController.isDragonShouTriggered);
+        root_fight_DragonShout_ChildNodes.Add(root_fight_DragonShout_ConditionNode);
+        GenericActionNode root_fight_GenericActionNode_DragonShout = new GenericActionNode(enemyController.DragonShout, () => enemyController.isDragonShouting);
+        root_fight_DragonShout_ChildNodes.Add(root_fight_GenericActionNode_DragonShout);
+        SelectorNode root_fight_DragonShout = new SelectorNode(root_fight_DragonShout_ChildNodes);//BackAway 节点
+        root_fight_ChildNodes.Add(root_fight_DragonShout);
 
         //  攻击 WeightedRandomSelectorNode 如果没有执行中的节点选择一个满足条件的发动，多个条件满足则根据权重随机一个
         //  {
@@ -114,7 +137,7 @@ public class FatFatDragon_AI : Enemy_AI
 
 
         WeightedRandomSelectorNode root_fight_atk = new WeightedRandomSelectorNode(root_fight_atk_ChildNodes, root_fight_atk_Weights);//攻击 节点
-        root_fight_ChildNodes.Add(root_fight_atk);
+        //root_fight_ChildNodes.Add(root_fight_atk);
         SequenceNode root_fight = new SequenceNode(root_fight_ChildNodes);//战斗 节点
 
         //  巡逻 Patrol SelectorNode
@@ -147,7 +170,7 @@ public class FatFatDragon_AI : Enemy_AI
         root_ChildNodes.Add(root_deathCheck); 
         root_ChildNodes.Add(root_downedCheck);
         root_ChildNodes.Add(root_runAway);
-        //root_ChildNodes.Add(root_fight);
+        root_ChildNodes.Add(root_fight);
         //root_ChildNodes.Add(root_Patrol);
         rootNode = new NoMemorySelectorNode(root_ChildNodes);//root 节点
         return rootNode;
