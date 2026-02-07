@@ -115,6 +115,7 @@ public abstract class EnemyController : MonoBehaviour
         OnSleeping();
     }
 
+    #region OnUpdate
     /// <summary>
     /// 更新当前速度，平滑过渡到目标速度
     /// </summary>
@@ -136,16 +137,7 @@ public abstract class EnemyController : MonoBehaviour
             animator.SetBool(EnemyAnimationConfig.Parameters.isSleeping, false);// 播放睡觉动画
         }
     }
-
-    /// <summary>
-    /// 设置目标速度比值
-    /// </summary>
-    /// <param name="speedRatio"></param>
-    public virtual void SetTargetSpeed(float speedRatio)
-    {
-        _targetSpeedRatio = speedRatio;
-    }
-
+    #endregion
 
     #region Actions
     /// <summary>
@@ -228,8 +220,7 @@ public abstract class EnemyController : MonoBehaviour
     }
     #endregion
 
-
-
+    #region Combat
     /// <summary>
     /// 受到伤害
     /// </summary>
@@ -246,8 +237,7 @@ public abstract class EnemyController : MonoBehaviour
         }
         _jitterCoroutine = StartCoroutine(HitJitter());
     }
-
-
+    #endregion
 
     #region AnimationEvents
     private void AE_AtkOver()
@@ -263,8 +253,16 @@ public abstract class EnemyController : MonoBehaviour
 
     #endregion
 
-
     #region AI_navMeshAgent
+    /// <summary>
+    /// 设置目标速度比值
+    /// </summary>
+    /// <param name="speedRatio"></param>
+    public virtual void SetTargetSpeed(float speedRatio)
+    {
+        _targetSpeedRatio = speedRatio;
+    }
+
     /// <summary>
     /// 移动到目标位置
     /// </summary>
@@ -310,7 +308,6 @@ public abstract class EnemyController : MonoBehaviour
         return true;
     }
     #endregion
-
 
     #region Shader
     /// <summary>
