@@ -64,6 +64,7 @@ public abstract class EnemyController : MonoBehaviour
     public float ViewDistance = 25f;//视角距离
     public float OutOfCombatDistance = 50f;//视角距离
 
+    [Header("行为参数类")]
     public bool isDead = false;//是否死亡
     public bool isDowned = false;//是否破韧
     public bool isSleeping = false;//是否睡觉
@@ -90,7 +91,6 @@ public abstract class EnemyController : MonoBehaviour
     }
     public float curentSpeedRatio = 0f;//当前速度比值
     public bool hasTakeDamage = false;//是否受到攻击
-    public Vector3 currentPatrolTarget;//当前巡逻目标点
 
     [SerializeField]
     private float Duration;//抖动时间
@@ -129,6 +129,8 @@ public abstract class EnemyController : MonoBehaviour
         OnSleeping();
 
         OutOfCombat();
+
+        LockOnPlayer();
     }
 
     #region OnUpdate
@@ -165,6 +167,8 @@ public abstract class EnemyController : MonoBehaviour
             hasTakeDamage = false;
         }
     }
+
+
     #endregion
 
     #region Actions
@@ -211,6 +215,7 @@ public abstract class EnemyController : MonoBehaviour
         animator.SetTrigger(EnemyAnimationConfig.Parameters.DragonShout);// 播放龙吼动画
         isDragonShouTriggered = true;
         isDragonShouting = true;
+        StopMove();
     }
 
     /// <summary>
@@ -241,11 +246,18 @@ public abstract class EnemyController : MonoBehaviour
     /// <param name="awarenessRadius">查找自身范围内awarenessRadius米</param>
     /// <param name="viewAngle">扇形范围内viewAngle度</param>
     /// <param name="viewDistance">扇形范围内viewDistance米</param>
-    /// <param name="searchTargetPos">搜寻目标位置</param>
+    /// <param name="playerPos">搜寻目标位置</param>
     /// <returns></returns>
-    public bool SearchPlayer( )
+    public bool IsDetectedPlayer(Vector3 playerPos)
     {
+        Vector3 playerTothis = playerPos - this.transform.position;
 
+        if (playerTothis.sqrMagnitude < AwarenessRadius * AwarenessRadius || 
+            (Vector3.Dot(this.transform.forward, playerTothis.normalized) > Mathf.Cos(ViewAngle / 2) && playerTothis.sqrMagnitude < ViewDistance))
+        {
+            isFighting = true;
+            return true;
+        }
         return false;
     }
     #endregion
@@ -269,7 +281,16 @@ public abstract class EnemyController : MonoBehaviour
         _jitterCoroutine = StartCoroutine(HitJitter());
     }
 
-
+    /// <summary>
+    /// 锁定敌人
+    /// </summary>
+    public virtual void LockOnPlayer()
+    {
+        if (!isFighting) return;
+        this.transform.LookAt(GameManager.Instance.playerController.transform.position);
+        //_navMeshAgent.updateRotation = false;
+        //this.transform.Rotate()
+    }
     #endregion
 
     #region AnimationEvents

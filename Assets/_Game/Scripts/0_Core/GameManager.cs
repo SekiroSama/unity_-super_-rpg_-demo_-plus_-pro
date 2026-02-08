@@ -96,6 +96,7 @@ public class GameManager : MonoBehaviour
     public void InitEnemyController()
     {
         this.enemyController = Instantiate(enemyPrefab).GetComponent<EnemyController>();
+        this.enemyController.transform.position = FatFatDragonHome.position;
         this.enemyController.gameObject.transform.SetParent(CharactersTransform);
         this.enemyController.Init(FatFatDragonHome, FatFatDragon_Patrols);
     }
