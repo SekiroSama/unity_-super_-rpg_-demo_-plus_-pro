@@ -5,6 +5,7 @@ using UnityEngine;
 public class FatFatDragon_AI : Enemy_AI
 {
     DebugNode debugNodeSUCCESS = new DebugNode("Debug", BTNode.NodeStatus.SUCCESS);//DebugNode
+    DebugNode debugNodeSUCCESS2 = new DebugNode("Debug2", BTNode.NodeStatus.SUCCESS);//DebugNode
     DebugNode debugNodeFAILURE = new DebugNode("Debug", BTNode.NodeStatus.FAILURE);//DebugNode
 
 
@@ -15,6 +16,8 @@ public class FatFatDragon_AI : Enemy_AI
         blackboard.SetValue<PlayerController>(Enemy_AIBlackBoard_Config.KEY_Player_PlayerController, GameManager.Instance.playerController);
         blackboard.SetValue<Vector3>(Enemy_AIBlackBoard_Config.KEY_Player_PlayerPos, GameManager.Instance.playerController.transform.position);
         blackboard.SetValue<Vector3>(Enemy_AIBlackBoard_Config.KEY_EnemyController_HomePos, enemyController.HomeTransform.position);
+        blackboard.SetValue<float>(Enemy_AIBlackBoard_Config.KEY_EnemyController_AtkWeights_ProjectileAttack, enemyController.AtkWeights_ProjectileAttack);
+        blackboard.SetValue<float>(Enemy_AIBlackBoard_Config.KEY_EnemyController_AtkWeights_MeleeAttack, enemyController.AtkWeights_MeleeAttack);
     }
 
 
@@ -92,7 +95,7 @@ public class FatFatDragon_AI : Enemy_AI
         List<BTNode> root_fight_DragonShout_ChildNodes = new List<BTNode>();//DragonShout 子节点
         ConditionNode root_fight_DragonShout_ConditionNode = new ConditionNode(() => enemyController.isDragonShouTriggered);
         root_fight_DragonShout_ChildNodes.Add(root_fight_DragonShout_ConditionNode);
-        GenericActionNode root_fight_GenericActionNode_DragonShout = new GenericActionNode(enemyController.DragonShout, () => enemyController.isDragonShouting);
+        GenericActionNode root_fight_GenericActionNode_DragonShout = new GenericActionNode(enemyController.DragonShout, () => !enemyController.isDragonShouting);
         root_fight_DragonShout_ChildNodes.Add(root_fight_GenericActionNode_DragonShout);
         SelectorNode root_fight_DragonShout = new SelectorNode(root_fight_DragonShout_ChildNodes);//BackAway 节点
         root_fight_ChildNodes.Add(root_fight_DragonShout);
@@ -112,7 +115,7 @@ public class FatFatDragon_AI : Enemy_AI
         //  }
         List<BTNode> root_fight_atk_ProjectileAttack_ChildNodes = new List<BTNode>();//投射物攻击 子节点
         MoveToTargetNode root_fight_atk_ProjectileAttack_MoveToTargetNode = new MoveToTargetNode(Enemy_AIBlackBoard_Config.KEY_Player_PlayerPos, enemyController.ProjectileAttackDistance, enemyController.curentSpeedRatio);
-        GenericActionNode root_fight_atk_ProjectileAttack_GenericActionNode = new GenericActionNode(enemyController.ProjectileAttack, ()=>enemyController.isAttacking);
+        GenericActionNode root_fight_atk_ProjectileAttack_GenericActionNode = new GenericActionNode(enemyController.ProjectileAttack, () => !enemyController.isAttacking);
         root_fight_atk_ProjectileAttack_ChildNodes.Add(root_fight_atk_ProjectileAttack_MoveToTargetNode);
         root_fight_atk_ProjectileAttack_ChildNodes.Add(root_fight_atk_ProjectileAttack_GenericActionNode);
 
@@ -123,7 +126,7 @@ public class FatFatDragon_AI : Enemy_AI
         //  }
         List<BTNode> root_fight_atk_MeleeAttack_ChildNodes = new List<BTNode>();//近战攻击 子节点
         MoveToTargetNode root_fight_atk_MeleeAttack_MoveToTargetNode = new MoveToTargetNode(Enemy_AIBlackBoard_Config.KEY_Player_PlayerPos, enemyController.MeleeAttackDistance, enemyController.curentSpeedRatio);
-        GenericActionNode root_fight_atk_MeleeAttack_GenericActionNode = new GenericActionNode(enemyController.MeleeAttack, () => enemyController.isAttacking);
+        GenericActionNode root_fight_atk_MeleeAttack_GenericActionNode = new GenericActionNode(enemyController.MeleeAttack, () => !enemyController.isAttacking);
         root_fight_atk_MeleeAttack_ChildNodes.Add(root_fight_atk_MeleeAttack_MoveToTargetNode);
         root_fight_atk_MeleeAttack_ChildNodes.Add(root_fight_atk_MeleeAttack_GenericActionNode);
 
@@ -137,7 +140,7 @@ public class FatFatDragon_AI : Enemy_AI
 
 
         WeightedRandomSelectorNode root_fight_atk = new WeightedRandomSelectorNode(root_fight_atk_ChildNodes, root_fight_atk_Weights);//攻击 节点
-        //root_fight_ChildNodes.Add(root_fight_atk);
+        root_fight_ChildNodes.Add(root_fight_atk);
         SequenceNode root_fight = new SequenceNode(root_fight_ChildNodes);//战斗 节点
 
         //  巡逻 Patrol SelectorNode
@@ -149,7 +152,7 @@ public class FatFatDragon_AI : Enemy_AI
         List<BTNode> root_Patrol_ChildNodes = new List<BTNode>();//巡逻 子节点
         SearchSomethingNode root_SelectorNode_SearchSomethingNode = new SearchSomethingNode(Enemy_AIBlackBoard_Config.KEY_Player_PlayerPos);
         root_Patrol_ChildNodes.Add(root_SelectorNode_SearchSomethingNode);
-        ConditionNode root_SelectorNode_ConditionNode = new ConditionNode(()=> enemyController.hasTakeDamage);
+        ConditionNode root_SelectorNode_ConditionNode = new ConditionNode(() => enemyController.hasTakeDamage);
         root_Patrol_ChildNodes.Add(root_SelectorNode_ConditionNode);
         MoveToTargetNode root_SelectorNode_MoveToTargetNode = new MoveToTargetNode(Enemy_AIBlackBoard_Config.KEY_EnemyController_CurrentPatrolTarget, 0f, enemyController.curentSpeedRatio);
         root_Patrol_ChildNodes.Add(root_SelectorNode_MoveToTargetNode);
@@ -167,7 +170,7 @@ public class FatFatDragon_AI : Enemy_AI
         ///    <param SelectorNode="巡逻">在一条指定路径上巡逻</param> 通常返回ing 进入战斗返回成功 
         //  }
         List<BTNode> root_ChildNodes = new List<BTNode>();//root 子节点
-        root_ChildNodes.Add(root_deathCheck); 
+        root_ChildNodes.Add(root_deathCheck);
         root_ChildNodes.Add(root_downedCheck);
         root_ChildNodes.Add(root_runAway);
         root_ChildNodes.Add(root_fight);

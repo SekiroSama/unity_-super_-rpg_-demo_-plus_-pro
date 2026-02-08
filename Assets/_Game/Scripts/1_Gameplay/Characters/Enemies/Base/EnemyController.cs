@@ -44,6 +44,8 @@ public abstract class EnemyController : MonoBehaviour
     }
     public float MaxPoise = 100;//最大韧性值
     public float HPRegenerationSpeed = 1;//睡觉回复hp速度
+    public float AtkWeights_ProjectileAttack = 0.2f;//远程攻击权重
+    public float AtkWeights_MeleeAttack = 0.8f;//近身攻击权重
 
 
     [Header("移动配置类")]
@@ -75,7 +77,7 @@ public abstract class EnemyController : MonoBehaviour
     {
         get => RunAwayChance > 0;
     }
-    private bool _isAttacking = false;//是否正在攻击
+    [SerializeField] private bool _isAttacking = false;//是否正在攻击
     public bool isAttacking
     {
         get { return _isAttacking; }
@@ -201,7 +203,8 @@ public abstract class EnemyController : MonoBehaviour
     /// </summary>
     public virtual void ProjectileAttack()
     {
-        animator.SetTrigger(EnemyAnimationConfig.Parameters.ProjectileAttack);// 播放投射物攻击动画
+        animator.SetTrigger(EnemyAnimationConfig.Parameters.ProjectileAttack);// 进入atk子状态机
+        animator.SetTrigger(EnemyAnimationConfig.Parameters.IsFireballShooting);// 播放投射物攻击动画
         isAttacking = true;
     }
 
