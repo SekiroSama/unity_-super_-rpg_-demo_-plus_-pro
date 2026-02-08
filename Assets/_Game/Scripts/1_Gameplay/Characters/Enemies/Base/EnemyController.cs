@@ -51,8 +51,7 @@ public abstract class EnemyController : MonoBehaviour
     [Header("移动配置类")]
     public float MaxMoveSpeed = 9f;
     public int RunAwayChance = 2; //逃跑机会
-    public Vector3 PatrolStart;//巡逻起点
-    public Vector3 PatrolEnd;//巡逻终点
+    public Transform[] Patrols;//巡逻点位
     public Transform HomeTransform;//巢穴坐标
 
     [Header("战斗参数类")]
@@ -63,6 +62,7 @@ public abstract class EnemyController : MonoBehaviour
     public float AwarenessRadius = 10f;//近身感知距离
     public float ViewAngle = 120f;//视角范围
     public float ViewDistance = 25f;//视角距离
+    public float OutOfCombatDistance = 50f;//视角距离
 
     public bool isDead = false;//是否死亡
     public bool isDowned = false;//是否破韧
@@ -106,9 +106,10 @@ public abstract class EnemyController : MonoBehaviour
 
     public Animator animator => _animator;
 
-    public void Init(Transform HomeTransform)
+    public void Init(Transform HomeTransform, Transform[] Patrols)
     {
         this.HomeTransform = HomeTransform;
+        this.Patrols = Patrols;
     }
 
     public virtual void Start()
@@ -126,6 +127,8 @@ public abstract class EnemyController : MonoBehaviour
         UpdateCurrentSpeed();
 
         OnSleeping();
+
+        OutOfCombat();
     }
 
     #region OnUpdate
@@ -148,6 +151,18 @@ public abstract class EnemyController : MonoBehaviour
         if (!isSleeping)
         {
             animator.SetBool(EnemyAnimationConfig.Parameters.isSleeping, false);// 播放睡觉动画
+        }
+    }
+
+    /// <summary>
+    /// 脱战判断
+    /// </summary>
+    public virtual void OutOfCombat()
+    {
+        if((GameManager.Instance.playerController.transform.position - this.transform.position).sqrMagnitude > OutOfCombatDistance)
+        {
+            isFighting = false;
+            hasTakeDamage = false;
         }
     }
     #endregion
@@ -221,14 +236,14 @@ public abstract class EnemyController : MonoBehaviour
     }
 
     /// <summary>
-    /// 搜索目标是否在视野内
+    /// 搜索player是否在视野内
     /// </summary>
     /// <param name="awarenessRadius">查找自身范围内awarenessRadius米</param>
     /// <param name="viewAngle">扇形范围内viewAngle度</param>
     /// <param name="viewDistance">扇形范围内viewDistance米</param>
     /// <param name="searchTargetPos">搜寻目标位置</param>
     /// <returns></returns>
-    public bool SearchSomething(float awarenessRadius, float viewAngle, float viewDistance, Vector3 searchTargetPos)
+    public bool SearchPlayer( )
     {
 
         return false;
@@ -244,6 +259,7 @@ public abstract class EnemyController : MonoBehaviour
     public virtual void TakeDamage(float damage, float poiseDamage, Vector3 hitPoint)
     {
         Hp -= damage;
+        hasTakeDamage = true;
         Poise -= poiseDamage;
         _material.SetVector("_HitPos", hitPoint);
         if (_jitterCoroutine != null)
@@ -252,6 +268,8 @@ public abstract class EnemyController : MonoBehaviour
         }
         _jitterCoroutine = StartCoroutine(HitJitter());
     }
+
+
     #endregion
 
     #region AnimationEvents

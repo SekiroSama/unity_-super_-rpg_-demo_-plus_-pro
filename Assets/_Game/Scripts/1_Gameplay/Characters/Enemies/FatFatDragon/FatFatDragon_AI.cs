@@ -16,9 +16,12 @@ public class FatFatDragon_AI : Enemy_AI
         blackboard.SetValue<PlayerController>(Enemy_AIBlackBoard_Config.KEY_Player_PlayerController, GameManager.Instance.playerController);
         blackboard.SetValue<Vector3>(Enemy_AIBlackBoard_Config.KEY_Player_PlayerPos, GameManager.Instance.playerController.transform.position);
         blackboard.SetValue<Vector3>(Enemy_AIBlackBoard_Config.KEY_EnemyController_HomePos, enemyController.HomeTransform.position);
+        blackboard.SetValue<Vector3>(Enemy_AIBlackBoard_Config.KEY_EnemyController_Patrol0, enemyController.Patrols[0].transform.position);
+        blackboard.SetValue<Vector3>(Enemy_AIBlackBoard_Config.KEY_EnemyController_Patrol1, enemyController.Patrols[1].transform.position);
         blackboard.SetValue<float>(Enemy_AIBlackBoard_Config.KEY_EnemyController_AtkWeights_ProjectileAttack, enemyController.AtkWeights_ProjectileAttack);
         blackboard.SetValue<float>(Enemy_AIBlackBoard_Config.KEY_EnemyController_AtkWeights_MeleeAttack, enemyController.AtkWeights_MeleeAttack);
     }
+    
 
 
 
@@ -143,20 +146,21 @@ public class FatFatDragon_AI : Enemy_AI
         root_fight_ChildNodes.Add(root_fight_atk);
         SequenceNode root_fight = new SequenceNode(root_fight_ChildNodes);//战斗 节点
 
-        //  巡逻 Patrol SelectorNode
+        //  巡逻 Patrol SequenceNode序列节点成功继续失败返回
         //  {
-        /// <param SearchSomethingNode="搜索范围和回调">检查视野中player出现来触发战斗</param> 通常返回失败 搜到后返回成功
-        /// <param ConditionNode="hasTakeDamage">检查是否受到攻击掉血来触发战斗</param> 通常返回失败 受伤后返回成功
-        /// <param MoveToTargetNode="targetPosList, speed">在一条指定路径上来回移动</param> 通常返回ing
+        /// <param ConditionNode="搜索范围和回调">检查视野中player出现来触发战斗</param> 通常返回成功 搜到后返回失败
+        /// <param ConditionNode="!hasTakeDamage">检查是否受到攻击掉血来触发战斗</param> 通常返回成功 受伤后返回失败
+        /// <param MoveToTargetNode="targetPosList, speed">在一条指定路径上来回移动</param> 通常返回ing 到了后返回成功
+        /// <param MoveToTargetNode="targetPosList, speed">在一条指定路径上来回移动</param> 通常返回ing 到了后返回成功
         //  }
         List<BTNode> root_Patrol_ChildNodes = new List<BTNode>();//巡逻 子节点
-        SearchSomethingNode root_SelectorNode_SearchSomethingNode = new SearchSomethingNode(Enemy_AIBlackBoard_Config.KEY_Player_PlayerPos);
-        root_Patrol_ChildNodes.Add(root_SelectorNode_SearchSomethingNode);
-        ConditionNode root_SelectorNode_ConditionNode = new ConditionNode(() => enemyController.hasTakeDamage);
+        ConditionNode root_SelectorNode_ConditionNode = new ConditionNode(()=> !enemyController.SearchPlayer() || enemyController.hasTakeDamage, () => enemyController.isFighting = true);
         root_Patrol_ChildNodes.Add(root_SelectorNode_ConditionNode);
-        MoveToTargetNode root_SelectorNode_MoveToTargetNode = new MoveToTargetNode(Enemy_AIBlackBoard_Config.KEY_EnemyController_CurrentPatrolTarget, 0f, enemyController.curentSpeedRatio);
+        MoveToTargetNode root_SelectorNode_MoveToTargetNode = new MoveToTargetNode(Enemy_AIBlackBoard_Config.KEY_EnemyController_Patrol0, 0f, enemyController.curentSpeedRatio);
         root_Patrol_ChildNodes.Add(root_SelectorNode_MoveToTargetNode);
-        SelectorNode root_Patrol = new SelectorNode(root_Patrol_ChildNodes);//巡逻 节点
+        MoveToTargetNode root_SelectorNode_MoveToTargetNode2 = new MoveToTargetNode(Enemy_AIBlackBoard_Config.KEY_EnemyController_Patrol1, 0f, enemyController.curentSpeedRatio);
+        root_Patrol_ChildNodes.Add(root_SelectorNode_MoveToTargetNode2);
+        SequenceNode root_Patrol = new SequenceNode(root_Patrol_ChildNodes);//巡逻 节点
 
         /// <summary>
         /// FatFatDragon_AI行为逻辑
@@ -174,7 +178,7 @@ public class FatFatDragon_AI : Enemy_AI
         root_ChildNodes.Add(root_downedCheck);
         root_ChildNodes.Add(root_runAway);
         root_ChildNodes.Add(root_fight);
-        //root_ChildNodes.Add(root_Patrol);
+        root_ChildNodes.Add(root_Patrol);
         rootNode = new NoMemorySelectorNode(root_ChildNodes);//root 节点
         return rootNode;
     }
