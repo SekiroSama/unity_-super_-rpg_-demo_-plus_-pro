@@ -17,8 +17,15 @@ public class PlayerController : MonoBehaviour
     public float rotatSpeed = 10f;
     public float walkSpeed = 5f;
     public float runSpeed = 10f;
+    public float jumpForce = 10f;
+    public float gravity;
     [Tooltip("跑步过渡时间")]
     public float fadeTime = 10f;
+    [HideInInspector]
+    public float verSpeed;
+    [HideInInspector]
+    public float horSpeed;
+    //摄像头位置
     Transform _camTransform;
     [Header("物理检测")]
     public Transform grdCheckPos;//地面检测点
@@ -27,13 +34,14 @@ public class PlayerController : MonoBehaviour
     public bool isGrounded;
     [HideInInspector]
     public bool UseRootMotion = false;
+    
     [Header("武器脚本")]
     public WeaponController weaponController;
     public Transform LookPos;//用于环境遮挡裁剪
-
-
+               
     private void Start()
     {
+
         CC = this.GetComponent<CharacterController>();
         animator = this.GetComponent<Animator>();
         _camTransform = Camera.main.transform;
@@ -47,19 +55,29 @@ public class PlayerController : MonoBehaviour
         //状态帧更新
         stateMachine.OnUpdate();
         //角色混合树动画参数更新
-
+        UpdateVerLocomotion(1);
         //UpdateLocomotion(GameManager.Instance.InputManager.CurrentInput.MoveVector.magnitude);
         //处理角色重力
         HandGravity();
+        //地面检测
         CheckIsGrounded();
+        //获取角色运动状态
+        GetTheSpeed();
     }
     #region 角色运动状态
     
-    public void AddForce(Vector2 force)
+    public void AddForce(Vector3 force)
     {
-        
+        CC.Move(force * Time.deltaTime);
     }
-
+    /// <summary>
+    /// 获取角色运动状态,水平方向的速度和垂直方向的速度
+    /// </summary>
+    private void GetTheSpeed()
+    {
+        this.horSpeed = CC.velocity.x;
+        this.verSpeed = CC.velocity.y;
+    }
 
     /// <summary>
     /// 处理角色重力
@@ -133,12 +151,20 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// 让角色混合树动画参数更新
+    /// 让角色水平方向混合树动画参数更新
     /// </summary>
     /// <param name="speed"></param>
-    public void UpdateLocomotion(float speed)
+    public void UpdateHorLocomotion(float speed)
     {
         animator.SetFloat(AnimationConfig_UnityChan.Parameters.XSpeed, speed);
+    }
+    /// <summary>
+    ///  让角色垂直方向混合树动画参数更新
+    /// </summary>
+    /// <param name="speed"></param>
+    public void UpdateVerLocomotion(float speed)
+    {
+        animator.SetFloat(AnimationConfig_UnityChan.Parameters.YSpeed, speed);
     }
     #endregion
     #region 角色动画状态

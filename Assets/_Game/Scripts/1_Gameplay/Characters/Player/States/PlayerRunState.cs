@@ -9,7 +9,7 @@ public class PlayerRunState : PlayerGroundState
     
     public override void OnEnter()
     {
-        owner.PlayAnimation(AnimationConfig_UnityChan.StateHashes.Locomotion, AnimationConfig_UnityChan.TransitionSettings.NormalTransitionDuration);
+        owner.PlayAnimation(AnimationConfig_UnityChan.StateHashes.HorLocomotion, AnimationConfig_UnityChan.TransitionSettings.NormalTransitionDuration);
         runTimer = 0;
         timerId = TimerMgr.Instance.CreateTimer(false, 8000, () => { }, 200, () =>
         {
@@ -29,7 +29,7 @@ public class PlayerRunState : PlayerGroundState
             return;
         }
 
-        owner.UpdateLocomotion(Mathf.Lerp(inputValue,1.5f,runTimer/owner.fadeTime));
+        owner.UpdateHorLocomotion(Mathf.Lerp(inputValue,1.5f,runTimer/owner.fadeTime));
         owner.Move(GameManager.Instance.inputManager.CurrentInput.MoveVector);
     }
     public override void OnExit() 
