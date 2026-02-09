@@ -69,7 +69,7 @@ public class FatFatDragon_AI : Enemy_AI
         //  战斗 SequenceNode序列节点成功继续失败返回
         //  {
         /// <param ConditionNode="isFighting">检查是否触发战斗</param> 通常返回失败 战斗时返回成功
-        /// <param SequenceNode="BackAway, ()=> isLowStamina">精力不足时对峙</param> 通常返回成功 精力不足返回ing 
+        /// <param SelectorNode="BackAway, ()=> isLowStamina">精力不足时对峙</param> 通常返回成功 精力不足返回ing 
         /// <param SequenceNode="DragonShout, ()=> isDragonShouTriggered">龙吼</param> 通常返回ing 吼过了返回成功 
         /// <param WeightedRandomSelector="childNodes, weights">攻击,选择一个满足条件的发动，多个条件满足则随机一个</param>
         //  }
@@ -80,12 +80,12 @@ public class FatFatDragon_AI : Enemy_AI
         //  BackAway SelectorNode成功返回失败继续
         //  {
         /// <param ConditionNode="isLowStamina">检查是否触发BackAway</param> 通常返回成功 精力不足返回失败
-        /// <param GenericActionNode="BackAway, ()=> isLowStamina">精力不足时对峙</param> 通常返回ing BackAway完返回成功 
+        /// <param GenericActionNode="BackAway, ()=> isBackAwaying">精力不足时对峙</param> 通常返回ing BackAway完返回成功 
         //  }
         List<BTNode> root_fight_BackAway_ChildNodes = new List<BTNode>();//BackAway 子节点
         ConditionNode root_fight_BackAway_ConditionNode = new ConditionNode(() => !enemyController.isLowStamina);
         root_fight_BackAway_ChildNodes.Add(root_fight_BackAway_ConditionNode);
-        GenericActionNode root_fight_GenericActionNode_BackAway = new GenericActionNode(enemyController.BackAway, () => enemyController.isBackAwaying);
+        GenericActionNode root_fight_GenericActionNode_BackAway = new GenericActionNode(enemyController.BackAway, () => !enemyController.isBackAwaying);
         root_fight_BackAway_ChildNodes.Add(root_fight_GenericActionNode_BackAway);
         SelectorNode root_fight_BackAway = new SelectorNode(root_fight_BackAway_ChildNodes);//BackAway 节点
         root_fight_ChildNodes.Add(root_fight_BackAway);
