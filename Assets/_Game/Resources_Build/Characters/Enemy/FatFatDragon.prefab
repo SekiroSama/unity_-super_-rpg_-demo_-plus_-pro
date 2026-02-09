@@ -2240,7 +2240,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9027627837874716125}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -2296,19 +2296,24 @@ MonoBehaviour:
   _Hp: 100
   MaxHp: 100
   LowHpPersent: 0.2
+  _Stamina: 100
   MaxStamina: 100
   LowStaminaPersent: 0.2
   _Poise: 100
   MaxPoise: 100
   HPRegenerationSpeed: 20
+  StaminaRegenerationSpeed: 20
   AtkWeights_ProjectileAttack: 0.2
   AtkWeights_MeleeAttack: 0.8
   MaxMoveSpeed: 5
+  JumpPower: 8
   RunAwayChance: 2
   Patrols: []
   HomeTransform: {fileID: 0}
   ProjectileAttackDistance: 50
+  StaminaCust_ProjectileAttack: 20
   MeleeAttackDistance: 5
+  StaminaCust_MeleeAttack: 10
   AwarenessRadius: 5
   ViewAngle: 120
   ViewDistance: 20

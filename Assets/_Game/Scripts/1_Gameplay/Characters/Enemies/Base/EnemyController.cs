@@ -20,7 +20,7 @@ public abstract class EnemyController : MonoBehaviour
     }
     public float MaxHp = 100;
     [Range(0,1)] public float LowHpPersent = 0.2f;//残血阈值
-    private float _Stamina = 100;//精力值
+    [SerializeField] private float _Stamina = 100;//精力值
     public float Stamina
     {
         get => _Stamina;
@@ -44,19 +44,23 @@ public abstract class EnemyController : MonoBehaviour
     }
     public float MaxPoise = 100;//最大韧性值
     public float HPRegenerationSpeed = 1;//睡觉回复hp速度
+    public float StaminaRegenerationSpeed = 1;//睡觉回复hp速度
     public float AtkWeights_ProjectileAttack = 0.2f;//远程攻击权重
     public float AtkWeights_MeleeAttack = 0.8f;//近身攻击权重
 
 
     [Header("移动配置类")]
     public float MaxMoveSpeed = 9f;
+    public float JumpPower = 8f;
     public int RunAwayChance = 2; //逃跑机会
     public Transform[] Patrols;//巡逻点位
     public Transform HomeTransform;//巢穴坐标
 
     [Header("战斗参数类")]
     public float ProjectileAttackDistance = 50f;//远程攻击距离
+    public float StaminaCust_ProjectileAttack = 20f;
     public float MeleeAttackDistance = 5f;//近身攻击距离
+    public float StaminaCust_MeleeAttack = 10f;
 
     [Header("感知参数类")]
     public float AwarenessRadius = 10f;//近身感知距离
@@ -98,6 +102,7 @@ public abstract class EnemyController : MonoBehaviour
     private float JitterScale = 1f;//抖动幅度
 
     private SkinnedMeshRenderer _meshRenderer;
+    private Rigidbody _rigidbody;
     private Material _material;
     private Coroutine _jitterCoroutine;//抖动协程引用
     private NavMeshAgent _navMeshAgent;//导航组件
@@ -115,6 +120,7 @@ public abstract class EnemyController : MonoBehaviour
     public virtual void Start()
     {
         _meshRenderer = this.GetComponentInChildren<SkinnedMeshRenderer>();
+        _rigidbody = this.GetComponent<Rigidbody>();
         _material = _meshRenderer.material;
         _navMeshAgent = this.GetComponent<NavMeshAgent>();
         _animator = this.GetComponent<Animator>();
@@ -127,6 +133,8 @@ public abstract class EnemyController : MonoBehaviour
         UpdateCurrentSpeed();
 
         OnSleeping();
+
+        OnBackAwaying();
 
         OutOfCombat();
 
@@ -154,6 +162,12 @@ public abstract class EnemyController : MonoBehaviour
         {
             animator.SetBool(EnemyAnimationConfig.Parameters.isSleeping, false);// 播放睡觉动画
         }
+    }
+
+    public virtual void OnBackAwaying()
+    {
+        if (!isBackAwaying) return;
+        Stamina += Time.deltaTime * StaminaRegenerationSpeed;
     }
 
     /// <summary>
@@ -205,6 +219,10 @@ public abstract class EnemyController : MonoBehaviour
     public virtual void BackAway()
     {
         isBackAwaying = true;
+        animator.SetTrigger(EnemyAnimationConfig.Parameters.isBackAwaying);// 播放对峙动画
+
+        _rigidbody.isKinematic = false;
+        _rigidbody.AddForce(new Vector3(0, 0, -JumpPower), ForceMode.Impulse);//动画会往上飞，给往后的力
     }
 
     /// <summary>
@@ -226,6 +244,7 @@ public abstract class EnemyController : MonoBehaviour
         animator.SetTrigger(EnemyAnimationConfig.Parameters.ProjectileAttack);// 进入atk子状态机
         animator.SetTrigger(EnemyAnimationConfig.Parameters.IsFireballShooting);// 播放投射物攻击动画
         isAttacking = true;
+        Stamina -= StaminaCust_ProjectileAttack;
     }
 
     /// <summary>
@@ -238,6 +257,7 @@ public abstract class EnemyController : MonoBehaviour
 
         int randomIndex = Random.Range(0, EnemyAnimationConfig.FatFatDragonSettings.FatFatDragonMeleeAttackList.Count);
         animator.SetTrigger(EnemyAnimationConfig.FatFatDragonSettings.FatFatDragonMeleeAttackList[randomIndex]);// 播放随机的近战攻击动画
+        Stamina -= StaminaCust_MeleeAttack;
     }
 
     /// <summary>
@@ -308,6 +328,15 @@ public abstract class EnemyController : MonoBehaviour
     {
         isDowned = false;
         Poise = MaxPoise;
+    }
+
+    /// <summary>
+    /// 对峙结束
+    /// </summary>
+    public virtual void AE_BackAwayOver()
+    {
+        _rigidbody.isKinematic = true;
+        isBackAwaying = false;
     }
 
     /// <summary>
