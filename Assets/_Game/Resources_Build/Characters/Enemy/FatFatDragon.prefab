@@ -2309,10 +2309,10 @@ MonoBehaviour:
   HomeTransform: {fileID: 0}
   ProjectileAttackDistance: 50
   MeleeAttackDistance: 5
-  AwarenessRadius: 10
+  AwarenessRadius: 5
   ViewAngle: 120
-  ViewDistance: 40
-  OutOfCombatDistance: 70
+  ViewDistance: 20
+  OutOfCombatDistance: 20
   isDead: 0
   isDowned: 0
   isSleeping: 0
@@ -2325,7 +2325,6 @@ MonoBehaviour:
   _isAttacking: 0
   curentSpeedRatio: 1
   hasTakeDamage: 0
-  currentPatrolTarget: {x: 0, y: 0, z: 0}
   Duration: 0.1
   JitterScale: 2
 --- !u!114 &7404015419590639437

@@ -161,7 +161,7 @@ public abstract class EnemyController : MonoBehaviour
     /// </summary>
     public virtual void OutOfCombat()
     {
-        if((GameManager.Instance.playerController.transform.position - this.transform.position).sqrMagnitude > OutOfCombatDistance)
+        if((GameManager.Instance.playerController.transform.position - this.transform.position).sqrMagnitude > OutOfCombatDistance * OutOfCombatDistance)
         {
             isFighting = false;
             hasTakeDamage = false;
@@ -253,9 +253,8 @@ public abstract class EnemyController : MonoBehaviour
         Vector3 playerTothis = playerPos - this.transform.position;
 
         if (playerTothis.sqrMagnitude < AwarenessRadius * AwarenessRadius || 
-            (Vector3.Dot(this.transform.forward, playerTothis.normalized) > Mathf.Cos(ViewAngle / 2) && playerTothis.sqrMagnitude < ViewDistance))
+            (Vector3.Dot(this.transform.forward, playerTothis.normalized) > Mathf.Cos(ViewAngle / 2 * Mathf.Deg2Rad) && playerTothis.sqrMagnitude < ViewDistance * ViewDistance))
         {
-            isFighting = true;
             return true;
         }
         return false;

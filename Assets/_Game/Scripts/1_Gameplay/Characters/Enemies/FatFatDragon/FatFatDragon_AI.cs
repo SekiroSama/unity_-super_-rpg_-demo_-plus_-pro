@@ -152,10 +152,10 @@ public class FatFatDragon_AI : Enemy_AI
         /// <param SequenceNode="来回移动">在一条指定路径上来回移动</param> 通常返回ing 到了后返回成功
         //  }
         List<BTNode> root_Patrol_ChildNodes = new List<BTNode>();//巡逻 子节点
-        ConditionNode root_SelectorNode_ConditionNode = new ConditionNode(()=> !enemyController.IsDetectedPlayer(blackboard.GetValue<Vector3>(Enemy_AIBlackBoard_Config.KEY_Player_PlayerPos)) || enemyController.hasTakeDamage, () => enemyController.isFighting = true);
+        ConditionNode root_SelectorNode_ConditionNode = new ConditionNode(()=> enemyController.IsDetectedPlayer(blackboard.GetValue<Vector3>(Enemy_AIBlackBoard_Config.KEY_Player_PlayerPos)) || enemyController.hasTakeDamage, () => enemyController.isFighting = true);
         root_Patrol_ChildNodes.Add(root_SelectorNode_ConditionNode);
 
-        //  来回移动 BackAndForth SequenceNode序列节点成功继续失败返回
+        //  来回移动 BackAndForth NoMemorySelectorNode
         //  {
         /// <param MoveToTargetNode="targetPosList, speed">在一条指定路径上来回移动</param> 通常返回ing 到了后返回成功
         /// <param MoveToTargetNode="targetPosList, speed">在一条指定路径上来回移动</param> 通常返回ing 到了后返回成功
@@ -168,7 +168,7 @@ public class FatFatDragon_AI : Enemy_AI
 
         SequenceNode root_Patrol_BackAndForth = new SequenceNode(root_Patrol_BackAndForth_ChildNodes);//巡逻 节点
         root_Patrol_ChildNodes.Add(root_Patrol_BackAndForth);
-        NoMemorySequenceNode root_Patrol = new NoMemorySequenceNode(root_Patrol_ChildNodes);//巡逻 节点
+        NoMemorySelectorNode root_Patrol = new NoMemorySelectorNode(root_Patrol_ChildNodes);//巡逻 节点
 
         /// <summary>
         /// FatFatDragon_AI行为逻辑
