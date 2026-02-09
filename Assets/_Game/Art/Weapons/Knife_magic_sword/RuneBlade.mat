@@ -69,7 +69,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AuraWidth: 0.0033
+    - _AuraWidth: 0.0017
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
