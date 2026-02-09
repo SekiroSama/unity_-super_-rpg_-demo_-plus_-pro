@@ -22,8 +22,9 @@ public class 开发日志_Sekiro
     List<string> SekiroDoList = new List<string>()
     {
         //"行为树基类",
-        "行为树拓展",
+        //"行为树拓展",
+        //"行为树逻辑完结",
+        "敌人控制器完善,索敌方法优化",
+        "通用插值方法",
     };
 }
-
-

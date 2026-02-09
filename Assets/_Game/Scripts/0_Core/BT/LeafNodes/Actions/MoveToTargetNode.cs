@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 public class MoveToTargetNode : BTNode
 {
-    private string _targetKey;
+    private Enemy_AIBlackBoard_Config _targetKey;
     private float _stoppingDistanceSqr;
     private float _speedRatio;
     private Vector3 _targetPos;
@@ -21,7 +21,7 @@ public class MoveToTargetNode : BTNode
     /// <param name="targetKey">黑板Key,用来取目标位置</param>
     /// <param name="stoppingDistance">停止距离</param>
     /// <param name="speedRatio">移动速度</param>
-    public MoveToTargetNode(string targetKey, float stoppingDistance, float speedRatio)
+    public MoveToTargetNode(Enemy_AIBlackBoard_Config targetKey, float stoppingDistance, float speedRatio)
     {
         _targetKey = targetKey;
         _stoppingDistanceSqr = stoppingDistance * stoppingDistance;
@@ -34,7 +34,7 @@ public class MoveToTargetNode : BTNode
         _currentPos = _enemyController.transform.position;
         _targetPos = blackboard.GetValue<Vector3>(_targetKey);
 
-        if ((_currentPos - _targetPos).sqrMagnitude > _stoppingDistanceSqr)
+        if ((_currentPos - _targetPos).sqrMagnitude > _stoppingDistanceSqr + 0.1f)
         {
             _enemyController.MoveToTarget(_targetPos, _speedRatio);
             currentStatus = NodeStatus.RUNNING;

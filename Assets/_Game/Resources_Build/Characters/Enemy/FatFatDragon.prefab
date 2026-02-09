@@ -2202,15 +2202,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9027627837874716125}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 5.19, y: -1.77, z: 9.400244}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7634415597996843629}
   - {fileID: 107632783125039470}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &323046726281161166
 Animator:
   serializedVersion: 5
@@ -2293,8 +2293,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8663a0201271d7e4baf031b8ec9cc292, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HP: 100
+  _Hp: 100
+  MaxHp: 100
+  LowHpPersent: 0.2
+  MaxStamina: 100
+  LowStaminaPersent: 0.2
+  _Poise: 100
+  MaxPoise: 100
+  HPRegenerationSpeed: 20
+  AtkWeights_ProjectileAttack: 0.2
+  AtkWeights_MeleeAttack: 0.8
   MaxMoveSpeed: 5
+  RunAwayChance: 2
+  Patrols: []
+  HomeTransform: {fileID: 0}
+  ProjectileAttackDistance: 50
+  MeleeAttackDistance: 5
+  AwarenessRadius: 5
+  ViewAngle: 120
+  ViewDistance: 20
+  OutOfCombatDistance: 25
+  isDead: 0
+  isDowned: 0
+  isSleeping: 0
+  isFighting: 0
+  isBackAwaying: 0
+  isDragonShouTriggered: 0
+  isDragonShouting: 0
+  isLowHp: 0
+  isLowStamina: 0
+  _isAttacking: 0
+  curentSpeedRatio: 1
+  hasTakeDamage: 0
   Duration: 0.1
   JitterScale: 2
 --- !u!114 &7404015419590639437
@@ -2309,7 +2339,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ae6a242be27c9b438490c865eec7569, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stoppingDistance: 5
 --- !u!1 &9089856476793434509
 GameObject:
   m_ObjectHideFlags: 0
