@@ -1,4 +1,4 @@
-﻿Shader "Custom/Enemy/FleshImpact"
+﻿Shader "Custom/Enemy/FleshImpactURP"
 {
     Properties
     {
@@ -11,18 +11,19 @@
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        // 1. 增加 Tags
+        Tags { "RenderType"="Opaque" "RenderPipeline" = "UniversalPipeline" }
         LOD 100
 
         Pass
         {
-            CGPROGRAM
+            HLSLPROGRAM // 2. 使用 HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            // make fog work
             #pragma multi_compile_fog
 
-            #include "UnityCG.cginc"
+            // 3. 包含 URP 核心库
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
             struct appdata
             {
@@ -34,45 +35,53 @@
             struct v2f
             {
                 float2 uv : TEXCOORD0;
-                UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
+                float fogFactor : TEXCOORD1; // URP 雾效因子
             };
 
-            sampler2D _MainTex;
-            float4 _MainTex_ST;
-            float4 _HitPos;//外部传入
-            float _HitStrength;//外部传入
-            float _HitRadius;
-            float _WaveSpeed;
-            float _WaveFrequency;
-            float _HitFalloff;
-            float _StrengthScale;
+            // 4. 将变量放入 CBUFFER 以支持 SRP Batcher
+            CBUFFER_START(UnityPerMaterial)
+                float4 _MainTex_ST;
+                float4 _HitPos;
+                float _HitStrength;
+                float _HitRadius;
+                float _WaveSpeed;
+                float _WaveFrequency;
+                float _HitFalloff;
+                float _StrengthScale;
+            CBUFFER_END
+
+            TEXTURE2D(_MainTex);
+            SAMPLER(sampler_MainTex);
 
             v2f vert (appdata v)
             {
                 v2f o;
 
-                float3 wpos = mul(unity_ObjectToWorld, v.vertex).xyz;
-                float dist = distance(wpos, _HitPos.xyz);
+                // 5. 坐标转换逻辑修改
+                float3 worldPos = TransformObjectToWorld(v.vertex.xyz);
+                float dist = distance(worldPos, _HitPos.xyz);
 
                 float import = pow(saturate((_HitRadius - dist) / max(_HitRadius, 0.001)), _HitFalloff) * _HitStrength * _StrengthScale;
                 import *= sin(_Time.y * _WaveSpeed + dist * _WaveFrequency);
 
-                o.vertex = UnityObjectToClipPos(v.vertex + import * v.normal);
+                // 将位移后的顶点转换到裁剪空间
+                float3 displacedWorldPos = worldPos + TransformObjectToWorldDir(v.normal) * import;
+                o.vertex = TransformWorldToHClip(displacedWorldPos);
+
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                UNITY_TRANSFER_FOG(o,o.vertex);
+                o.fogFactor = ComputeFogFactor(o.vertex.z);
                 return o;
             }
 
-            fixed4 frag (v2f i) : SV_Target
+            half4 frag (v2f i) : SV_Target
             {
-                // sample the texture
-                fixed4 col = tex2D(_MainTex, i.uv);
-                // apply fog
-                UNITY_APPLY_FOG(i.fogCoord, col);
+                // 6. 采样方式修改
+                half4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+                col.rgb = MixFog(col.rgb, i.fogFactor);
                 return col;
             }
-            ENDCG
+            ENDHLSL
         }
     }
     Fallback "Diffuse"

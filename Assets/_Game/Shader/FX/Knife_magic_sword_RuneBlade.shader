@@ -1,234 +1,170 @@
-﻿Shader "Custom/Weapon/Knife_magic_sword_RuneBlade"
+﻿Shader "Custom/Weapon/Knife_magic_sword_RuneBlade_URP"
 {
-   Properties
+    Properties
     {
         _MainColor("MainColor", Color) = (1,1,1,1)
         [HDR]_AuraColor("AuraColor", Color) = (1,1,1,1)
-        _MainTex("MainTex", 2D) = ""{}
-        _BumpMap("BumpMap", 2D) = ""{}
+        _MainTex("MainTex", 2D) = "white"{}
+        _BumpMap("BumpMap", 2D) = "bump"{}
         _BumpScale("BumpScale", Range(0,1)) = 1
-        _AuraWidth ("AuraWidth", Range(0, 0.1)) = 0.01//外扩宽度
-        _AuraFlowMap("AuraFlowMap", 2D) = ""{}//噪波贴图（云雾图）
+        _AuraWidth ("AuraWidth", Range(0, 0.1)) = 0.01
+        _AuraFlowMap("AuraFlowMap", 2D) = "white"{}
         _FlowSpeed("FlowSpeed", float) = 1
-        //_DissolveVal ("DissolveVal", Range(0, 1)) = 0//溶解程度 在Properties配置会无视C#Shader广播
-        _MaskTex ("MaskTex", 2D) = "" { }//发光遮罩贴图
-        _FresnelPower ("FresnelPower", Range(0, 10)) = 5//菲涅尔强度
-
+        _DissolveVal ("DissolveVal", Range(0, 1)) = 0
+        _MaskTex ("MaskTex", 2D) = "white" { }
+        _FresnelPower ("FresnelPower", Range(0, 10)) = 5
     }
+
     SubShader
     {
-        Tags{ "RenderType"="Opaque" "Queue"="Geometry"}
+        Tags{ "RenderType"="Opaque" "RenderPipeline" = "UniversalPipeline" "Queue"="Geometry"}
 
-        CGINCLUDE
-        #include "UnityCG.cginc"
-        #include "Lighting.cginc"
-        #include "AutoLight.cginc"
-        float4 _MainColor;//漫反射颜色
-        sampler2D _MainTex;//颜色纹理
-        float4 _MainTex_ST;//颜色纹理的缩放和平移
-        sampler2D _BumpMap;//法线纹理
-        float4 _BumpMap_ST;//法线纹理的缩放和平移
-        float _BumpScale;//凹凸程度
-        sampler2D _AuraFlowMap;//噪波贴图（云雾图）
-        float _DissolveVal = 0;//溶解程度
-        sampler2D _MaskTex;//发光遮罩贴图
-        float _FresnelPower = 0;//菲涅尔强度
-        ENDCG
-
+        // ---------------- Pass 1: 刀身主体 ----------------
         Pass
         {
-            Tags { "LightMode"="ForwardBase" }
-            CGPROGRAM
+            Name "ForwardLit"
+            Tags { "LightMode"="UniversalForward" }
+
+            HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #pragma multi_compile_fwdbase
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 
-            struct v2f
-            {
-                float4 pos:SV_POSITION;
-                float4 uv:TEXCOORD0;
-                float4 TtoW0:TEXCOORD1;
-                float4 TtoW1:TEXCOORD2;
-                float4 TtoW2:TEXCOORD3;
-                SHADOW_COORDS(4)
+            struct Attributes {
+                float4 positionOS : POSITION;
+                float3 normalOS   : NORMAL;
+                float4 tangentOS  : TANGENT;
+                float2 uv         : TEXCOORD0;
             };
-            v2f vert (appdata_full v)
-            {
-                v2f data;
-                //把模型空间下的顶点转到裁剪空间下
-                data.pos = UnityObjectToClipPos(v.vertex);
-                //计算纹理的缩放偏移
-                data.uv.xy = v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;
-                data.uv.zw = v.texcoord.xy * _BumpMap_ST.xy + _BumpMap_ST.zw;
-                //得到世界空间下的 顶点位置 用于之后在片元中计算视角方向（世界空间下的）
-                //data.worldPos = mul(unity_ObjectToWorld, v.vertex);
-                float3 worldPos = mul(unity_ObjectToWorld, v.vertex);
-                //把模型空间下的法线、切线转换到世界空间下
-                float3 worldNormal = UnityObjectToWorldNormal(v.normal);
-                float3 worldTangent = UnityObjectToWorldDir(v.tangent);
-                //计算副切线 计算叉乘结果后 垂直与切线和法线的向量有两条 通过乘以 切线当中的w，就可以确定是哪一条
-                float3 worldBinormal = cross(normalize(worldTangent), normalize(worldNormal)) * v.tangent.w;
-                //这个就是我们 切线空间到世界空间的 转换矩阵
-                //data.rotation = float3x3( worldTangent.x, worldBinormal.x,  worldNormal.x,
-                //                          worldTangent.y, worldBinormal.y,  worldNormal.y,
-                //                          worldTangent.z, worldBinormal.z,  worldNormal.z);
-                data.TtoW0 = float4(worldTangent.x, worldBinormal.x,  worldNormal.x, worldPos.x);
-                data.TtoW1 = float4(worldTangent.y, worldBinormal.y,  worldNormal.y, worldPos.y);
-                data.TtoW2 = float4(worldTangent.z, worldBinormal.z,  worldNormal.z, worldPos.z);
-                TRANSFER_SHADOW(data);
-                return data;
-            }
-            fixed4 frag (v2f i) : SV_Target
-            {
-                clip(tex2D(_AuraFlowMap, i.uv.xy).r - _DissolveVal);
 
-                //世界空间下光的方向
-                fixed3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
-                //世界空间下视角方向
-                float3 worldPos = float3(i.TtoW0.w, i.TtoW1.w, i.TtoW2.w);
-                fixed3 viewDir = normalize(UnityWorldSpaceViewDir(worldPos));
-                //通过纹理采样函数 取出法线纹理贴图当中的数据
-                float4 packedNormal = tex2D(_BumpMap, i.uv.zw);
-                //将我们取出来的法线数据 进行逆运算并且可能会进行解压缩的运算，最终得到切线空间下的法线数据
-                float3 tangentNormal = UnpackNormal(packedNormal);
-                //乘以凹凸程度的系数
-                tangentNormal.xy *= _BumpScale;
-                tangentNormal.z = sqrt(1.0 - saturate(dot(tangentNormal.xy, tangentNormal.xy)));
-                //本质 就是在进行矩阵运算
-                float3 worldNormal = float3(dot(i.TtoW0.xyz, tangentNormal), dot(i.TtoW1.xyz, tangentNormal), dot(i.TtoW2.xyz, tangentNormal));
-                //接下来就来处理 带颜色纹理的 布林方光照模型计算
-                //颜色纹理和漫反射颜色的 叠加
-                fixed3 albedo = tex2D(_MainTex, i.uv.xy) * _MainColor.rgb;
-                //兰伯特
-                fixed3 lambertColor = _LightColor0.rgb * albedo.rgb * max(0, dot(worldNormal, normalize(lightDir)));
-              
-                UNITY_LIGHT_ATTENUATION(atten, i, worldPos);
-              
-               //布林方
-                fixed3 color = UNITY_LIGHTMODEL_AMBIENT.rgb * albedo + lambertColor * atten;
-                return fixed4(color.rgb, 1);
+            struct Varyings {
+                float4 positionCS : SV_POSITION;
+                float4 uv         : TEXCOORD0; 
+                float3 worldPos   : TEXCOORD1;
+                half3  worldNormal: NORMAL;
+                half4  worldTangent: TANGENT;
+            };
+
+            // 重要：所有 Properties 里的变量必须全部放进这里
+            CBUFFER_START(UnityPerMaterial)
+                half4 _MainColor;
+                half4 _AuraColor;
+                float4 _MainTex_ST;
+                float4 _BumpMap_ST;
+                float _BumpScale;
+                float _AuraWidth;
+                float _FlowSpeed;
+                float _DissolveVal;
+                float _FresnelPower;
+            CBUFFER_END
+
+            TEXTURE2D(_MainTex); SAMPLER(sampler_MainTex);
+            TEXTURE2D(_BumpMap); SAMPLER(sampler_BumpMap);
+            TEXTURE2D(_AuraFlowMap); SAMPLER(sampler_AuraFlowMap);
+
+            Varyings vert (Attributes v) {
+                Varyings o;
+                o.positionCS = TransformObjectToHClip(v.positionOS.xyz);
+                o.worldPos = TransformObjectToWorld(v.positionOS.xyz);
+                o.worldNormal = TransformObjectToWorldNormal(v.normalOS);
+                o.worldTangent = half4(TransformObjectToWorldDir(v.tangentOS.xyz), v.tangentOS.w);
+                o.uv.xy = TRANSFORM_TEX(v.uv, _MainTex);
+                o.uv.zw = TRANSFORM_TEX(v.uv, _BumpMap);
+                return o;
             }
-            ENDCG
+
+            half4 frag (Varyings i) : SV_Target {
+                clip(SAMPLE_TEXTURE2D(_AuraFlowMap, sampler_AuraFlowMap, i.uv.xy).r - _DissolveVal);
+                
+                half3 viewDir = normalize(GetWorldSpaceViewDir(i.worldPos));
+                half3 bitangent = cross(i.worldNormal, i.worldTangent.xyz) * i.worldTangent.w;
+                half3x3 TBN = half3x3(i.worldTangent.xyz, bitangent, i.worldNormal);
+                half3 normalTS = UnpackNormalScale(SAMPLE_TEXTURE2D(_BumpMap, sampler_BumpMap, i.uv.zw), _BumpScale);
+                half3 worldNormal = normalize(mul(normalTS, TBN));
+
+                Light light = GetMainLight();
+                half3 albedo = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv.xy).rgb * _MainColor.rgb;
+                half3 diffuse = light.color * albedo * saturate(dot(worldNormal, light.direction));
+                half3 ambient = SampleSH(worldNormal) * albedo;
+
+                return half4(diffuse + ambient, 1.0);
+            }
+            ENDHLSL
         }
+
+        // ---------------- Pass 2: 菲涅尔发光外壳 ----------------
         Pass
         {
-            Tags { "LightMode"="ForwardAdd" }
-            Blend One One
-            CGPROGRAM
+            Name "Aura"
+            // 在 URP 多 Pass 渲染中，第二个 Pass 通常使用 SRPDefaultUnlit 或 UniversalForward
+            Tags{ "LightMode"="SRPDefaultUnlit" "Queue"="Transparent" "RenderType"="Transparent" }
+            
+            Blend One One   // 线性减淡（加法混合）
+            ZWrite Off      // 关闭深度写入
+            Cull Off        // 双面渲染，增加发光厚度
+
+            HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #pragma multi_compile_fwdadd
-            struct v2f
-            {
-                float4 pos:SV_POSITION;
-                float4 uv:TEXCOORD0;
-                float4 TtoW0:TEXCOORD1;
-                float4 TtoW1:TEXCOORD2;
-                float4 TtoW2:TEXCOORD3;
-                SHADOW_COORDS(4)
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+
+            struct Attributes {
+                float4 positionOS : POSITION;
+                float3 normalOS   : NORMAL;
+                float4 tangentOS  : TANGENT;
+                float2 uv         : TEXCOORD0;
             };
-            v2f vert (appdata_full v)
-            {
-                v2f data;
-                //把模型空间下的顶点转到裁剪空间下
-                data.pos = UnityObjectToClipPos(v.vertex);
-                //计算纹理的缩放偏移
-                data.uv.xy = v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;
-                data.uv.zw = v.texcoord.xy * _BumpMap_ST.xy + _BumpMap_ST.zw;
-                //得到世界空间下的 顶点位置 用于之后在片元中计算视角方向（世界空间下的）
-                //data.worldPos = mul(unity_ObjectToWorld, v.vertex);
-                float3 worldPos = mul(unity_ObjectToWorld, v.vertex);
-                //把模型空间下的法线、切线转换到世界空间下
-                float3 worldNormal = UnityObjectToWorldNormal(v.normal);
-                float3 worldTangent = UnityObjectToWorldDir(v.tangent);
-                //计算副切线 计算叉乘结果后 垂直与切线和法线的向量有两条 通过乘以 切线当中的w，就可以确定是哪一条
-                float3 worldBinormal = cross(normalize(worldTangent), normalize(worldNormal)) * v.tangent.w;
-                //这个就是我们 切线空间到世界空间的 转换矩阵
-                //data.rotation = float3x3( worldTangent.x, worldBinormal.x,  worldNormal.x,
-                //                          worldTangent.y, worldBinormal.y,  worldNormal.y,
-                //                          worldTangent.z, worldBinormal.z,  worldNormal.z);
-                data.TtoW0 = float4(worldTangent.x, worldBinormal.x,  worldNormal.x, worldPos.x);
-                data.TtoW1 = float4(worldTangent.y, worldBinormal.y,  worldNormal.y, worldPos.y);
-                data.TtoW2 = float4(worldTangent.z, worldBinormal.z,  worldNormal.z, worldPos.z);
-                TRANSFER_SHADOW(data);
-                return data;
-            }
-            fixed4 frag (v2f i) : SV_Target
-            {
-                clip(tex2D(_AuraFlowMap, i.uv.xy).r - _DissolveVal);
 
-                //世界空间下光的方向
-                fixed3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
-                //世界空间下视角方向
-                float3 worldPos = float3(i.TtoW0.w, i.TtoW1.w, i.TtoW2.w);
-                fixed3 viewDir = normalize(UnityWorldSpaceViewDir(worldPos));
-                //通过纹理采样函数 取出法线纹理贴图当中的数据
-                float4 packedNormal = tex2D(_BumpMap, i.uv.zw);
-                //将我们取出来的法线数据 进行逆运算并且可能会进行解压缩的运算，最终得到切线空间下的法线数据
-                float3 tangentNormal = UnpackNormal(packedNormal);
-                //乘以凹凸程度的系数
-                tangentNormal.xy *= _BumpScale;
-                tangentNormal.z = sqrt(1.0 - saturate(dot(tangentNormal.xy, tangentNormal.xy)));
-                //本质 就是在进行矩阵运算
-                float3 worldNormal = float3(dot(i.TtoW0.xyz, tangentNormal), dot(i.TtoW1.xyz, tangentNormal), dot(i.TtoW2.xyz, tangentNormal));
-                //接下来就来处理 带颜色纹理的 布林方光照模型计算
-                //颜色纹理和漫反射颜色的 叠加
-                fixed3 albedo = tex2D(_MainTex, i.uv.xy) * _MainColor.rgb;
-                //兰伯特
-                fixed3 lambertColor = _LightColor0.rgb * albedo.rgb * max(0, dot(worldNormal, normalize(lightDir)));
-              
-                UNITY_LIGHT_ATTENUATION(atten, i, worldPos);
-              
-               //布林方
-                fixed3 color = UNITY_LIGHTMODEL_AMBIENT.rgb * albedo + lambertColor * atten;
-                return fixed4(color.rgb, 1);
-            }
-            ENDCG
-        }
-        Pass
-        {
-            Tags{ "RenderType"="Transparent" "Queue"="Transparent"}
-            Blend One One
-            ZWrite Off
-            CGPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
-            #include "UnityCG.cginc"
-
-            float _AuraWidth;
-            float _FlowSpeed;
-            fixed3 _AuraColor;
-            struct v2f
-            {
-                float4 pos:SV_POSITION;
-                float3 wNormal: TEXCOORD0;
-                float3 wPos: TEXCOORD1;
-                float2 uv: TEXCOORD2;
+            struct Varyings {
+                float4 positionCS : SV_POSITION;
+                float3 worldNormal: TEXCOORD0;
+                float3 worldPos   : TEXCOORD1;
+                float2 uv         : TEXCOORD2;
             };
-            v2f vert (appdata_full v)
-            {
-                v2f data;
-                v.vertex.xyz += _AuraWidth * v.tangent.xyz;
-                data.pos = UnityObjectToClipPos(v.vertex);
-                data.wNormal = UnityObjectToWorldNormal(v.normal);
-                data.wPos = mul(unity_ObjectToWorld, v.vertex).xyz;
-                data.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
-                return data;
+
+            // 共享同一个 CBUFFER
+            CBUFFER_START(UnityPerMaterial)
+                half4 _MainColor;
+                half4 _AuraColor;
+                float4 _MainTex_ST;
+                float4 _BumpMap_ST;
+                float _BumpScale;
+                float _AuraWidth;
+                float _FlowSpeed;
+                float _DissolveVal;
+                float _FresnelPower;
+            CBUFFER_END
+            
+            TEXTURE2D(_MaskTex); SAMPLER(sampler_MaskTex);
+            TEXTURE2D(_AuraFlowMap); SAMPLER(sampler_AuraFlowMap);
+
+            Varyings vert (Attributes v) {
+                Varyings o;
+                // 外扩顶点
+                float3 posOS = v.positionOS.xyz + v.normalOS * _AuraWidth;
+                o.positionCS = TransformObjectToHClip(posOS);
+                o.worldNormal = TransformObjectToWorldNormal(v.normalOS);
+                o.worldPos = TransformObjectToWorld(posOS);
+                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                return o;
             }
-            fixed4 frag (v2f i) : SV_Target
-            {
-                float3 viewDir = normalize(_WorldSpaceCameraPos - i.wPos);
-                float fresnel = pow(1 - saturate(dot(viewDir, normalize(i.wNormal))), _FresnelPower);
-                fixed mask = tex2D(_MaskTex, i.uv).r;
 
-                fixed3 noise = tex2D(_AuraFlowMap, float2(i.uv.x + _Time.y * _FlowSpeed, i.uv.y + _Time.y * _FlowSpeed)) ;
+            half4 frag (Varyings i) : SV_Target {
+                // 计算菲涅尔
+                float3 viewDir = normalize(GetWorldSpaceViewDir(i.worldPos));
+                float fresnel = pow(1.0 - saturate(dot(viewDir, normalize(i.worldNormal))), _FresnelPower);
+                
+                // 遮罩与噪波
+                half mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv).r;
+                float2 flowUV = i.uv + _Time.y * _FlowSpeed;
+                half3 noise = SAMPLE_TEXTURE2D(_AuraFlowMap, sampler_AuraFlowMap, flowUV).rgb;
 
-                return float4(_AuraColor * noise * fresnel * mask * (1 -_DissolveVal) , 1);
+                // 结果计算
+                half3 finalRGB = _AuraColor.rgb * noise * fresnel * mask * (1.0 - _DissolveVal);
+                return half4(finalRGB, 1.0);
             }
-
-            ENDCG
+            ENDHLSL
         }
-
     }
     Fallback "Diffuse"
 }

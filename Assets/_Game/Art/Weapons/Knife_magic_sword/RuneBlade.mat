@@ -73,7 +73,7 @@ Material:
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _DissolveVal: 1
+    - _DissolveVal: 0
     - _DstBlend: 0
     - _FlowSpeed: 0.1
     - _FresnelPower: 1.93
