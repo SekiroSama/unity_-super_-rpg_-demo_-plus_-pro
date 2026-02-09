@@ -164,6 +164,9 @@ public abstract class EnemyController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 正在后退对峙
+    /// </summary>
     public virtual void OnBackAwaying()
     {
         if (!isBackAwaying) return;
@@ -307,7 +310,7 @@ public abstract class EnemyController : MonoBehaviour
     {
         if (!isFighting) return;
         this.transform.LookAt(GameManager.Instance.playerController.transform.position);
-        //_navMeshAgent.updateRotation = false;
+        _navMeshAgent.updateRotation = false;
         //this.transform.Rotate()
     }
     #endregion
