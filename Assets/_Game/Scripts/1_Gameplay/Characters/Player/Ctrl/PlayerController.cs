@@ -63,7 +63,6 @@ public class PlayerController : MonoBehaviour
         CheckIsGrounded();
         //获取角色运动状态
         GetTheSpeed();
-        Debug.Log(verSpeed);
     }
     #region 角色运动状态
     

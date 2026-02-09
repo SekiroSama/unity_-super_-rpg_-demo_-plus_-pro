@@ -27,7 +27,7 @@ public class PlayerGroundState : StateBase
         if (GameManager.Instance.inputManager.CurrentInput.isJump)
         {
             float jumpTimer = 0f;
-            TimerMgr.Instance.CreateTimer(true, 500, () =>
+            TimerMgr.Instance.CreateTimer(true, 1000, () =>
             {
                 Physics.gravity = new Vector3(0, owner.gravity, 0);
             }, 20, () =>
