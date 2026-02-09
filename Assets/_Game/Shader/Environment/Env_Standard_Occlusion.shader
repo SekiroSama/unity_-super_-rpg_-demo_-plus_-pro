@@ -1,257 +1,163 @@
-﻿Shader "Custom/Environment/StandardOcclusion"
+﻿Shader "Custom/Environment/StandardOcclusion_URP"
 {
-   Properties
+    Properties
     {
         _MainColor("MainColor", Color) = (1,1,1,1)
-        _MainTex("MainTex", 2D) = ""{}
-        _BumpMap("BumpMap", 2D) = ""{}
+        _MainTex("MainTex", 2D) = "white"{}
+        _BumpMap("BumpMap", 2D) = "bump"{}
         _BumpScale("BumpScale", Range(0,1)) = 1
         _ClipRadius ("ClipRadius", Range(0, 1)) = 0.9
     }
     SubShader
     {
-        Tags{ "RenderType"="Opaque" "Queue"="Geometry"}
+        // URP 识别标签
+        Tags{ "RenderType"="Opaque" "Queue"="Geometry" "RenderPipeline" = "UniversalPipeline"}
+        
         Pass
         {
-            Tags { "LightMode"="ForwardBase" }
-            CGPROGRAM
+            Name "UniversalForward"
+            Tags { "LightMode"="UniversalForward" }
+
+            HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #pragma multi_compile_fwdbase
-            #include "UnityCG.cginc"
-            #include "Lighting.cginc"
-            #include "AutoLight.cginc"
-            float4 _MainColor;//漫反射颜色
-            sampler2D _MainTex;//颜色纹理
-            float4 _MainTex_ST;//颜色纹理的缩放和平移
-            sampler2D _BumpMap;//法线纹理
-            float4 _BumpMap_ST;//法线纹理的缩放和平移
-            float _BumpScale;//凹凸程度
-            float4 _PlayerPos;//玩家位置
-            float _ClipRadius;//裁剪半径
-            struct v2f
+            
+            // URP 关键字，用于接收阴影和光照设置
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
+            #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
+            #pragma multi_compile _ _SHADOWS_SOFT
+
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+
+            // 材质数据定义 (SRP Batcher 兼容)
+            CBUFFER_START(UnityPerMaterial)
+                float4 _MainColor;
+                float4 _MainTex_ST;
+                float4 _BumpMap_ST;
+                float _BumpScale;
+                float4 _PlayerPos;
+                float _ClipRadius;
+            CBUFFER_END
+
+            TEXTURE2D(_MainTex);      SAMPLER(sampler_MainTex);
+            TEXTURE2D(_BumpMap);      SAMPLER(sampler_BumpMap);
+
+            struct Attributes
             {
-                float4 pos:SV_POSITION;
-                //float2 uvTex:TEXCOORD0;
-                //float2 uvBump:TEXCOORD1;
-                //我们可以单独的声明两个float2的成员用于记录 颜色和法线纹理的uv坐标
-                //也可以直接声明一个float4的成员 xy用于记录颜色纹理的uv，zw用于记录法线纹理的uv
-                float4 uv:TEXCOORD0;
-                //顶点相对于世界坐标的位置 主要用于 之后的 视角方向的计算
-                //float3 worldPos:TEXCOORD1;
-                //切线 到 世界空间的 变换矩阵
-                //float3x3 rotation:TEXCOORD2;
-                //代表我们切线空间到世界空间的 变换矩阵的3行
-                float4 TtoW0:TEXCOORD1;
-                float4 TtoW1:TEXCOORD2;
-                float4 TtoW2:TEXCOORD3;
-                float3 worldPos : TEXCOORD5;
-                SHADOW_COORDS(4)
+                float4 positionOS : POSITION;
+                float2 uv : TEXCOORD0;
+                float3 normalOS : NORMAL;
+                float4 tangentOS : TANGENT;
             };
 
-            float Dither4x4(float4 pos, float alpha)
+            struct Varyings
             {
-                float4x4 baier =   float4x4(1, 9, 3, 11,
+                float4 positionCS : SV_POSITION;
+                float2 uv : TEXCOORD0; // xy: Main, zw: Bump
+                float3 positionWS : TEXCOORD1;
+                float3 normalWS : TEXCOORD2;
+                float3 tangentWS : TEXCOORD3;
+                float3 bitangentWS : TEXCOORD4;
+            };
+
+            // 你的 Dither 算法 (保持不变，除了参数类型微调)
+            float Dither4x4(float2 screenPos, float alpha)
+            {
+                float4x4 baier = float4x4(1, 9, 3, 11,
                                             13, 5, 15, 7,
                                             4, 12, 2, 10,
                                             16, 8, 14, 6);
-                float x = fmod(pos.x, 4);
-                float y = fmod(pos.y, 4);
-                float menkan = baier[(int)x][(int)y]/17;
+                // screenPos 已经是像素坐标
+                float x = fmod(screenPos.x, 4);
+                float y = fmod(screenPos.y, 4);
+                float menkan = baier[(int)x][(int)y] / 17.0;
                 return alpha - menkan;
             }
 
-            v2f vert (appdata_full v)
+            Varyings vert(Attributes input)
             {
-                v2f data;
-                //把模型空间下的顶点转到裁剪空间下
-                data.pos = UnityObjectToClipPos(v.vertex);
-                //计算纹理的缩放偏移
-                data.uv.xy = v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;
-                data.uv.zw = v.texcoord.xy * _BumpMap_ST.xy + _BumpMap_ST.zw;
-                //得到世界空间下的 顶点位置 用于之后在片元中计算视角方向（世界空间下的）
-                //data.worldPos = mul(unity_ObjectToWorld, v.vertex);
-                float3 worldPos = mul(unity_ObjectToWorld, v.vertex);
-                data.worldPos = worldPos;
-                //把模型空间下的法线、切线转换到世界空间下
-                float3 worldNormal = UnityObjectToWorldNormal(v.normal);
-                float3 worldTangent = UnityObjectToWorldDir(v.tangent);
-                //计算副切线 计算叉乘结果后 垂直与切线和法线的向量有两条 通过乘以 切线当中的w，就可以确定是哪一条
-                float3 worldBinormal = cross(normalize(worldTangent), normalize(worldNormal)) * v.tangent.w;
-                //这个就是我们 切线空间到世界空间的 转换矩阵
-                //data.rotation = float3x3( worldTangent.x, worldBinormal.x,  worldNormal.x,
-                //                          worldTangent.y, worldBinormal.y,  worldNormal.y,
-                //                          worldTangent.z, worldBinormal.z,  worldNormal.z);
-                data.TtoW0 = float4(worldTangent.x, worldBinormal.x,  worldNormal.x, worldPos.x);
-                data.TtoW1 = float4(worldTangent.y, worldBinormal.y,  worldNormal.y, worldPos.y);
-                data.TtoW2 = float4(worldTangent.z, worldBinormal.z,  worldNormal.z, worldPos.z);
-                TRANSFER_SHADOW(data);
-                return data;
+                Varyings output;
+
+                // 1. 顶点位置转换 (Object -> Clip)
+                output.positionCS = TransformObjectToHClip(input.positionOS.xyz);
+                
+                // 2. 顶点位置转换 (Object -> World)
+                output.positionWS = TransformObjectToWorld(input.positionOS.xyz);
+
+                // 3. 法线/切线转换 (Object -> World)
+                VertexNormalInputs normalInput = GetVertexNormalInputs(input.normalOS, input.tangentOS);
+                output.normalWS = normalInput.normalWS;
+                output.tangentWS = normalInput.tangentWS;
+                output.bitangentWS = normalInput.bitangentWS;
+
+                // 4. UV 处理
+                output.uv = input.uv; // 稍后在片元做 ST 计算或者在这里做都可以，为了对其逻辑，这里简化
+
+                return output;
             }
-            fixed4 frag (v2f i) : SV_Target
+
+            half4 frag(Varyings input) : SV_Target
             {
-                _PlayerPos.y += 0.4;
-                float3 lineVec = _WorldSpaceCameraPos - _PlayerPos;
-                float3 pixelVec = i.worldPos - _PlayerPos;
-                float t = dot(pixelVec,lineVec) / dot(lineVec, lineVec);//计算pv在lv上的投影算法，避免开根号
-                float3 closestPoint = _PlayerPos + lineVec * saturate(t); 
-                float dist = distance(i.worldPos, closestPoint);//点到直线的距离 因为不能直接传直线，要先有一个点，所以要算垂足，所以先算投影
-                float alpha = (t <0 || t > 1) ? 1 : smoothstep(0, _ClipRadius, dist);//_ClipRadius = 0时关闭裁剪
-                clip(Dither4x4(i.pos, alpha));
+                // --- 1. 遮挡半透明逻辑 (Occlusion Logic) ---
+                // 重构 UV
+                float2 uvMain = input.uv * _MainTex_ST.xy + _MainTex_ST.zw;
+                float2 uvBump = input.uv * _BumpMap_ST.xy + _BumpMap_ST.zw;
 
+                float3 playerPos = _PlayerPos.xyz;
+                playerPos.y += 0.4;
+                
+                float3 camPos = GetCameraPositionWS();
+                float3 lineVec = camPos - playerPos;
+                float3 pixelVec = input.positionWS - playerPos;
+                
+                // 投影计算
+                float t = dot(pixelVec, lineVec) / dot(lineVec, lineVec);
+                float3 closestPoint = playerPos + lineVec * saturate(t);
+                float dist = distance(input.positionWS, closestPoint);
+                
+                float alpha = (t < 0 || t > 1) ? 1 : smoothstep(0, _ClipRadius, dist);
+                
+                // Dither 裁剪 (input.positionCS.xy 在 HLSL 中即为屏幕像素坐标)
+                clip(Dither4x4(input.positionCS.xy, alpha));
 
-                //世界空间下光的方向
-                fixed3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
-                //世界空间下视角方向
-                float3 worldPos = float3(i.TtoW0.w, i.TtoW1.w, i.TtoW2.w);
-                fixed3 viewDir = normalize(UnityWorldSpaceViewDir(worldPos));
-                //通过纹理采样函数 取出法线纹理贴图当中的数据
-                float4 packedNormal = tex2D(_BumpMap, i.uv.zw);
-                //将我们取出来的法线数据 进行逆运算并且可能会进行解压缩的运算，最终得到切线空间下的法线数据
-                float3 tangentNormal = UnpackNormal(packedNormal);
-                //乘以凹凸程度的系数
-                tangentNormal.xy *= _BumpScale;
-                tangentNormal.z = sqrt(1.0 - saturate(dot(tangentNormal.xy, tangentNormal.xy)));
-                //把计算完毕后的切线空间下的法线转换到世界空间下
-                //float3x3 rotation = float3x3(i.TtoW0.xyz, i.TtoW1.xyz, i.TtoW2.xyz );
-                //float3 worldNormal = mul(rotation, tangentNormal);
-                //本质 就是在进行矩阵运算
-                float3 worldNormal = float3(dot(i.TtoW0.xyz, tangentNormal), dot(i.TtoW1.xyz, tangentNormal), dot(i.TtoW2.xyz, tangentNormal));
-                //接下来就来处理 带颜色纹理的 布林方光照模型计算
-                //颜色纹理和漫反射颜色的 叠加
-                fixed3 albedo = tex2D(_MainTex, i.uv.xy) * _MainColor.rgb;
-                //兰伯特
-                fixed3 lambertColor = _LightColor0.rgb * albedo.rgb * max(0, dot(worldNormal, normalize(lightDir)));
-              
-                UNITY_LIGHT_ATTENUATION(atten, i, worldPos);
-              
-               //布林方
-                fixed3 color = UNITY_LIGHTMODEL_AMBIENT.rgb * albedo + lambertColor * atten;
-                return fixed4(color.rgb, 1);
+                // --- 2. 法线贴图处理 ---
+                half4 packedNormal = SAMPLE_TEXTURE2D(_BumpMap, sampler_BumpMap, uvBump);
+                float3 localNormal = UnpackNormalScale(packedNormal, _BumpScale);
+                
+                // 构建 TBN 矩阵并转换法线到世界空间
+                float3x3 TBN = float3x3(normalize(input.tangentWS), normalize(input.bitangentWS), normalize(input.normalWS));
+                float3 worldNormal = normalize(mul(localNormal, TBN)); // 注意乘法顺序，HLSL通常是 mul(vec, matrix) 或 mul(matrix, vec) 取决于矩阵构造
+
+                // --- 3. 光照计算 (Main Light) ---
+                float4 shadowCoord = TransformWorldToShadowCoord(input.positionWS);
+                Light mainLight = GetMainLight(shadowCoord);
+                
+                half3 albedo = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uvMain).rgb * _MainColor.rgb;
+                
+                // 兰伯特漫反射 (N dot L)
+                half NdotL = saturate(dot(worldNormal, mainLight.direction));
+                half3 lightingColor = albedo * (mainLight.color * mainLight.distanceAttenuation * mainLight.shadowAttenuation * NdotL);
+                
+                // 环境光
+                lightingColor += albedo * SampleSH(worldNormal); // URP 获取环境光的方法
+
+                // --- 4. 额外光照循环 (Additional Lights) ---
+                #ifdef _ADDITIONAL_LIGHTS
+                uint pixelLightCount = GetAdditionalLightsCount();
+                for (uint lightIndex = 0; lightIndex < pixelLightCount; ++lightIndex)
+                {
+                    Light light = GetAdditionalLight(lightIndex, input.positionWS);
+                    half NdotL_add = saturate(dot(worldNormal, light.direction));
+                    lightingColor += albedo * (light.color * light.distanceAttenuation * light.shadowAttenuation * NdotL_add);
+                }
+                #endif
+
+                return half4(lightingColor, 1.0);
             }
-            ENDCG
+            ENDHLSL
         }
-        Pass
-        {
-            Tags { "LightMode"="ForwardAdd" }
-            Blend One One
-            CGPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
-            #pragma multi_compile_fwdadd
-            #include "UnityCG.cginc"
-            #include "Lighting.cginc"
-            #include "AutoLight.cginc"
-            float4 _MainColor;//漫反射颜色
-            sampler2D _MainTex;//颜色纹理
-            float4 _MainTex_ST;//颜色纹理的缩放和平移
-            sampler2D _BumpMap;//法线纹理
-            float4 _BumpMap_ST;//法线纹理的缩放和平移
-            float _BumpScale;//凹凸程度
-            float4 _PlayerPos;//玩家位置
-            float _ClipRadius;//裁剪半径
-            struct v2f
-            {
-                float4 pos:SV_POSITION;
-                //float2 uvTex:TEXCOORD0;
-                //float2 uvBump:TEXCOORD1;
-                //我们可以单独的声明两个float2的成员用于记录 颜色和法线纹理的uv坐标
-                //也可以直接声明一个float4的成员 xy用于记录颜色纹理的uv，zw用于记录法线纹理的uv
-                float4 uv:TEXCOORD0;
-                //顶点相对于世界坐标的位置 主要用于 之后的 视角方向的计算
-                //float3 worldPos:TEXCOORD1;
-                //切线 到 世界空间的 变换矩阵
-                //float3x3 rotation:TEXCOORD2;
-                //代表我们切线空间到世界空间的 变换矩阵的3行
-                float4 TtoW0:TEXCOORD1;
-                float4 TtoW1:TEXCOORD2;
-                float4 TtoW2:TEXCOORD3;
-                SHADOW_COORDS(4)
-                float3 worldPos : TEXCOORD5;
-            };
-
-            float Dither4x4(float4 pos, float alpha)
-            {
-                float4x4 baier =   float4x4(1, 9, 3, 11,
-                                            13, 5, 15, 7,
-                                            4, 12, 2, 10,
-                                            16, 8, 14, 6);
-                float x = fmod(pos.x, 4);
-                float y = fmod(pos.y, 4);
-                float menkan = baier[(int)x][(int)y]/16;
-                return alpha - menkan;
-            }
-
-            v2f vert (appdata_full v)
-            {
-                v2f data;
-                //把模型空间下的顶点转到裁剪空间下
-                data.pos = UnityObjectToClipPos(v.vertex);
-                //计算纹理的缩放偏移
-                data.uv.xy = v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;
-                data.uv.zw = v.texcoord.xy * _BumpMap_ST.xy + _BumpMap_ST.zw;
-                //得到世界空间下的 顶点位置 用于之后在片元中计算视角方向（世界空间下的）
-                //data.worldPos = mul(unity_ObjectToWorld, v.vertex);
-                float3 worldPos = mul(unity_ObjectToWorld, v.vertex);
-                data.worldPos = worldPos;
-                //把模型空间下的法线、切线转换到世界空间下
-                float3 worldNormal = UnityObjectToWorldNormal(v.normal);
-                float3 worldTangent = UnityObjectToWorldDir(v.tangent);
-                //计算副切线 计算叉乘结果后 垂直与切线和法线的向量有两条 通过乘以 切线当中的w，就可以确定是哪一条
-                float3 worldBinormal = cross(normalize(worldTangent), normalize(worldNormal)) * v.tangent.w;
-                //这个就是我们 切线空间到世界空间的 转换矩阵
-                //data.rotation = float3x3( worldTangent.x, worldBinormal.x,  worldNormal.x,
-                //                          worldTangent.y, worldBinormal.y,  worldNormal.y,
-                //                          worldTangent.z, worldBinormal.z,  worldNormal.z);
-                data.TtoW0 = float4(worldTangent.x, worldBinormal.x,  worldNormal.x, worldPos.x);
-                data.TtoW1 = float4(worldTangent.y, worldBinormal.y,  worldNormal.y, worldPos.y);
-                data.TtoW2 = float4(worldTangent.z, worldBinormal.z,  worldNormal.z, worldPos.z);
-                TRANSFER_SHADOW(data);
-                return data;
-            }
-            fixed4 frag (v2f i) : SV_Target
-            {
-                _PlayerPos.y += 0.4;
-                float3 lineVec = _WorldSpaceCameraPos - _PlayerPos;
-                float3 pixelVec = i.worldPos - _PlayerPos;
-                float t = saturate(dot(pixelVec,lineVec) / dot(lineVec, lineVec));//计算pv在lv上的投影算法，避免开根号
-                float3 closestPoint = _PlayerPos + lineVec * t; 
-                float dist = distance(i.worldPos, closestPoint);//点到直线的距离 因为不能直接传直线，要先有一个点，所以要算垂足，所以先算投影
-                float alpha = smoothstep(1 - _ClipRadius, 1, dist);//alpha > 1时关闭裁剪
-                clip(Dither4x4(i.pos, alpha));
-
-                //世界空间下光的方向
-                fixed3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
-                //世界空间下视角方向
-                float3 worldPos = float3(i.TtoW0.w, i.TtoW1.w, i.TtoW2.w);
-                fixed3 viewDir = normalize(UnityWorldSpaceViewDir(worldPos));
-                //通过纹理采样函数 取出法线纹理贴图当中的数据
-                float4 packedNormal = tex2D(_BumpMap, i.uv.zw);
-                //将我们取出来的法线数据 进行逆运算并且可能会进行解压缩的运算，最终得到切线空间下的法线数据
-                float3 tangentNormal = UnpackNormal(packedNormal);
-                //乘以凹凸程度的系数
-                tangentNormal.xy *= _BumpScale;
-                tangentNormal.z = sqrt(1.0 - saturate(dot(tangentNormal.xy, tangentNormal.xy)));
-                //把计算完毕后的切线空间下的法线转换到世界空间下
-                //float3x3 rotation = float3x3(i.TtoW0.xyz, i.TtoW1.xyz, i.TtoW2.xyz );
-                //float3 worldNormal = mul(rotation, tangentNormal);
-                //本质 就是在进行矩阵运算
-                float3 worldNormal = float3(dot(i.TtoW0.xyz, tangentNormal), dot(i.TtoW1.xyz, tangentNormal), dot(i.TtoW2.xyz, tangentNormal));
-                //接下来就来处理 带颜色纹理的 布林方光照模型计算
-                //颜色纹理和漫反射颜色的 叠加
-                fixed3 albedo = tex2D(_MainTex, i.uv.xy) * _MainColor.rgb;
-                //兰伯特
-                fixed3 lambertColor = _LightColor0.rgb * albedo.rgb * max(0, dot(worldNormal, normalize(lightDir)));
-              
-                UNITY_LIGHT_ATTENUATION(atten, i, worldPos);
-              
-               //布林方
-                fixed3 color = UNITY_LIGHTMODEL_AMBIENT.rgb * albedo + lambertColor * atten;
-                return fixed4(color.rgb, 1);
-            }
-            ENDCG
-        }
-
     }
-    Fallback "Diffuse"
+    FallBack "Hidden/Universal Render Pipeline/FallbackError"
 }
