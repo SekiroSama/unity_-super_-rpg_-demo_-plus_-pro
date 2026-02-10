@@ -161,9 +161,9 @@ public class FatFatDragon_AI : Enemy_AI
         /// <param MoveToTargetNode="targetPosList, speed">在一条指定路径上来回移动</param> 通常返回ing 到了后返回成功
         //  }
         List<BTNode> root_Patrol_BackAndForth_ChildNodes = new List<BTNode>();//巡逻 子节点
-        MoveToTargetNode root_Patrol_BackAndForth_MoveToTargetNode = new MoveToTargetNode(Enemy_AIBlackBoard_Config.KEY_EnemyController_Patrol0, 0f, enemyController.curentSpeedRatio);
+        MoveToTargetNode root_Patrol_BackAndForth_MoveToTargetNode = new MoveToTargetNode(Enemy_AIBlackBoard_Config.KEY_EnemyController_Patrol0, 1f, enemyController.curentSpeedRatio);
         root_Patrol_BackAndForth_ChildNodes.Add(root_Patrol_BackAndForth_MoveToTargetNode);
-        MoveToTargetNode root_Patrol_BackAndForth_MoveToTargetNode2 = new MoveToTargetNode(Enemy_AIBlackBoard_Config.KEY_EnemyController_Patrol1, 0f, enemyController.curentSpeedRatio);
+        MoveToTargetNode root_Patrol_BackAndForth_MoveToTargetNode2 = new MoveToTargetNode(Enemy_AIBlackBoard_Config.KEY_EnemyController_Patrol1, 1f, enemyController.curentSpeedRatio);
         root_Patrol_BackAndForth_ChildNodes.Add(root_Patrol_BackAndForth_MoveToTargetNode2);
 
         SequenceNode root_Patrol_BackAndForth = new SequenceNode(root_Patrol_BackAndForth_ChildNodes);//巡逻 节点

@@ -37,6 +37,8 @@ public class GameManager : MonoBehaviour
     private Transform FatFatDragonHome;
     [SerializeField]
     private Transform[] FatFatDragon_Patrols;
+    [SerializeField]
+    private Transform Player_BornPos;
 
     private void Awake()
     {
@@ -88,6 +90,7 @@ public class GameManager : MonoBehaviour
         cameraManager.camFreeLook.Follow = this.playerController.transform;
         cameraManager.camFreeLook.LookAt = this.playerController.LookPos;
         this.playerController.gameObject.transform.SetParent(CharactersTransform);
+        this.playerController.gameObject.transform.position = Player_BornPos.position;
     }
 
     /// <summary>
