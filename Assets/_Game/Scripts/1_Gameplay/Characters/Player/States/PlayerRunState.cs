@@ -10,8 +10,9 @@ public class PlayerRunState : PlayerGroundState
     public override void OnEnter()
     {
         owner.PlayAnimation(AnimationConfig_UnityChan.StateHashes.HorLocomotion, AnimationConfig_UnityChan.TransitionSettings.NormalTransitionDuration);
+        PlayerGroundState.runValue = 2f;
         runTimer = 0;
-        timerId = TimerMgr.Instance.CreateTimer(false, 8000, () => { }, 200, () =>
+        timerId = TimerMgr.Instance.CreateTimer(false, 8000, () => { }, 20, () =>
         {
             runTimer += .2f;
         });
@@ -29,13 +30,14 @@ public class PlayerRunState : PlayerGroundState
             return;
         }
 
-        owner.UpdateHorLocomotion(Mathf.Lerp(inputValue,1.5f,runTimer/owner.fadeTime));
+        owner.UpdateHorLocomotion(Mathf.Lerp(inputValue,PlayerGroundState.runValue,runTimer/owner.fadeTime));
         owner.Move(GameManager.Instance.inputManager.CurrentInput.MoveVector);
     }
     public override void OnExit() 
     {
+        TimerMgr.Instance.StopTimer(timerId);
         //GameManager.Instance.runTimer = 0;
-        runValue = 1.5f;
+        PlayerGroundState.runValue = 2f;
         owner.moveSpeed = owner.walkSpeed;
     }
 }

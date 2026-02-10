@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerGroundState : StateBase
 {
-    public float inputValue;
-    public float runValue;
+    protected static float inputValue;
+    protected static float runValue = 2f;
     public override void OnEnter()
     {
 
@@ -14,16 +14,19 @@ public class PlayerGroundState : StateBase
     {
         
         inputValue = GameManager.Instance.inputManager.CurrentInput.MoveVector.sqrMagnitude;
+        //在空中
         if (Mathf.Abs(owner.verSpeed) > 0.1f&&!owner.isGrounded)
         {
             stateMachine.ChangeState<PlayerAirState>();
             return;
         }
+        //攻击输入
         if (GameManager.Instance.inputManager.CurrentInput.IsAttack)
         {
             stateMachine.ChangeState<PlayerAttackState>();
             return;
         }
+        //跳跃
         if (GameManager.Instance.inputManager.CurrentInput.isJump)
         {
             float jumpTimer = 0f;
@@ -37,16 +40,19 @@ public class PlayerGroundState : StateBase
             });
             return;
         }
+        //没有移动
         if (GameManager.Instance.inputManager.CurrentInput.MoveVector.sqrMagnitude <= 0.01)
         {
             stateMachine.ChangeState<PlayerIdleState>();
             return;
         }
+        //移动
         if (GameManager.Instance.inputManager.CurrentInput.MoveVector.sqrMagnitude > 0.01&&!GameManager.Instance.inputManager.CurrentInput.IsRun)
         {
             stateMachine.ChangeState<PlayerMoveState>();
             return;
         }
+        //跑步
         if (GameManager.Instance.inputManager.CurrentInput.IsRun)
         {
             stateMachine.ChangeState<PlayerRunState>();
