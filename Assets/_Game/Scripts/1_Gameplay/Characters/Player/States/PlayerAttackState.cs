@@ -26,7 +26,7 @@ public class PlayerAttackState : StateBase
             _hasAtkInput = true;
         }
 
-        if (owner.IsAnimationFinished(comboHashIDs[comboIndex], comboIndex == 2 ? 0.5f : 1f))
+        if (owner.IsAnimationFinished(comboHashIDs[comboIndex], comboIndex == 2 ? 0.25f : 0.75f))
         {
             if (_hasAtkInput && comboIndex < 2)
             {

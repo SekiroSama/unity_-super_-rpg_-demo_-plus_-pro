@@ -295,15 +295,15 @@ BlendTree:
   m_Name: VerLocomotion
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: -998496362607748373, guid: ac75d16809dc0054d8e3449e7ba665f2, type: 3}
-    m_Threshold: 0.0155210495
+    m_Motion: {fileID: 7400002, guid: cfb019d410ec3e548bdfbf114377a8dc, type: 3}
+    m_Threshold: -1
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Speed
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 9067093048684652814, guid: ac75d16809dc0054d8e3449e7ba665f2, type: 3}
+    m_Motion: {fileID: 7400002, guid: 945b55edfc0ad224ca4acd04e340617f, type: 3}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -312,7 +312,7 @@ BlendTree:
     m_Mirror: 0
   m_BlendParameter: YSpeed
   m_BlendParameterY: Speed
-  m_MinThreshold: 0.0155210495
+  m_MinThreshold: -1
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0

@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
         //状态帧更新
         stateMachine.OnUpdate();
         //角色混合树动画参数更新
-        UpdateVerLocomotion(1);
+        UpdateVerLocomotion(Mathf.Clamp(this.verSpeed,-1,1));
         //UpdateLocomotion(GameManager.Instance.InputManager.CurrentInput.MoveVector.magnitude);
         //处理角色重力
         HandGravity();
