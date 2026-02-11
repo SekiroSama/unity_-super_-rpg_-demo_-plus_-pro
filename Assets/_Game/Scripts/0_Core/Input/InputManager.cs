@@ -11,6 +11,7 @@ public class InputManager
         public bool IsRun;
         public bool IsAttack;
         public bool isMoveing;
+        public bool isDodge;
     }
 
     PlayerInputData _playerInputData;
@@ -55,6 +56,8 @@ public class InputManager
             CheckIsJump();
 
             UpdateFreelookInput();
+
+            CheckIsDodge();
         }
     }
 
@@ -158,6 +161,15 @@ public class InputManager
         }
 #endif
     }
+    private void CheckIsDodge()
+    {
+#if UNITY_ANDROID && !UNITY_EDITOR
+        _playerInputData.IsAttack = uibtnAttackPressed;
+        uibtnAttackPressed = false;
+#else
+        _playerInputData.isDodge = Input.GetKeyDown(KeyCode.LeftControl);
+#endif
+    }
     /// <summary>
     /// 检查是否攻击
     /// </summary>
@@ -170,10 +182,13 @@ public class InputManager
         _playerInputData.IsAttack = Input.GetMouseButtonDown(0);
 #endif
     }
+    /// <summary>
+    /// 检查是否跳跃
+    /// </summary>
     private void CheckIsJump()
     {
 #if UNITY_ANDROID && !UNITY_EDITOR
-        _playerInputData.IsAttack = uibtnAttackPressed;
+        _playerInputData.IsJump= uibtnJumpPressed;
         uibtnAttackPressed = false;
 #else
         _playerInputData.isJump = Input.GetKey(KeyCode.Space);

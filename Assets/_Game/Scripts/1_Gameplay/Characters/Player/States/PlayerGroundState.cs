@@ -40,6 +40,12 @@ public class PlayerGroundState : StateBase
             });
             return;
         }
+        //闪避
+        if (GameManager.Instance.inputManager.CurrentInput.isDodge)
+        {
+            stateMachine.ChangeState<PlayerDodgeState>();
+            return;
+        }
         //没有移动
         if (GameManager.Instance.inputManager.CurrentInput.MoveVector.sqrMagnitude <= 0.01)
         {
@@ -58,7 +64,7 @@ public class PlayerGroundState : StateBase
             stateMachine.ChangeState<PlayerRunState>();
             return;
         }
-     
+
 
     }
     public override void OnExit()

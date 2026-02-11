@@ -6,7 +6,7 @@ public class PlayerJumpUpState : PlayerAirState
 {
     public override void OnEnter()
     {
-        owner.PlayAnimation(AnimationConfig_UnityChan.StateHashes.VerLocomotion, AnimationConfig_UnityChan.TransitionSettings.AttackOverTransitionDuration);
+        owner.PlayAnimation(AnimationConfig_UnityChan.StateHashes.VerLocomotion, AnimationConfig_UnityChan.TransitionSettings.NormalTransitionDuration);
     }
     public override void OnUpdate()
     {

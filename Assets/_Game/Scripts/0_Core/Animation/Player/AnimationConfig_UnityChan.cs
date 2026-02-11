@@ -20,6 +20,7 @@ public class AnimationConfig_UnityChan
         public static readonly int Attack01 = Animator.StringToHash("Attack01");
         public static readonly int Attack02 = Animator.StringToHash("Attack02");
         public static readonly int Attack03 = Animator.StringToHash("Attack03");
+        public static readonly int Dodge = Animator.StringToHash("Dodge");
     }
 
     public static class StatePriority
@@ -27,8 +28,9 @@ public class AnimationConfig_UnityChan
         public const int Idle = 0;
         public const int Run = 1;
         public const int Move = 2;
-        public const int Attack = 3;
-        public const int Jump = 4;
+        public const int Dodge = 3;
+        public const int Attack = 4;
+        public const int Jump = 5;
     }
 
     public static readonly Dictionary<System.Type, int[]> StateToParameters = new Dictionary<System.Type, int[]>

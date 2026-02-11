@@ -65,10 +65,12 @@ public class PlayerController : MonoBehaviour
         GetTheSpeed();
     }
     #region 角色运动状态
-    
-    public void AddForce(Vector3 force)
+    /// <summary>
+    /// 强制角色向某个方向移动
+    /// </summary>
+    public void RudeMove(Vector3 direction)
     {
-        CC.Move(force * Time.deltaTime);
+        CC.Move(direction);
     }
     /// <summary>
     /// 获取角色运动状态,水平方向的速度和垂直方向的速度
