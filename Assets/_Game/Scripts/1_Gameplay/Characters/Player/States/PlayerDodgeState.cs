@@ -16,12 +16,13 @@ public class PlayerDodgeState : StateBase
             isFinish = true;
         }, 20, () =>
         {
+            
             timer += .02f;
         });
     }
     public override void OnUpdate()
     {
-       
+        owner.Move(-GameManager.Instance.inputManager.CurrentInput.MoveVector.normalized * owner.moveSpeed);
         if (isFinish)
         {
             stateMachine.ChangeState<PlayerIdleState>();
