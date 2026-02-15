@@ -161,27 +161,62 @@ Shader "URP/UnityChan/HairDoubleSided"
             ENDHLSL
         }
 
+        // 修不好直接用fullback
         // --- Pass 3: Shadow Caster ---
-        Pass
-        {
-            Name "ShadowCaster"
-            Tags { "LightMode" = "ShadowCaster" }
-            HLSLPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-            struct Attributes { float4 positionOS : POSITION; float3 normalOS : NORMAL; };
-            struct Varyings { float4 positionCS : SV_POSITION; };
-            Varyings vert (Attributes input) {
-                Varyings output;
-                float3 positionWS = TransformObjectToWorld(input.positionOS.xyz);
-                float3 normalWS = TransformObjectToWorldNormal(input.normalOS);
-                output.positionCS = TransformWorldToHClip(ApplyShadowBias(positionWS, normalWS, _MainLightPosition.xyz));
-                return output;
-            }
-            half4 frag () : SV_Target { return 0; }
-            ENDHLSL
-        }
+        // Pass
+        // {
+        //     Name "ShadowCaster"
+        //     Tags { "LightMode" = "ShadowCaster" }
+
+        //     ZWrite On
+        //     ZTest LEqual
+
+        //     HLSLPROGRAM
+        //     #pragma vertex vert
+        //     #pragma fragment frag
+
+        //     1. 核心库
+        //     #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+
+        //     2. 【必需】手动引入材质通用库 (位于 core 包)
+        //     这一步是为了防止 Lighting.hlsl 报 LerpWhiteTo 错误
+        //     #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/CommonMaterial.hlsl"
+
+        //     3. 【必需】引入光照总库 (位于 universal 包)
+        //     它会自动引入 Shadows.hlsl，并确保所有函数(如 GetShadowPositionHClip)可用
+        //     #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+
+        //     struct Attributes
+        //     {
+        //         float4 positionOS : POSITION;
+        //         float3 normalOS : NORMAL;
+        //     };
+
+        //     struct Varyings
+        //     {
+        //         float4 positionCS : SV_POSITION;
+        //     };
+
+        //     Varyings vert (Attributes input)
+        //     {
+        //         Varyings output;
+
+        //         1. 先转世界坐标
+        //         float3 positionWS = TransformObjectToWorld(input.positionOS.xyz);
+        //         float3 normalWS = TransformObjectToWorldNormal(input.normalOS);
+
+        //         2. 传给阴影函数 (现在引用了 Lighting.hlsl，这个函数一定存在)
+        //         output.positionCS = GetShadowPositionHClip(positionWS, normalWS);
+
+        //         return output;
+        //     }
+
+        //     half4 frag () : SV_Target
+        //     {
+        //         return 0;
+        //     }
+        //     ENDHLSL
+        // }
     }
     FallBack "Universal Render Pipeline/Lit"
 }
