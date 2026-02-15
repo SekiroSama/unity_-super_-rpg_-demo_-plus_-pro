@@ -4,6 +4,7 @@ Shader "URP/UnityChan/Skin_Standard"
     {
         [MainColor] _BaseColor ("Main Color", Color) = (1, 1, 1, 1)
         _ShadowColor ("Shadow Color", Color) = (0.8, 0.8, 1, 1)
+        _OutLineColor ("OutLine Color", Color) = (0, 0, 0, 0)
         _EdgeThickness ("Outline Thickness", Float) = 1
                 
         [MainTexture] _BaseMap ("Diffuse", 2D) = "white" {}
@@ -130,6 +131,7 @@ Shader "URP/UnityChan/Skin_Standard"
             };
 
             CBUFFER_START(UnityPerMaterial)
+                float4 _OutLineColor;
                 float _EdgeThickness;
             CBUFFER_END
 
@@ -146,7 +148,7 @@ Shader "URP/UnityChan/Skin_Standard"
             }
 
             half4 frag () : SV_Target {
-                return half4(0.4, 0.2, 0.2, 1.0); // Ãè±ßÑÕÉ«
+                return _OutLineColor; // Ãè±ßÑÕÉ«
             }
             ENDHLSL
         }
