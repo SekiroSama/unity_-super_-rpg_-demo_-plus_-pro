@@ -107,46 +107,46 @@ Shader "URP/UnityChan/EyeOpaque"
         }
 
         // 建议添加 ShadowCaster Pass 以支持在 URP 中投射阴影
-        Pass
-        {
-            Name "ShadowCaster"
-            Tags { "LightMode" = "ShadowCaster" }
+        // Pass
+        // {
+        //     Name "ShadowCaster"
+        //     Tags { "LightMode" = "ShadowCaster" }
 
-            ZWrite On
-            ZTest LEqual
+        //     ZWrite On
+        //     ZTest LEqual
 
-            HLSLPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
+        //     HLSLPROGRAM
+        //     #pragma vertex vert
+        //     #pragma fragment frag
 
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+        //     #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
-            struct Attributes
-            {
-                float4 positionOS : POSITION;
-                float3 normalOS : NORMAL;
-            };
+        //     struct Attributes
+        //     {
+        //         float4 positionOS : POSITION;
+        //         float3 normalOS : NORMAL;
+        //     };
 
-            struct Varyings
-            {
-                float4 positionCS : SV_POSITION;
-            };
+        //     struct Varyings
+        //     {
+        //         float4 positionCS : SV_POSITION;
+        //     };
 
-            Varyings vert (Attributes input)
-            {
-                Varyings output;
-                float3 positionWS = TransformObjectToWorld(input.positionOS.xyz);
-                float3 normalWS = TransformObjectToWorldNormal(input.normalOS);
-                output.positionCS = TransformWorldToHClip(ApplyShadowBias(positionWS, normalWS, _MainLightPosition.xyz));
-                return output;
-            }
+        //     Varyings vert (Attributes input)
+        //     {
+        //         Varyings output;
+        //         float3 positionWS = TransformObjectToWorld(input.positionOS.xyz);
+        //         float3 normalWS = TransformObjectToWorldNormal(input.normalOS);
+        //         output.positionCS = TransformWorldToHClip(ApplyShadowBias(positionWS, normalWS, _MainLightPosition.xyz));
+        //         return output;
+        //     }
 
-            half4 frag () : SV_Target
-            {
-                return 0;
-            }
-            ENDHLSL
-        }
+        //     half4 frag () : SV_Target
+        //     {
+        //         return 0;
+        //     }
+        //     ENDHLSL
+        // }
     }
     FallBack "Universal Render Pipeline/Lit"
 }
