@@ -32,7 +32,8 @@ public class 开发日志_Sekiro
 
     List<string> SekiroTODoListFrist = new List<string>()
     {
-        "找个地图",
+        //"找个地图",
         "怪物火球对象",
+        "修复unity酱的渲染不兼容",
     };
 }
