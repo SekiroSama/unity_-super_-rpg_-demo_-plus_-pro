@@ -3172,6 +3172,7 @@ MonoBehaviour:
   FatFatDragon_Patrols:
   - {fileID: 406194182}
   - {fileID: 192336174}
+  Player_BornPos: {fileID: 0}
 --- !u!1 &2041117014
 GameObject:
   m_ObjectHideFlags: 0

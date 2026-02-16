@@ -17,7 +17,8 @@ public class 开发日志_Sekiro
         //"武器的刀光效果：需要在动画事件中控制TrailRenderer的开启和关闭",
         //"刀光效果更新，使用MyTrailRenderer预制体渲染，在动画事件控制生成或销毁，需要保证世界坐标为000，需要调用InitMyTrailRenderer传入首尾位置",
         "武器动态生成，位置可以用现在调好的子节点位置",
-        "优化刀光接口isEmitting,可以直接MyTrailRenderer.isEmitting"
+        "优化刀光接口isEmitting,可以直接MyTrailRenderer.isEmitting",
+        "找了个刀的命中特效，合适的话可以用上",
     };
 
     List<string> SekiroTODoList = new List<string>()
@@ -33,8 +34,9 @@ public class 开发日志_Sekiro
     List<string> SekiroTODoListFrist = new List<string>()
     {
         //"找个地图",
-        "怪物火球对象",
+        //"怪物火球对象",
         //"修复unity酱的渲染不兼容",
         //"修复unity酱的曝光渲染",
+        "远程攻击释放火球",
     };
 }
