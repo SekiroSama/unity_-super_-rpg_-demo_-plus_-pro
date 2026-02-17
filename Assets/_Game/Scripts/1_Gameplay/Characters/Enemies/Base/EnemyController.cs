@@ -61,6 +61,8 @@ public abstract class EnemyController : MonoBehaviour
     public float StaminaCust_ProjectileAttack = 20f;
     public float MeleeAttackDistance = 5f;//近身攻击距离
     public float StaminaCust_MeleeAttack = 10f;
+    public GameObject FireBallPrefab;//火球预制体
+    public Transform FireTransform;//火球发射位置
 
     [Header("感知参数类")]
     public float AwarenessRadius = 10f;//近身感知距离
@@ -312,6 +314,17 @@ public abstract class EnemyController : MonoBehaviour
         this.transform.LookAt(GameManager.Instance.playerController.transform.position);
         _navMeshAgent.updateRotation = false;
         //this.transform.Rotate()
+    }
+
+    /// <summary>
+    /// 发射火球
+    /// 应该放在动画事件里
+    /// </summary>
+    protected virtual void ShutFireBall()
+    {
+        GameObject fireball = Instantiate(FireBallPrefab);
+        fireball.transform.position = FireTransform.position;
+        fireball.transform.rotation = FireTransform.rotation;
     }
     #endregion
 
