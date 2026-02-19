@@ -22,7 +22,7 @@ public class PlayerDodgeState : StateBase
     }
     public override void OnUpdate()
     {
-        owner.Move(-GameManager.Instance.inputManager.CurrentInput.MoveVector.normalized * owner.moveSpeed);
+        owner.RudeMove(-owner.transform.forward*0.1f);
         if (isFinish)
         {
             stateMachine.ChangeState<PlayerIdleState>();
