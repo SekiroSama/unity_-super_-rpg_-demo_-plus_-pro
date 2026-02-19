@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void RudeMove(Vector3 direction)
     {
-            CC.Move(direction);
+        CC.Move(direction);
     }
     /// <summary>
     /// 获取角色运动状态,水平方向的速度和垂直方向的速度

@@ -25,7 +25,12 @@ public class PlayerAttackState : StateBase
         {
             _hasAtkInput = true;
         }
-
+        //闪避
+        if (GameManager.Instance.inputManager.CurrentInput.isDodge)
+        {
+            stateMachine.ChangeState<PlayerDodgeState>();
+            return;
+        }
         if (owner.IsAnimationFinished(comboHashIDs[comboIndex], comboIndex == 2 ? 0.25f : 0.75f))
         {
             if (_hasAtkInput && comboIndex < 2)

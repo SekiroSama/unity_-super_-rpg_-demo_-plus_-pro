@@ -11,7 +11,7 @@ public class PlayerDodgeState : StateBase
     {
         isFinish = false;
         owner.PlayAnimation(AnimationConfig_UnityChan.StateHashes.Dodge, AnimationConfig_UnityChan.TransitionSettings.NormalTransitionDuration);
-        timerId = TimerMgr.Instance.CreateTimer(true, 800, () =>
+        timerId = TimerMgr.Instance.CreateTimer(true, 500, () =>
         {
             isFinish = true;
         }, 20, () =>
@@ -22,7 +22,11 @@ public class PlayerDodgeState : StateBase
     }
     public override void OnUpdate()
     {
-        owner.RudeMove(-owner.transform.forward*0.1f);
+        owner.RudeMove(-owner.transform.forward*0.2f);
+        if(GameManager.Instance.inputManager.CurrentInput.IsAttack&&isFinish)
+        {
+            //stateMachine.ChangeState<>();
+        }
         if (isFinish)
         {
             stateMachine.ChangeState<PlayerIdleState>();
