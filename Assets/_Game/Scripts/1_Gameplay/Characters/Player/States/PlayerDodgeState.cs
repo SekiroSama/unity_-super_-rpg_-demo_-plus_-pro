@@ -6,7 +6,7 @@ public class PlayerDodgeState : StateBase
 {
     bool isFinish;
     int timerId;
-    float timer = 0;   
+    bool isAttack;
     public override void OnEnter()
     {
         isFinish = false;
@@ -15,26 +15,36 @@ public class PlayerDodgeState : StateBase
         {
             isFinish = true;
         }, 20, () =>
-        {
-            
-            timer += .02f;
-        });
+        {});
     }
     public override void OnUpdate()
     {
-        owner.RudeMove(-owner.transform.forward*0.2f);
-        if(GameManager.Instance.inputManager.CurrentInput.IsAttack&&isFinish)
+        if (GameManager.Instance.inputManager.CurrentInput.IsAttack)
         {
-            //stateMachine.ChangeState<>();
+            isAttack = true;
         }
-        if (isFinish)
+        if(isAttack)
+        {
+            if (isFinish)
+            {
+                stateMachine.ChangeState<PlayerDodgeAttackState>();
+                isAttack = false;
+            }
+            return;
+
+        }
+        else if (isFinish)
         {
             stateMachine.ChangeState<PlayerIdleState>();
+            return;
         }
+        owner.RudeMove(-owner.transform.forward*0.2f);
+        
+       
     }
     public override void OnExit()
     {
-
+        TimerMgr.Instance.StopTimer(timerId);
     }
 
 

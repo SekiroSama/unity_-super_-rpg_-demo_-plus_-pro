@@ -13,13 +13,14 @@ public class AnimationConfig_UnityChan
     public static class StateHashes
     {
         public static readonly int HorLocomotion = Animator.StringToHash("HorLocomotion");
-        public static readonly int Idle = Animator.StringToHash("Idle");
         public static readonly int VerLocomotion = Animator.StringToHash("VerLocomotion");
+        public static readonly int Idle = Animator.StringToHash("Idle");
         public static readonly int WalkBack = Animator.StringToHash("WalkBack");
         public static readonly int Rest = Animator.StringToHash("Rest");
         public static readonly int Attack01 = Animator.StringToHash("Attack01");
         public static readonly int Attack02 = Animator.StringToHash("Attack02");
         public static readonly int Attack03 = Animator.StringToHash("Attack03");
+        public static readonly int AttackDodge = Animator.StringToHash("AttackDodge");
         public static readonly int Dodge = Animator.StringToHash("Dodge");
     }
 
@@ -38,8 +39,8 @@ public class AnimationConfig_UnityChan
         { typeof(PlayerIdleState), new int[] { Parameters.XSpeed } },
         { typeof(PlayerMoveState), new int[] { Parameters.XSpeed } },
         { typeof(PlayerAttackState), new int[] { Parameters.XSpeed } },
-        {typeof(PlayerJumpUpState),new int[] {Parameters.YSpeed} },
-         {typeof(PlayerJumpDownState),new int[] {Parameters.YSpeed} },
+        { typeof(PlayerJumpUpState),new int[] {Parameters.YSpeed} },
+        { typeof(PlayerJumpDownState),new int[] {Parameters.YSpeed} },
     };
 
     public static class TransitionSettings
