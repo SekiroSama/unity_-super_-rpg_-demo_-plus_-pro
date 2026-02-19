@@ -14,6 +14,6 @@ public class FireBallController : MonoBehaviour
 
     private void Moving()
     {
-        this.transform.Translate(-this.transform.forward * MoveSpeed * Time.deltaTime);
+        this.transform.Translate(this.transform.forward * MoveSpeed * Time.deltaTime, Space.World);
     }
 }

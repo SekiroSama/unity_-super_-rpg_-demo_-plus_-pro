@@ -324,7 +324,7 @@ public abstract class EnemyController : MonoBehaviour
     {
         GameObject fireball = Instantiate(FireBallPrefab);
         fireball.transform.position = FireTransform.position;
-        fireball.transform.rotation = FireTransform.rotation;
+        fireball.transform.forward = GameManager.Instance.playerController.transform.position - FireTransform.position;
     }
     #endregion
 
@@ -361,6 +361,11 @@ public abstract class EnemyController : MonoBehaviour
     public virtual void AE_DragonShoutOver()
     {
         isDragonShouting = false;
+    }
+
+    public virtual void AE_ShutFireBall()
+    {
+        ShutFireBall();
     }
     #endregion
 

@@ -2314,7 +2314,7 @@ MonoBehaviour:
   StaminaCust_ProjectileAttack: 20
   MeleeAttackDistance: 5
   StaminaCust_MeleeAttack: 10
-  FireBallPrefab: {fileID: 8764043878647920493, guid: 617a73c102e0ebb499213a1da3e28f20, type: 3}
+  FireBallPrefab: {fileID: 9190338398130653643, guid: d37466ac243084241b6c83d454713956, type: 3}
   FireTransform: {fileID: 2660080515296169604}
   AwarenessRadius: 5
   ViewAngle: 120
