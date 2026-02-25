@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class InputManager
@@ -12,6 +13,7 @@ public class InputManager
         public bool IsAttack;
         public bool isMoveing;
         public bool isDodge;
+        public bool isDefense;
     }
 
     PlayerInputData _playerInputData;
@@ -54,6 +56,8 @@ public class InputManager
             CheckIsAttack();
 
             CheckIsJump();
+
+            CheckIsDefense();
 
             UpdateFreelookInput();
 
@@ -161,6 +165,9 @@ public class InputManager
         }
 #endif
     }
+    /// <summary>
+    /// 是否躲避
+    /// </summary>
     private void CheckIsDodge()
     {
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -192,6 +199,23 @@ public class InputManager
         uibtnAttackPressed = false;
 #else
         _playerInputData.isJump = Input.GetKey(KeyCode.Space);
+#endif
+    }
+    /// <summary>
+    /// 检查是否在防御
+    /// </summary>
+    private void CheckIsDefense()
+    {
+#if UNITY_ANDROID && !UNITY_EDITOR
+        _playerInputData.IsDefense = uibtnDefensePressed;
+        uibtnAttackPressed = false;
+#else
+        _playerInputData.isDefense = Input.GetMouseButton(1);
+        if (Input.GetMouseButtonUp(1))
+        {
+            _playerInputData.isDefense = false;
+            return;
+        }
 #endif
     }
     /// <summary>

@@ -6,11 +6,12 @@ public class PlayerDodgeAttackState : StateBase
 {
     bool isFinish;
     int timerId;
+    //计时0.8s用于动画过渡的时间
     public override void OnEnter()
     {
         isFinish = false;
         owner.PlayAnimation(AnimationConfig_UnityChan.StateHashes.AttackDodge, AnimationConfig_UnityChan.TransitionSettings.AttackTransitionDuration);
-        timerId = TimerMgr.Instance.CreateTimer(true, 500, () =>
+        timerId = TimerMgr.Instance.CreateTimer(true, 800, () =>
         {
             isFinish = true;
         }, 20, () =>

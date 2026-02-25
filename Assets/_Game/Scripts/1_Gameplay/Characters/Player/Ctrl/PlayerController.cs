@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
 
     public StateMachine stateMachine;
-
+    
 
     //[HideInInspector]
     public float moveSpeed = 5f;
@@ -37,6 +37,8 @@ public class PlayerController : MonoBehaviour
     
     [Header("武器脚本")]
     public WeaponController weaponController;
+    [Header("角色状态")]
+    public bool isDefense = false;
     public Transform LookPos;//用于环境遮挡裁剪
                
     private void Start()

@@ -14,6 +14,7 @@ public class WeaponController : MonoBehaviour
     public Transform baseTransform;
     private GameObject obj;
 
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))

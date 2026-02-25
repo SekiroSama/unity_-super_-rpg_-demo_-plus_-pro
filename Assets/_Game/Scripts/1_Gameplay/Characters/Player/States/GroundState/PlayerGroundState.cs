@@ -20,6 +20,12 @@ public class PlayerGroundState : StateBase
             stateMachine.ChangeState<PlayerAirState>();
             return;
         }
+        //防御
+        if(GameManager.Instance.inputManager.CurrentInput.isDefense)
+        {
+            stateMachine.ChangeState<PlayerDefenseState>();
+            return;
+        }
         //攻击输入
         if (GameManager.Instance.inputManager.CurrentInput.IsAttack)
         {

@@ -7,6 +7,7 @@ public class PlayerDodgeState : StateBase
     bool isFinish;
     int timerId;
     bool isAttack;
+    //计时动画过渡时间
     public override void OnEnter()
     {
         isFinish = false;
@@ -23,6 +24,7 @@ public class PlayerDodgeState : StateBase
         {
             isAttack = true;
         }
+        //如果在躲避过程中按攻击键就可以冲刺攻击
         if(isAttack)
         {
             if (isFinish)
@@ -31,7 +33,6 @@ public class PlayerDodgeState : StateBase
                 isAttack = false;
             }
             return;
-
         }
         else if (isFinish)
         {
@@ -39,7 +40,6 @@ public class PlayerDodgeState : StateBase
             return;
         }
         owner.RudeMove(-owner.transform.forward*0.2f);
-        
        
     }
     public override void OnExit()
