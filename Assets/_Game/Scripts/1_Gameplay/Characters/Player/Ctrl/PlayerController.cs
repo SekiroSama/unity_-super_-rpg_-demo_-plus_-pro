@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour
     public WeaponController weaponController;
     [Header("角色状态")]
     public bool isDefense = false;
+    public bool isRush = false;
     public Transform LookPos;//用于环境遮挡裁剪
                
     private void Start()
@@ -233,6 +234,20 @@ public class PlayerController : MonoBehaviour
     {
         weaponController.WeaponColliderOff();
         weaponController.WeaponTrailOff();
+    }
+    /// <summary>
+    /// 动画事件：开始冲刺
+    /// </summary>
+    public void AE_StartRush()
+    {
+        isRush = true;
+    }
+    /// <summary>
+    /// 动画事件：结束冲刺
+    /// </summary>
+    public void AE_EndRush()
+    {
+        isRush = false;
     }
     #endregion
 
