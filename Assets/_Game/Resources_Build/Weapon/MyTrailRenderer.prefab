@@ -97,6 +97,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minVertexDistance: 0.1
-  trailLifeTime: 0.2
+  trailLifeTime: 0.4
   subdivisions: 10
   isEmitting: 0

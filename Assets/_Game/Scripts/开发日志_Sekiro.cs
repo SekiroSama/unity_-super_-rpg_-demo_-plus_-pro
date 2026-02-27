@@ -16,9 +16,8 @@ public class 开发日志_Sekiro
         //"预制体会放在Resources_Build文件夹下",
         //"武器的刀光效果：需要在动画事件中控制TrailRenderer的开启和关闭",
         //"刀光效果更新，使用MyTrailRenderer预制体渲染，在动画事件控制生成或销毁，需要保证世界坐标为000，需要调用InitMyTrailRenderer传入首尾位置",
-        "武器动态生成，位置可以用现在调好的子节点位置",
-        "优化刀光接口isEmitting,可以直接MyTrailRenderer.isEmitting",
-        "找了个刀的命中特效，合适的话可以用上",
+        //"优化刀光接口isEmitting,可以直接MyTrailRenderer.isEmitting",
+        //"找了个刀的命中特效，合适的话可以用上",
     };
 
     List<string> SekiroTODoList = new List<string>()
@@ -43,5 +42,7 @@ public class 开发日志_Sekiro
         //"火球碰撞逻辑",
         "火球伤害逻辑",
         "伤害检测添加白名单抽象",
+        "现在需要闪避的一个残影，按住Ctrl角色会向后闪避一段距离，这个是直接用的CC的Move方法进行强制移动的",
+        "蓄力斩需要一个特殊的刀光，换个颜色都可以"
     };
 }
