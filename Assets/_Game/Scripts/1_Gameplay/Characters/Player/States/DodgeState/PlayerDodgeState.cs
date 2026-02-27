@@ -39,7 +39,7 @@ public class PlayerDodgeState : StateBase
             stateMachine.ChangeState<PlayerIdleState>();
             return;
         }
-        owner.RudeMove(-owner.transform.forward*0.2f);
+        owner.RudeMove(-owner.transform.forward*owner.dodgeSpeed);
        
     }
     public override void OnExit()

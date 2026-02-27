@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public float walkSpeed = 5f;
     public float runSpeed = 10f;
     public float jumpForce = 10f;
+    public float dodgeSpeed = 0.2f;
     public float gravity;
     [Tooltip("跑步过渡时间")]
     public float fadeTime = 10f;

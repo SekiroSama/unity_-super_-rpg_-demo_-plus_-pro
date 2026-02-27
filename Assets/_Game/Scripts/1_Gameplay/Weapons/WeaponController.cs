@@ -12,14 +12,18 @@ public class WeaponController : MonoBehaviour
     public bool hideWeapon = false;
     public Transform tipTransform;
     public Transform baseTransform;
-    private GameObject obj;
+    private GameObject trailObj; 
+    private GameObject hitObj;
 
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
+          
             EnemyController enemyController = other.GetComponentInParent<EnemyController>();
+            hitObj = PoolMgr.Instance.GetObj("CFXR Impact Glowing HDR (Blue)");
+            hitObj.transform.position = enemyController.transform.position;
             int id = enemyController.gameObject.GetInstanceID();
             if (!whiteList.Contains(id))
             {
@@ -30,15 +34,15 @@ public class WeaponController : MonoBehaviour
     }
     public void WeaponTrailOn()
     {
-        obj = PoolMgr.Instance.GetObj("MyTrailRenderer");
-        obj.GetComponent<MyTrailRenderer>().isEmitting = true;  
-        obj.GetComponent<MyTrailRenderer>().InitMyTrailRenderer(tipTransform,baseTransform);
-        obj.transform.position = Vector3.zero;
+        trailObj = PoolMgr.Instance.GetObj("MyTrailRenderer");
+        trailObj.GetComponent<MyTrailRenderer>().isEmitting = true;  
+        trailObj.GetComponent<MyTrailRenderer>().InitMyTrailRenderer(tipTransform,baseTransform);
+        trailObj.transform.position = Vector3.zero;
     }
     public void WeaponTrailOff()
     {
-        obj.GetComponent<MyTrailRenderer>().isEmitting = false;
-        PoolMgr.Instance.PushObj(obj);
+        trailObj.GetComponent<MyTrailRenderer>().isEmitting = false;
+        PoolMgr.Instance.PushObj(trailObj);
     }
     /// <summary>
     /// 动画事件：武器碰撞开启
