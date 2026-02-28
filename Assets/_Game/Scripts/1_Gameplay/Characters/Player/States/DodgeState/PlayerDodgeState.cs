@@ -16,7 +16,9 @@ public class PlayerDodgeState : StateBase
         {
             isFinish = true;
         }, 20, () =>
-        {});
+        {
+            owner.CreateGhost();
+        });
     }
     public override void OnUpdate()
     {

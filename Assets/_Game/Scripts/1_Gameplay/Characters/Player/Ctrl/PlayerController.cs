@@ -6,12 +6,15 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     CharacterController CC;
-    private Animator animator;
-
-    public StateMachine stateMachine;
-    
-
     //[HideInInspector]
+    public StateMachine stateMachine;
+
+    private Animator animator;
+    public float ghostLifeTime = 0.5f; // 残影持续时间
+    public float ghostInterval = 0.1f; // 生成残影的间隔
+    public Material ghostMaterial;
+    private SkinnedMeshRenderer[] meshRenderers;
+    
     public float moveSpeed = 5f;
     [Header("主角移动")]
     public float rotatSpeed = 10f;
@@ -49,7 +52,7 @@ public class PlayerController : MonoBehaviour
         CC = this.GetComponent<CharacterController>();
         animator = this.GetComponent<Animator>();
         _camTransform = Camera.main.transform;
-
+        meshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
         stateMachine = new StateMachine(this);
         stateMachine.Initialize<PlayerIdleState>();
     }
@@ -267,5 +270,28 @@ public class PlayerController : MonoBehaviour
     public void CheckIsGrounded()
     {
         isGrounded = Physics.CheckSphere(grdCheckPos.position, checkRadius, whatIsGround);
+    }
+    public void CreateGhost()
+    {
+        foreach (var smr in meshRenderers)
+        {
+            // 1. 创建一个新的物体作为残影
+            GameObject ghostObj = new GameObject("Ghost");
+            ghostObj.transform.position = smr.transform.position;
+            ghostObj.transform.rotation = smr.transform.rotation;
+            ghostObj.transform.localScale = smr.transform.lossyScale;
+
+            // 2. 添加 MeshFilter 和 MeshRenderer
+            MeshFilter mf = ghostObj.AddComponent<MeshFilter>();
+            MeshRenderer mr = ghostObj.AddComponent<MeshRenderer>();
+
+            // 3. 烘焙当前的网格状态（捕捉动画中的那一帧）
+            Mesh mesh = new Mesh();
+            smr.BakeMesh(mesh);
+            mf.mesh = mesh;
+            mr.material = ghostMaterial;
+
+            Destroy(ghostObj, ghostLifeTime);
+        }
     }
 }

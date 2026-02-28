@@ -6632,6 +6632,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ae196684c7b66b4e86300a15f8187fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ghostLifeTime: 0.5
+  ghostInterval: 0.1
+  ghostMaterial: {fileID: -876546973899608171, guid: 7f1166f0c4e1e5747b973168dbe0f2c6, type: 3}
   moveSpeed: 5
   rotatSpeed: 10
   walkSpeed: 5
