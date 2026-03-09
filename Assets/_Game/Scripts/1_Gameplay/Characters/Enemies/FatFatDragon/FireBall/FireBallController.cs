@@ -27,13 +27,7 @@ public class FireBallController : MonoBehaviour
     /// <param name="other"></param>
     public void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            Explosion();
-            PlayerController playerController = other.GetComponent<PlayerController>();
-            playerController.TakeDamage();
-        }
-        else if (other.CompareTag("Terrain"))
+        if (other.CompareTag("Player") || other.CompareTag("Terrain"))
         {
             Explosion();
         }
@@ -45,5 +39,6 @@ public class FireBallController : MonoBehaviour
     private void Explosion()
     {
         GameObject explosion = Instantiate(ExplosionPrefab);
+        explosion.transform.position = this.transform.position;
     }
 }
