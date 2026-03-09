@@ -1,7 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Unity.IO.LowLevel.Unsafe;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Playables;
@@ -205,6 +203,7 @@ public abstract class EnemyController : MonoBehaviour
     private void GetPerfectParry()
     {
         Poise = 0;
+        isAttacking = false;
     }
 
     #endregion
@@ -217,6 +216,8 @@ public abstract class EnemyController : MonoBehaviour
     {
         animator.SetTrigger(EnemyAnimationConfig.Parameters.Die);// 播放死亡动画
         isDead = true;
+        isDowned = false;
+        isAttacking = false;
     }
 
     /// <summary>
@@ -226,6 +227,7 @@ public abstract class EnemyController : MonoBehaviour
     {
         animator.SetTrigger(EnemyAnimationConfig.Parameters.IsDowned);// 播放破韧动画
         isDowned = true;
+        isAttacking = false;
     }
 
     /// <summary>
@@ -235,6 +237,8 @@ public abstract class EnemyController : MonoBehaviour
     {
         animator.SetBool(EnemyAnimationConfig.Parameters.isSleeping, true);// 播放睡觉动画
         isSleeping = true;
+        isDowned = false;
+        isAttacking = false;
     }
 
     /// <summary>

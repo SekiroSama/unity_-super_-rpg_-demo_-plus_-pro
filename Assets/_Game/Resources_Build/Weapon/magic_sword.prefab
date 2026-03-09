@@ -348,7 +348,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Atk: 10
-  PoiseAtk: 0
+  PoiseAtk: 34
   hideWeapon: 0
   tipTransform: {fileID: 4608978789034275223}
   baseTransform: {fileID: 7294515361622272856}
