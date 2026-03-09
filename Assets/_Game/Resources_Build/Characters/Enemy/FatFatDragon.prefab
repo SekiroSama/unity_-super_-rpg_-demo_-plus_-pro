@@ -124,11 +124,11 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 27.49
+  m_Radius: 37.6
   m_Height: 293.8
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -2326,7 +2326,7 @@ GameObject:
   - component: {fileID: 8326437973762505579}
   m_Layer: 6
   m_Name: FatFatDragon
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2433,8 +2433,8 @@ MonoBehaviour:
   _Hp: 100
   MaxHp: 100
   LowHpPersent: 0.2
-  _Stamina: 100
-  MaxStamina: 100
+  _Stamina: 1000
+  MaxStamina: 1000
   LowStaminaPersent: 0.2
   _Poise: 100
   MaxPoise: 100
@@ -2453,7 +2453,6 @@ MonoBehaviour:
   StaminaCust_MeleeAttack: 10
   FireBallPrefab: {fileID: 9190338398130653643, guid: d37466ac243084241b6c83d454713956, type: 3}
   FireTransform: {fileID: 2660080515296169604}
-  BasicAttackTimeLine: {fileID: 0}
   AwarenessRadius: 5
   ViewAngle: 120
   ViewDistance: 20
@@ -2502,6 +2501,10 @@ PlayableDirector:
   - key: {fileID: -8007430663942761417, guid: 245523e6808d00c43b3bb9a8e7ee65b0, type: 2}
     value: {fileID: 323046726281161166}
   - key: {fileID: 1151390874513346862, guid: 245523e6808d00c43b3bb9a8e7ee65b0, type: 2}
+    value: {fileID: 4151510221703999720}
+  - key: {fileID: -8007430663942761417, guid: e8dfcb4ddda496941bdf7cd685e48596, type: 2}
+    value: {fileID: 323046726281161166}
+  - key: {fileID: 1151390874513346862, guid: e8dfcb4ddda496941bdf7cd685e48596, type: 2}
     value: {fileID: 917526934217797813}
   m_ExposedReferences:
     m_References: []

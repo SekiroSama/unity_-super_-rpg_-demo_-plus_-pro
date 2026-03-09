@@ -66,7 +66,6 @@ public abstract class EnemyController : MonoBehaviour
     public GameObject FireBallPrefab;//火球预制体
     public Transform FireTransform;//火球发射位置
     private PlayableDirector _director;// 唯一的播放器
-    public PlayableAsset BasicAttackTimeLine;
 
 
     [Header("感知参数类")]
@@ -96,8 +95,8 @@ public abstract class EnemyController : MonoBehaviour
         set 
         { 
             _isAttacking = value;
-            if(animator != null)
-            animator.SetBool(EnemyAnimationConfig.Parameters.IsAttacking, _isAttacking);// 进入atk动画层级
+            //if(animator != null) //通过trigger直接进入atk层级不再需要_isAttacking
+            //animator.SetBool(EnemyAnimationConfig.Parameters.IsAttacking, _isAttacking);// 进入atk动画层级
         }
     }
     public float curentSpeedRatio = 0f;//当前速度比值
