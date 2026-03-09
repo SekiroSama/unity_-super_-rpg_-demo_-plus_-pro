@@ -23,6 +23,7 @@ public class PlayerGroundState : StateBase
         if(owner.isHurt)
         {
             stateMachine.ChangeState<PlayerHurtState>();
+            return; 
         }
         //防御
         if(GameManager.Instance.inputManager.CurrentInput.isDefense)

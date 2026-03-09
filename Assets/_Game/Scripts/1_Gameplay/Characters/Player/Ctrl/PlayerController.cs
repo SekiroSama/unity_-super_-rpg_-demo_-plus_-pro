@@ -261,13 +261,6 @@ public class PlayerController : MonoBehaviour
     {
         isHurt = true;
     }
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        if (hit.gameObject.CompareTag("Enemy"))
-        {
-            Debug.Log("碰到了");
-        }
-    }
     /// <summary>
     /// 忽视敌人与主角的碰撞
     /// </summary>
