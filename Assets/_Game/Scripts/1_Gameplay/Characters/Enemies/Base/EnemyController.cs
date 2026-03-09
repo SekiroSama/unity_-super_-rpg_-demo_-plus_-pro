@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.IO.LowLevel.Unsafe;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Playables;
 
 public abstract class EnemyController : MonoBehaviour
 {
@@ -63,6 +65,9 @@ public abstract class EnemyController : MonoBehaviour
     public float StaminaCust_MeleeAttack = 10f;
     public GameObject FireBallPrefab;//火球预制体
     public Transform FireTransform;//火球发射位置
+    private PlayableDirector _director;// 唯一的播放器
+    public PlayableAsset BasicAttackTimeLine;
+
 
     [Header("感知参数类")]
     public float AwarenessRadius = 10f;//近身感知距离
@@ -126,6 +131,7 @@ public abstract class EnemyController : MonoBehaviour
         _material = _meshRenderer.material;
         _navMeshAgent = this.GetComponent<NavMeshAgent>();
         _animator = this.GetComponent<Animator>();
+        _director = this.GetComponent<PlayableDirector>();
     }
 
     public virtual void Update()
@@ -330,6 +336,16 @@ public abstract class EnemyController : MonoBehaviour
 
     #region AnimationEvents
     /// <summary>
+    /// 攻击开始
+    /// </summary>
+    /// <param name="targetSkill">目标timeline</param>
+    public void AE_PlayAttack(PlayableAsset targetSkill)
+    {
+        _director.playableAsset = targetSkill; // 动态把光盘塞进播放器
+        _director.Play();
+    }
+
+    /// <summary>
     /// 攻击结束
     /// </summary>
     private void AE_AtkOver()
@@ -367,6 +383,8 @@ public abstract class EnemyController : MonoBehaviour
     {
         ShutFireBall();
     }
+
+
     #endregion
 
     #region AI_navMeshAgent

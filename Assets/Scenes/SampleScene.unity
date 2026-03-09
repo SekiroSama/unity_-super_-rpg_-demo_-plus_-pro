@@ -2272,29 +2272,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8992808540254977710, guid: b8a5e736084067e4086a6f9f20bec7fb, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -53
-      objectReference: {fileID: 0}
-    - target: {fileID: 8992808540254977710, guid: b8a5e736084067e4086a6f9f20bec7fb, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -46.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 8992808540254977710, guid: b8a5e736084067e4086a6f9f20bec7fb, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 9027627837874716125, guid: b8a5e736084067e4086a6f9f20bec7fb, type: 3}
       propertyPath: m_Name
       value: FatFatDragon
       objectReference: {fileID: 0}
     - target: {fileID: 9027627837874716125, guid: b8a5e736084067e4086a6f9f20bec7fb, type: 3}
       propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9094732150655271722, guid: b8a5e736084067e4086a6f9f20bec7fb, type: 3}
-      propertyPath: m_Radius
-      value: 84.3
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

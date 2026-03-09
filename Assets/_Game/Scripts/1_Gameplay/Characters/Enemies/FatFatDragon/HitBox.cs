@@ -11,6 +11,6 @@ public class HitBox : MonoBehaviour
     public void OnTriggerEnter(Collider other)
     {
         PlayerController playerController = other.GetComponent<PlayerController>();
-        
+        playerController.TakeDamage();
     }
 }

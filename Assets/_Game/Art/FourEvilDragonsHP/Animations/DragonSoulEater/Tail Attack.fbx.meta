@@ -454,6 +454,13 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
+      - time: 0
+        functionName: AE_PlayAttack
+        data: 
+        objectReferenceParameter: {fileID: 11400000, guid: e8dfcb4ddda496941bdf7cd685e48596, type: 2}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask:
       - path: 
         weight: 1
