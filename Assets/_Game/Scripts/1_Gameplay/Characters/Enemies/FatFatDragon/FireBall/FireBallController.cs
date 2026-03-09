@@ -5,6 +5,7 @@ using UnityEngine;
 public class FireBallController : MonoBehaviour
 {
     public float MoveSpeed = 10f;
+    public GameObject ExplosionPrefab;
 
     // Update is called once per frame
     void Update()
@@ -26,7 +27,10 @@ public class FireBallController : MonoBehaviour
     /// <param name="other"></param>
     public void OnTriggerEnter(Collider other)
     {
-        Explosion();
+        if (other.CompareTag("Player") || other.CompareTag("Terrain"))
+        {
+            Explosion();
+        }
     }
 
     /// <summary>
@@ -34,6 +38,7 @@ public class FireBallController : MonoBehaviour
     /// </summary>
     private void Explosion()
     {
-
+        GameObject explosion = Instantiate(ExplosionPrefab);
+        explosion.transform.position = this.transform.position;
     }
 }

@@ -1253,7 +1253,7 @@ GameObject:
   - component: {fileID: 959651828}
   m_Layer: 0
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -2503,7 +2503,7 @@ GameObject:
   - component: {fileID: 1573851467}
   m_Layer: 8
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647

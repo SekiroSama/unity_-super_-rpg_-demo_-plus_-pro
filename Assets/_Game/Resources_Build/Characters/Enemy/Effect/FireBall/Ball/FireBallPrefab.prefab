@@ -14319,6 +14319,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MoveSpeed: 10
+  ExplosionPrefab: {fileID: 2433282508537954060, guid: b032fac3b2e2e484bafe38544215ec93, type: 3}
 --- !u!54 &4121719249929908887
 Rigidbody:
   m_ObjectHideFlags: 0
