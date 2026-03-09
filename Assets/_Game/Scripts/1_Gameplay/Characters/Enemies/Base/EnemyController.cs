@@ -131,6 +131,9 @@ public abstract class EnemyController : MonoBehaviour
         _navMeshAgent = this.GetComponent<NavMeshAgent>();
         _animator = this.GetComponent<Animator>();
         _director = this.GetComponent<PlayableDirector>();
+
+        //事件注册
+        EventCenter.Instance.AddEventListner(EventEnum.PerfectParry, GetPerfectParry);
     }
 
     public virtual void Update()
@@ -192,6 +195,17 @@ public abstract class EnemyController : MonoBehaviour
         }
     }
 
+
+    #endregion
+
+    #region Event
+    /// <summary>
+    /// 被完美格挡硬直
+    /// </summary>
+    private void GetPerfectParry()
+    {
+        Poise = 0;
+    }
 
     #endregion
 
