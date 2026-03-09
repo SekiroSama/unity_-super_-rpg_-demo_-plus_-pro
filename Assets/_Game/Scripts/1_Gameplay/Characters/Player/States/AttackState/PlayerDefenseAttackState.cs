@@ -14,6 +14,7 @@ public class PlayerDefenseAttackState : PlayerDefenseState
         if(owner.isHurt)
         {
             stateMachine.ChangeState<PlayerForceAttackState>();
+            EventCenter.Instance.EventTrigger(EventEnum.PerfectParry);
             return;
         }
     }
