@@ -14,7 +14,9 @@ public class PlayerController : MonoBehaviour
     public float ghostInterval = 0.1f; // 生成残影的间隔
     public Material ghostMaterial;
     private SkinnedMeshRenderer[] meshRenderers;
-    
+
+    public LayerMask playerLayer;
+    public LayerMask enemyLayer;
     public float moveSpeed = 5f;
     [Header("主角移动")]
     public float rotatSpeed = 10f;
@@ -44,6 +46,7 @@ public class PlayerController : MonoBehaviour
     [Header("角色状态")]
     public bool isDefense = false;
     public bool isRush = false;
+    public bool isHurt = false;
     public Transform LookPos;//用于环境遮挡裁剪
                
     private void Start()
@@ -254,6 +257,32 @@ public class PlayerController : MonoBehaviour
         isRush = false;
     }
     #endregion
+    public void TakeDamage()
+    {
+        isHurt = true;
+    }
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.gameObject.CompareTag("Enemy"))
+        {
+            Debug.Log("碰到了");
+        }
+    }
+    /// <summary>
+    /// 忽视敌人与主角的碰撞
+    /// </summary>
+    public void IgnoreCollsion()
+    {
+        // 禁用 Player 层和 Enemy 层之间的碰撞
+        Physics.IgnoreLayerCollision(playerLayer, enemyLayer, true);
+    }
+    /// <summary>
+    /// 恢复敌人与主角的碰撞
+    /// </summary>
+    public void ResetCollsion()
+    {
+        Physics.IgnoreLayerCollision(playerLayer, enemyLayer, false);
+    }
 
     private void OnDrawGizmos()
     {
