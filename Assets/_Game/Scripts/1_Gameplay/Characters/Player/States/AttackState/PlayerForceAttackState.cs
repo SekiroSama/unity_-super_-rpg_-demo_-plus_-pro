@@ -29,7 +29,7 @@ public class PlayerForceAttackState : StateBase
 
     public override void OnExit()
     {
-       
+       owner.isHurt = false;
     }
 
 }

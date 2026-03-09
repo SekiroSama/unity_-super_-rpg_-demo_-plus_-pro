@@ -14,6 +14,7 @@ public class PlayerDefenseState : StateBase
         if(!GameManager.Instance.inputManager.CurrentInput.isDefense)
         {
             stateMachine.ChangeState<PlayerIdleState>();
+            return;
         }
         if(GameManager.Instance.inputManager.CurrentInput.IsAttack)
         {

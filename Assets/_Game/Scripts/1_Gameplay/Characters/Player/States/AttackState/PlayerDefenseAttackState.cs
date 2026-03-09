@@ -11,6 +11,11 @@ public class PlayerDefenseAttackState : PlayerDefenseState
     public override void OnUpdate()
     {
        base.OnUpdate();
+        if(owner.isHurt)
+        {
+            stateMachine.ChangeState<PlayerForceAttackState>();
+            return;
+        }
     }
     public override void OnExit()
     {   
