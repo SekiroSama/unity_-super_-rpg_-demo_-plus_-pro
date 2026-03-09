@@ -584,15 +584,15 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.164406
-        functionName: AE_WeaponColliderOn
+      - time: 0.18433952
+        functionName: AE_StartRush
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.18433952
-        functionName: AE_StartRush
+      - time: 0.23087485
+        functionName: AE_WeaponColliderOn
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0

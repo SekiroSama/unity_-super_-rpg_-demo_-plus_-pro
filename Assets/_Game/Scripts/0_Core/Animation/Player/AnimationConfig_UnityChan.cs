@@ -27,7 +27,7 @@ public class AnimationConfig_UnityChan
         public static readonly int Attack01 = Animator.StringToHash("Attack01");
         public static readonly int Attack02 = Animator.StringToHash("Attack02");
         public static readonly int Attack03 = Animator.StringToHash("Attack03");
-        public static readonly int AttackDodge = Animator.StringToHash("AttackDodge");
+        public static readonly int ForceAttack = Animator.StringToHash("ForceAttack");
         public static readonly int DefenseAttack = Animator.StringToHash("DefenseAttack");
 
         #endregion

@@ -15,8 +15,10 @@ public class PlayerDodgeState : StateBase
         timerId = TimerMgr.Instance.CreateTimer(true, 500, () =>
         {
             isFinish = true;
+           
         }, 20, () =>
         {
+            owner.ghostMaterial.SetFloat("_StartTime",Time.time);
             owner.CreateGhost();
         });
     }
@@ -31,7 +33,7 @@ public class PlayerDodgeState : StateBase
         {
             if (isFinish)
             {
-                stateMachine.ChangeState<PlayerDodgeAttackState>();
+                stateMachine.ChangeState<PlayerForceAttackState>();
                 isAttack = false;
             }
             return;

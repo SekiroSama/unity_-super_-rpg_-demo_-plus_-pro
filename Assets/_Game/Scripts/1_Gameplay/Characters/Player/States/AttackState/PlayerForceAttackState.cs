@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerDodgeAttackState : StateBase
+public class PlayerForceAttackState : StateBase
 {
     bool isFinish;
     int timerId;
@@ -10,12 +10,14 @@ public class PlayerDodgeAttackState : StateBase
     public override void OnEnter()
     {
         isFinish = false;
-        owner.PlayAnimation(AnimationConfig_UnityChan.StateHashes.AttackDodge, AnimationConfig_UnityChan.TransitionSettings.AttackTransitionDuration);
+        owner.PlayAnimation(AnimationConfig_UnityChan.StateHashes.ForceAttack, AnimationConfig_UnityChan.TransitionSettings.AttackTransitionDuration);
         timerId = TimerMgr.Instance.CreateTimer(true, 1000, () =>
         {
             isFinish = true;
         }, 20, () =>
-        { });
+        { 
+
+        });
     }
     public override void OnUpdate()
     {
