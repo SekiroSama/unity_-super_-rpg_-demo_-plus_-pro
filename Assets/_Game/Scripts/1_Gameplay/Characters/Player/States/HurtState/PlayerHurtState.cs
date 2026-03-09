@@ -6,16 +6,17 @@ public class PlayerHurtState : StateBase
 {
     public override void OnEnter()
     {
-        base.OnEnter();
+        owner.PlayAnimation(AnimationConfig_UnityChan.StateHashes.Hurt, AnimationConfig_UnityChan.TransitionSettings.NormalTransitionDuration);
+    }
+    public override void OnUpdate()
+    {
+
     }
 
     public override void OnExit()
     {
-        base.OnExit();
+
     }
 
-    public override void OnUpdate()
-    {
-        base.OnUpdate();
-    }
+   
 }

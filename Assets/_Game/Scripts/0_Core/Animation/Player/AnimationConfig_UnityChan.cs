@@ -36,6 +36,7 @@ public class AnimationConfig_UnityChan
 
         public static readonly int Defense = Animator.StringToHash("Defense");
         public static readonly int Dodge = Animator.StringToHash("Dodge");
+        public static readonly int Hurt = Animator.StringToHash("Hurt");
         #endregion
     }
 
