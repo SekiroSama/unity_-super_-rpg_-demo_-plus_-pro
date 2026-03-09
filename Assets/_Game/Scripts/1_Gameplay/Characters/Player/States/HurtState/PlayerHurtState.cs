@@ -23,6 +23,8 @@ public class PlayerHurtState : StateBase
         if(isFinish)
         {
             stateMachine.ChangeState<PlayerIdleState>();
+            owner.isHurt = false;
+            return;
         }
     }
 
