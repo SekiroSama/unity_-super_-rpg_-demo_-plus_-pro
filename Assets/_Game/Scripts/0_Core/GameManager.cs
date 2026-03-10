@@ -39,13 +39,15 @@ public class GameManager : MonoBehaviour
     private Transform[] FatFatDragon_Patrols;
     [SerializeField]
     private Transform Player_BornPos;
+    [SerializeField]
+    private Material FX_RadialBlur_FullScreen_Material;
 
     private void Awake()
     {
         SetApplicationTargetFrameRate(60);
 
         this.Init();
-        cameraManager?.Init(camCollider, camFreeLook);
+        cameraManager?.Init(camCollider, camFreeLook, FX_RadialBlur_FullScreen_Material);
         terrainManager?.Init(meshRenderers);
 
         terrainManager?.onAwake();

@@ -262,6 +262,7 @@ public abstract class EnemyController : MonoBehaviour
         isDragonShouTriggered = true;
         isDragonShouting = true;
         StopMove();
+        GameManager.Instance.cameraManager.RadialBlurStart(2000, 0.05f);
     }
 
     /// <summary>
