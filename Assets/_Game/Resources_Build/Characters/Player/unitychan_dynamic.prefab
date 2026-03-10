@@ -6661,6 +6661,7 @@ MonoBehaviour:
   weaponController: {fileID: 6996604458749748505}
   isDefense: 0
   isRush: 0
+  isHurt: 0
   LookPos: {fileID: 2546347062103162459}
 --- !u!143 &941589012896754498
 CharacterController:
@@ -8710,7 +8711,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 237105988606561505, guid: d91ddf4d20388f6489cbff57c4bdb774, type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1973307781736823665, guid: d91ddf4d20388f6489cbff57c4bdb774, type: 3}
       propertyPath: m_Enabled
@@ -8722,15 +8723,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3541962978555424811, guid: d91ddf4d20388f6489cbff57c4bdb774, type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3695075494459123195, guid: d91ddf4d20388f6489cbff57c4bdb774, type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4998369418954385678, guid: d91ddf4d20388f6489cbff57c4bdb774, type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6324133640689830921, guid: d91ddf4d20388f6489cbff57c4bdb774, type: 3}
       propertyPath: m_Name
@@ -8738,7 +8739,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6324133640689830921, guid: d91ddf4d20388f6489cbff57c4bdb774, type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6667586560635573939, guid: d91ddf4d20388f6489cbff57c4bdb774, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8782,7 +8783,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7902856740878879513, guid: d91ddf4d20388f6489cbff57c4bdb774, type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

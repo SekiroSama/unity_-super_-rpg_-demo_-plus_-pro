@@ -10,7 +10,9 @@ public class PlayerForceAttackState : StateBase
     public override void OnEnter()
     {
         isFinish = false;
+        
         owner.PlayAnimation(AnimationConfig_UnityChan.StateHashes.ForceAttack, AnimationConfig_UnityChan.TransitionSettings.AttackTransitionDuration);
+        //owner.IgnoreCollsion();
         timerId = TimerMgr.Instance.CreateTimer(true, 1000, () =>
         {
             isFinish = true;
@@ -23,6 +25,12 @@ public class PlayerForceAttackState : StateBase
     {
         if(owner.isRush)
             owner.RudeMove(owner.transform.forward*0.25f);
+        if (owner.weaponController.isHit)
+        {
+            StyleRankManager.Instance.AddScore(30);
+            owner.weaponController.isHit = false;
+        }
+            
         if (isFinish)
             stateMachine.ChangeState<PlayerIdleState>();
     }
@@ -30,6 +38,7 @@ public class PlayerForceAttackState : StateBase
     public override void OnExit()
     {
        owner.isHurt = false;
+       //owner.ResetCollsion();
     }
 
 }

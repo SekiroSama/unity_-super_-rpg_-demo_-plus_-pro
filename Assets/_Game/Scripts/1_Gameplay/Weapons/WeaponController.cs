@@ -12,6 +12,7 @@ public class WeaponController : MonoBehaviour
     public bool hideWeapon = false;
     public Transform tipTransform;
     public Transform baseTransform;
+    public bool isHit;
     private GameObject trailObj; 
     private GameObject hitObj;
 
@@ -20,7 +21,7 @@ public class WeaponController : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
-          
+            isHit = true;
             EnemyController enemyController = other.GetComponentInParent<EnemyController>();
             hitObj = PoolMgr.Instance.GetObj("CFXR Impact Glowing HDR (Blue)");
             TimerMgr.Instance.CreateTimer(false, 800, () =>

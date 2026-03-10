@@ -15,6 +15,7 @@ public class PlayerDefenseAttackState : PlayerDefenseState
         {
             stateMachine.ChangeState<PlayerForceAttackState>();
             EventCenter.Instance.EventTrigger(EventEnum.PerfectParry);
+            GameManager.Instance.cameraManager.RadialBlurStart(1000);
             return;
         }
     }

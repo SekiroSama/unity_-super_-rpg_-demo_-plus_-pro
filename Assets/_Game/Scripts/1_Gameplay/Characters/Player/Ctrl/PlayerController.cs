@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [HideInInspector]
+    public GradeThreshold grade;
     CharacterController CC;
     //[HideInInspector]
     public StateMachine stateMachine;
@@ -268,14 +270,14 @@ public class PlayerController : MonoBehaviour
     public void IgnoreCollsion()
     {
         // 禁用 Player 层和 Enemy 层之间的碰撞
-        Physics.IgnoreLayerCollision(playerLayer, enemyLayer, true);
+        Physics.IgnoreLayerCollision(6, 7, true);
     }
     /// <summary>
     /// 恢复敌人与主角的碰撞
     /// </summary>
     public void ResetCollsion()
     {
-        Physics.IgnoreLayerCollision(playerLayer, enemyLayer, false);
+        Physics.IgnoreLayerCollision(6,7, false);
     }
 
     private void OnDrawGizmos()

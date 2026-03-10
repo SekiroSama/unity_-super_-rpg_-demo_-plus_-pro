@@ -21,6 +21,11 @@ public class PlayerAttackState : StateBase
 
     public override void OnUpdate()
     {
+        if (owner.isHurt)
+        {
+            stateMachine.ChangeState<PlayerHurtState>();
+            return;
+        }
         if (GameManager.Instance.inputManager.CurrentInput.IsAttack)
         {
             _hasAtkInput = true;
