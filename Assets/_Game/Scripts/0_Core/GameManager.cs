@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     public TerrainManager terrainManager { get; private set; } = new TerrainManager();
     public PlayerController playerController { get; private set; }
     public EnemyController enemyController { get; private set; }
-    public UIManager uiManager { get; private set; }
+    public UIManager uiManager { get; private set; } = new UIManager();
 
     [SerializeField]
     private CinemachineCollider camCollider;

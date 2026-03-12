@@ -39,6 +39,9 @@ public class StyleRankManager : MonoBehaviour
         if (currentScore < 50) return StyleGrade.C;
         if (currentScore < 100) return StyleGrade.B;
         if (currentScore < 200) return StyleGrade.A;
-        return StyleGrade.S; // 以此类推
+        if (currentScore < 400) return StyleGrade.S;
+        if (currentScore < 600) return StyleGrade.SS;
+        if (currentScore < 800) return StyleGrade.SSS;
+        return StyleGrade.SSS;// 以此类推
     }
 }

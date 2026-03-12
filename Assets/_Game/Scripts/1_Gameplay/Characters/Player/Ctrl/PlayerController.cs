@@ -66,6 +66,7 @@ public class PlayerController : MonoBehaviour
     {
         //状态帧更新
         stateMachine.OnUpdate();
+        UpdateGrade();
         //角色混合树动画参数更新
         UpdateVerLocomotion(Mathf.Clamp(this.verSpeed,-1,1));
         //UpdateLocomotion(GameManager.Instance.InputManager.CurrentInput.MoveVector.magnitude);
@@ -259,6 +260,11 @@ public class PlayerController : MonoBehaviour
         isRush = false;
     }
     #endregion
+    public void UpdateGrade()
+    {
+        StyleGrade sg = StyleRankManager.Instance.GetCurrentGrade();
+        GameManager.Instance.uiManager.MainPanel.ChangeCCRank(sg.ToString());
+    }
     public void TakeDamage()
     {
         isHurt = true;
