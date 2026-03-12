@@ -11,6 +11,8 @@ public class MainPanel : MonoBehaviour
 
     public Button btnSetting;
     public Button btnATK;
+    public Text txtRank;
+    public Vector2 txtRank_Offset;
 
     //public Image imgJoystickBackground;
     //public Image imgJoystickHandle;
@@ -37,8 +39,18 @@ public class MainPanel : MonoBehaviour
         
     }
 
-    //public void OnDrag(PointerEventData eventData)
-    //{
-    //    Debug.Log("OnDrag");
-    //}
+    private void LateUpdate()
+    {
+        if(GameManager.Instance.playerController != null)
+        {
+            txtRank.rectTransform.position = Camera.main.WorldToScreenPoint(GameManager.Instance.playerController.LookPos.position);
+        }
+
+        txtRank.rectTransform.position = new Vector3(txtRank.rectTransform.position.x + txtRank_Offset.x, txtRank.rectTransform.position.y + txtRank_Offset.y, txtRank.rectTransform.position.z);
+    }
+
+    public void ChangeCCRank(string rank)
+    {
+        txtRank.text = rank;
+    }
 }

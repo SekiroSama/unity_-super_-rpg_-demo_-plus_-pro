@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     public TerrainManager terrainManager { get; private set; } = new TerrainManager();
     public PlayerController playerController { get; private set; }
     public EnemyController enemyController { get; private set; }
+    public UIManager uiManager { get; private set; }
 
     [SerializeField]
     private CinemachineCollider camCollider;
@@ -41,6 +42,8 @@ public class GameManager : MonoBehaviour
     private Transform Player_BornPos;
     [SerializeField]
     private Material FX_RadialBlur_FullScreen_Material;
+    [SerializeField]
+    private MainPanel MainPanel;
 
     private void Awake()
     {
@@ -49,6 +52,7 @@ public class GameManager : MonoBehaviour
         this.Init();
         cameraManager?.Init(camCollider, camFreeLook, FX_RadialBlur_FullScreen_Material);
         terrainManager?.Init(meshRenderers);
+        uiManager?.Init(MainPanel);
 
         terrainManager?.onAwake();
         inputManager?.OnAwake();
