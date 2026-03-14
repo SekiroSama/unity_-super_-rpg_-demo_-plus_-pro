@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        SetApplicationTargetFrameRate(60);
+        SetApplicationTargetFrameRate(120);
 
         this.Init();
         cameraManager?.Init(camCollider, camFreeLook, FX_RadialBlur_FullScreen_Material);
@@ -65,6 +65,8 @@ public class GameManager : MonoBehaviour
     {
         _instance = this;
     }
+
+
 
     private void Start()
     {

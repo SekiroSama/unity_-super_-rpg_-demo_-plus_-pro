@@ -12,7 +12,8 @@ public class MyTrailRenderer : MonoBehaviour
     private float minVertexDistanceSqr;
     public float trailLifeTime = 0.2f;
     public int subdivisions = 5;// 每段之间插值的点数
-    public bool isEmitting = false;
+    public bool isEmitting = false;//是否清空网格
+    public bool isPlaying = true;//是否添加顶点
 
     private struct TrailSnapshot
     {
@@ -27,10 +28,22 @@ public class MyTrailRenderer : MonoBehaviour
     private MeshFilter meshFilter;
 
 
+    /// <summary>
+    /// 实例化刀光
+    /// </summary>
+    /// <param name="tipTransform">刀光的两端</param>
+    /// <param name="baseTransform"></param>
     public void InitMyTrailRenderer(Transform tipTransform, Transform baseTransform)
     {
         this.tipTransform = tipTransform;
         this.baseTransform = baseTransform;
+    }
+
+    private void OnEnable()
+    {
+        snapshotList.Clear();
+        smoothedList.Clear();
+        trailMesh.Clear();
     }
 
     private void OnDisable()
@@ -49,14 +62,18 @@ public class MyTrailRenderer : MonoBehaviour
 
     void LateUpdate()
     {
-        if (!isEmitting)
+        //if (!isEmitting)
+        //{
+        //    snapshotList.Clear();
+        //    smoothedList.Clear();
+        //    trailMesh.Clear();
+        //    return;
+        //}
+
+        if (isPlaying)
         {
-            snapshotList.Clear();
-            smoothedList.Clear();
-            trailMesh.Clear();
-            return;
+            AddNewTrailSnapshot();
         }
-        AddNewTrailSnapshot();
 
         RemoveOldTrailSnapshot();
 

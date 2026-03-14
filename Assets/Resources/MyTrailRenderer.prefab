@@ -101,6 +101,7 @@ MonoBehaviour:
   trailLifeTime: 0.2
   subdivisions: 10
   isEmitting: 0
+  isPlaying: 1
 --- !u!114 &-3209219733190664631
 MonoBehaviour:
   m_ObjectHideFlags: 0
