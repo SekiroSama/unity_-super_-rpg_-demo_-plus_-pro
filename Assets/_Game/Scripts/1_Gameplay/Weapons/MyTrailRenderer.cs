@@ -2,7 +2,6 @@
 using System.Linq;
 using UnityEngine;
 
-[ExecuteAlways]
 public class MyTrailRenderer : MonoBehaviour
 {
     private Transform tipTransform;
@@ -12,7 +11,7 @@ public class MyTrailRenderer : MonoBehaviour
     private float minVertexDistanceSqr;
     public float trailLifeTime = 0.2f;
     public int subdivisions = 5;// 每段之间插值的点数
-    public bool isEmitting = false;//是否清空网格
+    //public bool isEmitting = false;//是否清空网格
     public bool isPlaying = true;//是否添加顶点
 
     private struct TrailSnapshot
@@ -39,6 +38,11 @@ public class MyTrailRenderer : MonoBehaviour
         this.baseTransform = baseTransform;
     }
 
+    public Mesh GetTrailMesh()
+    {
+        return trailMesh;
+    }
+
     private void OnEnable()
     {
         snapshotList.Clear();
@@ -50,6 +54,7 @@ public class MyTrailRenderer : MonoBehaviour
     {
         snapshotList.Clear();
         smoothedList.Clear();
+        trailMesh.Clear();
     }
 
     private void Start()
@@ -110,6 +115,7 @@ public class MyTrailRenderer : MonoBehaviour
     /// </summary>
     private void SmoothSnapshotList()
     {
+        smoothedList.Clear();
         if (snapshotList.Count < 2) return;
 
         smoothedList.Clear();

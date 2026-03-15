@@ -43,14 +43,17 @@ public class WeaponController : MonoBehaviour
     public void WeaponTrailOn()
     {
         trailObj = PoolMgr.Instance.GetObj("MyTrailRenderer");
-        trailObj.GetComponent<MyTrailRenderer>().isEmitting = true;  
+        trailObj.GetComponent<MyTrailRenderer>().isPlaying = true;
         trailObj.GetComponent<MyTrailRenderer>().InitMyTrailRenderer(tipTransform,baseTransform);
         trailObj.transform.position = Vector3.zero;
     }
     public void WeaponTrailOff()
     {
-        trailObj.GetComponent<MyTrailRenderer>().isEmitting = false;
-        PoolMgr.Instance.PushObj(trailObj);
+        trailObj.GetComponent<MyTrailRenderer>().isPlaying = false;
+        TimerMgr.Instance.CreateTimer(false, 2000, () =>
+        {
+            PoolMgr.Instance.PushObj(trailObj);
+        });
     }
     /// <summary>
     /// 动画事件：武器碰撞开启
