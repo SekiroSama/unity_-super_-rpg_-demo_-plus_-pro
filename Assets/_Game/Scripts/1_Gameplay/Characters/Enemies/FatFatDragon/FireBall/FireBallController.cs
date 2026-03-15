@@ -7,6 +7,11 @@ public class FireBallController : MonoBehaviour
     public float MoveSpeed = 10f;
     public GameObject ExplosionPrefab;
 
+    private void Start()
+    {
+        Destroy(this.gameObject, 5f);
+    }
+
     // Update is called once per frame
     void Update()
     {

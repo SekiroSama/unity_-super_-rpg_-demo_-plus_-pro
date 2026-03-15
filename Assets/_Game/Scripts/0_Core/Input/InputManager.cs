@@ -38,14 +38,14 @@ public class InputManager
 #if UNITY_ANDROID && !UNITY_EDITOR
 
 #else
-        Cursor.lockState = CursorLockMode.Locked;//CursorLockMode影响鼠标运动逻辑，Locked大概率会隐藏但在某些环境不行
-        Cursor.visible = false;//确保隐藏
+        //Cursor.lockState = CursorLockMode.Locked;//CursorLockMode影响鼠标运动逻辑，Locked大概率会隐藏但在某些环境不行
+        //Cursor.visible = false;//确保隐藏
 #endif
     }
 
     public void OnUpdate()
     {
-        CheckAndSetCursorEnable();
+        //CheckAndSetCursorEnable();
 
         if (isReadIngPlayerInput)
         {
@@ -171,8 +171,6 @@ public class InputManager
     private void CheckIsDodge()
     {
 #if UNITY_ANDROID && !UNITY_EDITOR
-        _playerInputData.IsAttack = uibtnAttackPressed;
-        uibtnAttackPressed = false;
 #else
         _playerInputData.isDodge = Input.GetKeyDown(KeyCode.LeftControl);
 #endif
@@ -184,6 +182,7 @@ public class InputManager
     {
 #if UNITY_ANDROID && !UNITY_EDITOR
         _playerInputData.IsAttack = uibtnAttackPressed;
+        Debug.Log("uibtnAttackPressed");
         uibtnAttackPressed = false;
 #else
         _playerInputData.IsAttack = Input.GetMouseButtonDown(0);
@@ -195,8 +194,7 @@ public class InputManager
     private void CheckIsJump()
     {
 #if UNITY_ANDROID && !UNITY_EDITOR
-        _playerInputData.IsJump= uibtnJumpPressed;
-        uibtnAttackPressed = false;
+        //_playerInputData.IsJump= uibtnJumpPressed;
 #else
         _playerInputData.isJump = Input.GetKey(KeyCode.Space);
 #endif
@@ -207,8 +205,7 @@ public class InputManager
     private void CheckIsDefense()
     {
 #if UNITY_ANDROID && !UNITY_EDITOR
-        _playerInputData.IsDefense = uibtnDefensePressed;
-        uibtnAttackPressed = false;
+        //_playerInputData.IsDefense = uibtnDefensePressed;
 #else
         _playerInputData.isDefense = Input.GetMouseButton(1);
         if (Input.GetMouseButtonUp(1))

@@ -331,7 +331,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 1
       minScalar: 3.8
       maxCurve:
         serializedVersion: 2
@@ -1302,17 +1302,17 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 1, g: 1, b: 1, a: 1}
-        key1: {r: 0.3726415, g: 0.7790608, b: 1, a: 0}
-        key2: {r: 0.23113209, g: 0.4368856, b: 1, a: 0.039215688}
+        key0: {r: 1, g: 0.85882354, b: 0.23137255, a: 1}
+        key1: {r: 0.6377781, g: 1, b: 0.23137254, a: 0}
+        key2: {r: 0.55578005, g: 1, b: 0, a: 0.039215688}
         key3: {r: 0.4648342, g: 0, b: 1, a: 0.039215688}
-        key4: {r: 1, g: 0.017601715, b: 0, a: 0.039215688}
+        key4: {r: 0.4648342, g: 0, b: 1, a: 0.039215688}
         key5: {r: 1, g: 1, b: 1, a: 0.039215688}
         key6: {r: 1, g: 1, b: 1, a: 0}
         key7: {r: 0, g: 0, b: 0, a: 0}
-        ctime0: 3277
-        ctime1: 13107
-        ctime2: 35939
+        ctime0: 13500
+        ctime1: 32459
+        ctime2: 45875
         ctime3: 45875
         ctime4: 45875
         ctime5: 65535
@@ -1327,8 +1327,8 @@ ParticleSystem:
         atime6: 0
         atime7: 0
         m_Mode: 0
-        m_ColorSpace: -1
-        m_NumColorKeys: 4
+        m_ColorSpace: 0
+        m_NumColorKeys: 3
         m_NumAlphaKeys: 2
       minGradient:
         serializedVersion: 2
@@ -4765,7 +4765,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9205bc1bbacc90040a998067b5643d16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clearBehavior: 2
+  clearBehavior: 0
   cameraShake:
     enabled: 0
     useMainCamera: 1
@@ -4966,8 +4966,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 321632431294176016}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
@@ -6304,17 +6304,17 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 1, g: 1, b: 1, a: 1}
-        key1: {r: 0.3726415, g: 0.7790608, b: 1, a: 0}
-        key2: {r: 0.23113209, g: 0.4368856, b: 1, a: 0.039215688}
+        key0: {r: 1, g: 0.85882354, b: 0.23137255, a: 1}
+        key1: {r: 0.6377781, g: 1, b: 0.23137254, a: 0}
+        key2: {r: 0.55578005, g: 1, b: 0, a: 0.039215688}
         key3: {r: 0.4648342, g: 0, b: 1, a: 0.039215688}
         key4: {r: 1, g: 0.017601715, b: 0, a: 0.039215688}
         key5: {r: 1, g: 1, b: 1, a: 0.039215688}
         key6: {r: 1, g: 1, b: 1, a: 0}
         key7: {r: 0, g: 0, b: 0, a: 0}
-        ctime0: 3277
-        ctime1: 13107
-        ctime2: 26214
+        ctime0: 13500
+        ctime1: 32459
+        ctime2: 45875
         ctime3: 45875
         ctime4: 45875
         ctime5: 65535
@@ -6330,7 +6330,7 @@ ParticleSystem:
         atime7: 0
         m_Mode: 0
         m_ColorSpace: -1
-        m_NumColorKeys: 4
+        m_NumColorKeys: 3
         m_NumAlphaKeys: 2
       minGradient:
         serializedVersion: 2
@@ -9866,8 +9866,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 321632431294176016}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
@@ -11204,17 +11204,17 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 1, g: 1, b: 1, a: 1}
-        key1: {r: 0.3726415, g: 0.7790608, b: 1, a: 0}
-        key2: {r: 0.23113209, g: 0.4368856, b: 1, a: 0.039215688}
+        key0: {r: 1, g: 0.85882354, b: 0.23137255, a: 1}
+        key1: {r: 0.6377781, g: 1, b: 0.23137254, a: 0}
+        key2: {r: 0.55578005, g: 1, b: 0, a: 0.039215688}
         key3: {r: 0.4648342, g: 0, b: 1, a: 0.039215688}
         key4: {r: 1, g: 0.017601715, b: 0, a: 0.039215688}
         key5: {r: 1, g: 1, b: 1, a: 0.039215688}
         key6: {r: 1, g: 1, b: 1, a: 0}
         key7: {r: 0, g: 0, b: 0, a: 0}
-        ctime0: 3277
-        ctime1: 13107
-        ctime2: 26214
+        ctime0: 13500
+        ctime1: 32459
+        ctime2: 45875
         ctime3: 45875
         ctime4: 45875
         ctime5: 65535
@@ -11230,7 +11230,7 @@ ParticleSystem:
         atime7: 0
         m_Mode: 0
         m_ColorSpace: -1
-        m_NumColorKeys: 4
+        m_NumColorKeys: 3
         m_NumAlphaKeys: 2
       minGradient:
         serializedVersion: 2
@@ -14766,8 +14766,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 321632431294176016}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -19682,9 +19682,9 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 0.5631094, g: 0.3254717, b: 1, a: 1}
-  m_Intensity: 0
-  m_Range: 4
+  m_Color: {r: 0.91485286, g: 1, b: 0.32549024, a: 1}
+  m_Intensity: 4.821876
+  m_Range: 5.7203197
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10

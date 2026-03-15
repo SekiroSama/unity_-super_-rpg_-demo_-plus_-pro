@@ -42,6 +42,7 @@ public class MoveToTargetNode : BTNode
         }
         else
         {
+            //Debug.Log("StopMove");
             _enemyController.StopMove();
             currentStatus = NodeStatus.SUCCESS;
             return currentStatus;

@@ -662,13 +662,6 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.9234673
-        functionName: AE_ATKEnd
-        data: Hit_D_Right
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
       - time: 0.2059266
         functionName: AE_WeaponColliderOn
         data: Hit_D_Right
@@ -678,6 +671,13 @@ ModelImporter:
         messageOptions: 0
       - time: 0.2361924
         functionName: AE_WeaponColliderOff
+        data: Hit_D_Right
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.27920052
+        functionName: AE_ATKEnd
         data: Hit_D_Right
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0

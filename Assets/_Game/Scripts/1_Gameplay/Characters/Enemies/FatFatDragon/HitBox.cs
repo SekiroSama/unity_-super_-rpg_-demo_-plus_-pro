@@ -13,7 +13,7 @@ public class HitBox : MonoBehaviour
         if (other.CompareTag("Player")){
             PlayerController playerController = other.GetComponent<PlayerController>();
             playerController.TakeDamage();
-            print("TakeDamage");
+            //print("TakeDamage");
         }
     }
 }

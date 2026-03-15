@@ -27,11 +27,8 @@ public class WeaponController : MonoBehaviour
             TimerMgr.Instance.CreateTimer(false, 800, () =>
             {
                 PoolMgr.Instance.PushObj(hitObj);
-            }, 20, () =>
-            {
-
             });
-            hitObj.transform.position = enemyController.transform.position;
+            hitObj.transform.position = other.ClosestPoint(transform.position);
             int id = enemyController.gameObject.GetInstanceID();
             if (!whiteList.Contains(id))
             {

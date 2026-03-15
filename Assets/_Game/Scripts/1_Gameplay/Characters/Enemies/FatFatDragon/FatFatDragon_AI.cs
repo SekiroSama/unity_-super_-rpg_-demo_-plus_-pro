@@ -58,9 +58,13 @@ public class FatFatDragon_AI : Enemy_AI
         /// <param GenericActionNode="Sleep, ()=> !isSleeping = _enemyController.isFighting || _enemyController.Hp == _enemyController.MaxHp">睡觉时可缓慢回血，但收到双倍伤害</param> 通常返回ing 醒了后返回成功
         //  }
         List<BTNode> root_runAway_ChildNodes = new List<BTNode>();//逃跑_低血量 子节点
-        ConditionNode root_runAway_ConditionNode = new ConditionNode(() => enemyController.isLowHp && enemyController.haveRunChance, () => enemyController.RunAwayChance--);
+        ConditionNode root_runAway_ConditionNode = new ConditionNode(() => enemyController.isLowHp && enemyController.haveRunChance && !enemyController.isAttacking, () =>
+        {
+            enemyController.RunAwayChance--;
+            enemyController.isFighting = false;
+        });
         root_runAway_ChildNodes.Add(root_runAway_ConditionNode);
-        MoveToTargetNode root_runAway_MoveToTargetNode = new MoveToTargetNode(Enemy_AIBlackBoard_Config.KEY_EnemyController_HomePos, 0f, enemyController.curentSpeedRatio);
+        MoveToTargetNode root_runAway_MoveToTargetNode = new MoveToTargetNode(Enemy_AIBlackBoard_Config.KEY_EnemyController_HomePos, 5f, enemyController.curentSpeedRatio);
         root_runAway_ChildNodes.Add(root_runAway_MoveToTargetNode);
         GenericActionNode root_runAway_GenericActionNode = new GenericActionNode(enemyController.Sleep, () => !enemyController.isSleeping);
         root_runAway_ChildNodes.Add(root_runAway_GenericActionNode);

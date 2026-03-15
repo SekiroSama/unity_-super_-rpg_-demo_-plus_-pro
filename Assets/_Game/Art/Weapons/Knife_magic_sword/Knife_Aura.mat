@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: RuneBlade
-  m_Shader: {fileID: 4800000, guid: 99f63e010c6b0b047b73e43873b3d3ff, type: 3}
+  m_Name: Knife_Aura
+  m_Shader: {fileID: 4800000, guid: a1e1f1a9907b6824993bb154aa0dfd59, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -16,7 +16,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2450
   stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
@@ -69,8 +69,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AuraWidth: 0.0038
-    - _BumpScale: 0.58
+    - _AuraWidth: 0.0259
+    - _BumpScale: 0.575
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DissolveVal: 0

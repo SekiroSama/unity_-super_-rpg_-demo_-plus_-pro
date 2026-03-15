@@ -57,7 +57,7 @@ public class MyTrailRenderer : MonoBehaviour
         trailMesh.Clear();
     }
 
-    private void Start()
+    private void Awake()
     {
         minVertexDistanceSqr = minVertexDistance * minVertexDistance;
         trailMesh = new Mesh();

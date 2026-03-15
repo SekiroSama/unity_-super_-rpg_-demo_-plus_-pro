@@ -24,11 +24,11 @@ public class TerrainManager
     /// set遮挡裁剪半径工作与否
     /// </summary>
     /// <param name="isWork"></param>
-    //public void SetClipRadiusWork(bool isWork)
-    //{
-    //    foreach (Material material in materials)
-    //    {
-    //        material.SetFloat("_ClipRadius", isWork ? 0.5f : 0f);
-    //    }
-    //}
+    public void SetClipRadiusWork(bool isWork)
+    {
+        foreach (Material material in materials)
+        {
+            material.SetFloat("_ClipRadius", isWork ? 0.5f : 0f);
+        }
+    }
 }

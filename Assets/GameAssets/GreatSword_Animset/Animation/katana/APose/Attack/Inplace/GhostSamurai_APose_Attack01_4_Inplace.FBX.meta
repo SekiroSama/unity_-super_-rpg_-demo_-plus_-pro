@@ -641,13 +641,6 @@ ModelImporter:
           postInfinity: 3
           rotationOrder: 4
       events:
-      - time: 0.91321355
-        functionName: AE_ATKEnd
-        data: Hit_H_Right
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
       - time: 0
         functionName: AE_ATKStart
         data: Hit_H_Right
@@ -664,6 +657,13 @@ ModelImporter:
         messageOptions: 0
       - time: 0.23069157
         functionName: AE_WeaponColliderOff
+        data: Hit_H_Right
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.24761353
+        functionName: AE_ATKEnd
         data: Hit_H_Right
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0

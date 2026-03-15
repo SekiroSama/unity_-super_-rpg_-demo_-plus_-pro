@@ -106,7 +106,6 @@
                 float2 uvBump = input.uv * _BumpMap_ST.xy + _BumpMap_ST.zw;
 
                 float3 playerPos = _PlayerPos.xyz;
-                playerPos.y += 0.4;
                 
                 float3 camPos = GetCameraPositionWS();
                 float3 lineVec = camPos - playerPos;

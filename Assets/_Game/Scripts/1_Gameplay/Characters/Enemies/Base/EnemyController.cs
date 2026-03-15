@@ -218,6 +218,7 @@ public abstract class EnemyController : MonoBehaviour
         isDead = true;
         isDowned = false;
         isAttacking = false;
+        StopMove();
     }
 
     /// <summary>
@@ -228,6 +229,7 @@ public abstract class EnemyController : MonoBehaviour
         animator.SetTrigger(EnemyAnimationConfig.Parameters.IsDowned);// 播放破韧动画
         isDowned = true;
         isAttacking = false;
+        StopMove();
     }
 
     /// <summary>
@@ -423,6 +425,7 @@ public abstract class EnemyController : MonoBehaviour
     public virtual void MoveToTarget(Vector3 targetPos, float speedRatio)
     {
         if (!CheckisOnNavMeshAndFix()) return;
+        _navMeshAgent.updateRotation = true;
         _navMeshAgent.isStopped = false;
         _navMeshAgent.SetDestination(targetPos);
         _navMeshAgent.speed = speedRatio * MaxMoveSpeed;

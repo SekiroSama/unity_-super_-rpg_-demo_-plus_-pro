@@ -268,7 +268,7 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage()
     {
         isHurt = true;
-        Debug.Log("受到伤");
+        //Debug.Log("受到伤");
     }
     /// <summary>
     /// 忽视敌人与主角的碰撞

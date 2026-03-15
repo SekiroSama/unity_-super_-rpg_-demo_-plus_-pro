@@ -643,7 +643,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 1
+      - time: 0.4986666
         functionName: AE_ATKEnd
         data: Hit_H_Right
         objectReferenceParameter: {instanceID: 0}
